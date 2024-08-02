@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
+import InfoCard from "../components/InfoCard";
 import PieChart from "../components/PieChart";
-import InforCard from "../components/InfoCard";
 
 function Home() {
-    const [data, setData] = useState({
-        income: 0,
-        expense: 0,
-        assets: 0,
-        loans: 0,
-        savings: 0,
-    });
+    const [income, setIncome] = useState(0);
+    const [expense, setExpense] = useState(0);
+    const [debt, setDebt] = useState(0);    
+    const [assets, setAssets] = useState(0);
+
     const userID = 1;
     const API_URL = "https://bizzgogo-70f9.onrender.com/";
 
@@ -19,12 +17,20 @@ function Home() {
             try {
                 const response = await fetch(`${API_URL}incomes`);
                 const data = await response.json();
-                console.log(data);
-                const filteredData = data.filter((income) => income.user_id === userID);
-                const totalIncome = filteredData.reduce((acc, income) => acc + income.amount, 0);
-                setData(prevData => ({ ...prevData, income: totalIncome }));
+                const incomes = data.incomes;
+
+                let totalIncome = 0;
+
+                // filtering the data for a specific user and summing up the amounts
+                incomes.forEach(income => {
+                    if (income.user_id === userID) {
+                        totalIncome += parseFloat(income.amount);
+                    }
+                });
+
+                setIncome(totalIncome);
             } catch (error) {
-                console.log('Error fetching income:', error);
+                console.log("Error fetching income:", error);
             }
         };
         fetchData();
@@ -36,11 +42,43 @@ function Home() {
             try {
                 const response = await fetch(`${API_URL}expenses`);
                 const data = await response.json();
-                const filteredData = data.filter((expense) => expense.user_id === userID);
-                const totalExpense = filteredData.reduce((acc, expense) => acc + expense.amount, 0);
-                setData(prevData => ({ ...prevData, expense: totalExpense }));
+                const expenses = data.expenses;
+
+                let totalExpenses = 0;
+
+                expenses.forEach(expense => {
+                    if (expense.user_id === userID) {
+                        totalExpenses += parseFloat(expense.amount);
+                    }
+                });
+
+                setExpense(totalExpenses);
             } catch (error) {
-                console.log('Error fetching expenses:', error);
+                console.log("Error fetching expenses:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Fetching the user's debt
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_URL}debts`);
+                const data = await response.json();
+                const debts = data.debts;
+
+                let totalDebt = 0;
+
+                debts.forEach(debt => {
+                    if (debt.user_id === userID) {
+                        totalDebt += parseFloat(debt.principal_amount);
+                    }
+                });
+
+                setDebt(totalDebt);
+            } catch (error) {
+                console.log("Error fetching debt:", error);
             }
         };
         fetchData();
@@ -52,64 +90,39 @@ function Home() {
             try {
                 const response = await fetch(`${API_URL}assets`);
                 const data = await response.json();
-                const filteredData = data.filter((asset) => asset.user_id === userID);
-                const totalAssets = filteredData.reduce((acc, asset) => acc + asset.value, 0);
-                setData(prevData => ({ ...prevData, assets: totalAssets }));
+                const assets = data.assets;
+
+                let totalAssets = 0;
+
+                assets.forEach(asset => {
+                    if (asset.user_id === userID) {
+                        totalAssets += parseFloat(asset.value);
+                    }
+                });
+
+                setAssets(totalAssets);
             } catch (error) {
-                console.log('Error fetching assets:', error);
+                console.log("Error fetching assets:", error);
             }
         };
         fetchData();
     }, []);
 
-    // Fetching the user's debts
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${API_URL}debts`);
-                const data = await response.json();
-                const filteredData = data.filter((debt) => debt.user_id === userID);
-                const totalDebt = filteredData.reduce((acc, debt) => acc + debt.principal_amount, 0);
-                setData(prevData => ({ ...prevData, loans: totalDebt }));
-            } catch (error) {
-                console.log('Error fetching debts:', error);
-            }
-        };
-        fetchData();
-    }, []);
 
-    // Fetching the user's savings
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${API_URL}savings`);
-                const data = await response.json();
-                const filteredData = data.filter((savings) => savings.user_id === userID);
-                const totalSavings = filteredData.reduce((acc, savings) => acc + savings.amount, 0);
-                setData(prevData => ({ ...prevData, savings: totalSavings }));
-            } catch (error) {
-                console.log('Error fetching savings:', error);
-            }
-        };
-        fetchData();
-    }, []);
-
-    // Calculating the balance
-    const balance = data.income - data.expense;
 
     return (
         <div>
             <div>
-                <PieChart data={{ income: data.income, expense: data.expense }} />
-                <h2>{balance}</h2>
+                <PieChart  totalIncome={income} totalExpense={expense}/>
+            </div>
+            <div>
                 <p>left to spend</p>
             </div>
             <div>
-                <InforCard title="Income" value={data.income} />
-                <InforCard title="Expense" value={data.expense} />
-                <InforCard title="Assets" value={data.assets} />
-                <InforCard title="Loans" value={data.loans} />
-                <InforCard title="Savings" value={data.savings} />
+                <InfoCard title="Income" value={income} />
+                <InfoCard title="Expense" value={expense} />
+                <InfoCard title="Debt" value={debt} />
+                <InfoCard title="Assets" value={assets} />
             </div>
         </div>
     );
