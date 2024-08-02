@@ -1,5 +1,15 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Register from './pages/Register';
+import AddTransaction from './pages/AddTransaction';
 import Home from './pages/Home';
+import Assets from './pages/Assets';
+import Budget from './pages/Budget';
+import Expenses from './pages/Expenses';
+import Income from './pages/Income';
+import Insights from './pages/Insights';
+import Login from './pages/Login';
+import More from './pages/More';
+
 
 import './App.css';
 
