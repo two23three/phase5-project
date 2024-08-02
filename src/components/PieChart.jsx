@@ -4,12 +4,12 @@ import {Chart as CHartJS, ArcElement, Tooltip, Legend} from "chart.js"
 
 CHartJS.register(ArcElement, Tooltip, Legend)
 
-function PieChart({ data }) {
+function PieChart({totalIncome, totalExpense }) {
     const charData = {
     labels: ["Income", "Expense"],
     datasets: [
         {
-            data: [data.income, data.expense],
+            data: [totalIncome, totalExpense],
             backgroundColor: ["green", "red"],
             hoverOffset: 4,
             cutout: '70%',
