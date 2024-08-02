@@ -19,4 +19,4 @@ function PieChart({totalIncome, totalExpense }) {
     return <Doughnut data={charData} />
 }
 
-export default ExpensePieChart;
+export default PieChart;
