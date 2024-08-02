@@ -108,14 +108,15 @@ function Home() {
         fetchData();
     }, []);
 
-
+    let balance = income - expense;
 
     return (
-        <div>
+        <div className="flex flex-col gap-4 bg-gray-900 p-4">
             <div>
                 <PieChart  totalIncome={income} totalExpense={expense}/>
             </div>
             <div>
+                <h1>${balance}</h1>
                 <p>left to spend</p>
             </div>
             <div>
