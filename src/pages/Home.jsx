@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import InfoCard from "../components/InfoCard";
+import  { useEffect, useState } from "react";
 import PieChart from "../components/PieChart";
 
 function Home() {
@@ -128,5 +127,4 @@ function Home() {
         </div>
     );
 }
-
-export default Home;
+export default Home
