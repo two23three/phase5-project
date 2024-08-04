@@ -1,7 +1,7 @@
 function Register() {
   return (
     <div className="w-full max-w-xs">
-      <div className="bg-gray-800 rounded-lg shadow-lg p-6"> {/* Added padding here */}
+      <div className="bg-gray-800 rounded-lg shadow-lg p-6"> 
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Sign up to Barnes!</h2>
         <form className="space-y-4">
           <div>

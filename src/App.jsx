@@ -8,7 +8,8 @@ import Expenses from './pages/Expenses';
 import Income from './pages/Income';
 import Insights from './pages/Insights';
 import Login from './pages/Login';
-import More from './pages/More';
+import MorePersonal from './pages/MorePersonal';
+import MoreBusiness from './pages/MoreBusiness';
 
 
 import './App.css';
@@ -27,7 +28,8 @@ function App() {
           <Route path="/income" element={<Income />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/more" element={<More />} />
+          <Route path="/p-more" element={<MorePersonal />} />
+          <Route path="/b-more" element={<MoreBusiness />} />
         </Routes>
       </div>
     </Router>
