@@ -13,13 +13,13 @@ const AddLoan = ({ onClose, onSave }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-gray-800 p-6 rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Add New Loan</h2>
+      <div className="bg-gray-300 p-6 rounded-lg">
+        <h2 className="text-xl font-bold mb-4 text-gray-900">Add New Loan</h2>
         <form onSubmit={handleLoanSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="loan">Loan</label>
+            <label className="block text-gray-900 mb-2 text-left" htmlFor="loan">Loan:</label>
             <input
-              className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-neutral-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="loan"
               type="text"
               value={loan}
@@ -28,9 +28,9 @@ const AddLoan = ({ onClose, onSave }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2" htmlFor="loanAmount">Amount</label>
+            <label className="block text-gray-900 mb-2 text-left" htmlFor="loanAmount">Amount:</label>
             <input
-              className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-neutral-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="loanAmount"
               type="number"
               value={loanAmount}
@@ -39,13 +39,13 @@ const AddLoan = ({ onClose, onSave }) => {
             />
           </div>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+            className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-200"
             type="submit"
           >
             Save Loan
           </button>
           <button
-            className="ml-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition duration-200"
+            className="ml-4 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-200 transition duration-200"
             onClick={onClose}
           >
             Cancel
