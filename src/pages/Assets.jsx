@@ -11,6 +11,7 @@ function Assets() {
         const fetchData = async () => {
             try {
                 const response = await fetch(`${API_URL}assets`);
+                console.log("Response:", response);
                 const data = await response.json();
 
                 // Filter assets by user ID
