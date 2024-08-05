@@ -3,14 +3,15 @@ import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faChartBar, faPlus, faWallet, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
+
 function Navbar() {
     return (
-        <nav id='navbar' className="flex space-x-4 bg-gray-800">
-            <NavLink to='/' className="flex flex-col items-center text-white">
+        <nav id='navbar' className="flex space-x-4">
+            <NavLink to='/' className="flex flex-col items-center">
                 <FontAwesomeIcon icon={faHome} size="2x" />
                 <span>Home</span>
             </NavLink>
-            <NavLink to='/insights' className="flex flex-col items-center text-white">
+            <NavLink to='/insights' className="flex flex-col items-center">
                 <FontAwesomeIcon icon={faChartBar} size="2x" />
                 <span>Insights</span>
             </NavLink>
@@ -19,11 +20,11 @@ function Navbar() {
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
             </NavLink>
-            <NavLink to='/budget' className="flex flex-col items-center text-white">
+            <NavLink to='/budget' className="flex flex-col items-center">
                 <FontAwesomeIcon icon={faWallet} size="2x" />
                 <span>Budget</span>
             </NavLink>
-            <NavLink to='/p-more' className="flex flex-col items-center text-white">
+            <NavLink to='/p-more' className="flex flex-col items-center">
                 <FontAwesomeIcon icon={faEllipsisH} size="2x" />
                 <span>More</span>
             </NavLink>

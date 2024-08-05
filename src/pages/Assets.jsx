@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InfoCard from "../components/InfoCard";
+import Navbar from "../components/Navbar";
 
 function Assets() {
     const [assets, setAssets] = useState([]);
@@ -32,7 +33,8 @@ function Assets() {
     }, []); // Empty dependency array to run only once
 
     return (
-        <div>
+        <div className='min-h-screen height-full bg-gray-900 width-full'>
+            <h1 className="text-3xl font-bold text-white mb-6 text-center">Assets</h1>
             <div>
                 {assets.length > 0 ? (
                     assets.map((asset, index) => (
@@ -46,6 +48,7 @@ function Assets() {
                     <p>You have no assets.</p>
                 )}
             </div>
+            <Navbar />
         </div>
     );
 }
