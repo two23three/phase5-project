@@ -2,6 +2,7 @@ import  { useEffect, useState } from "react";
 import PieChart from "../components/PieChart";
 import InfoCard from "../components/InfoCard";
 import { Link } from 'react-router-dom';
+import Navbar
 
 function Home() {
     const [income, setIncome] = useState(0);
@@ -136,6 +137,7 @@ function Home() {
                         <InfoCard title="Assets" value={assets} />
                     </Link>
             </div>
+
         </div>
     );
 }
