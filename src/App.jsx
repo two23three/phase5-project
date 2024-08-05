@@ -1,33 +1,39 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-// import ChangeAccountDetails from './components/ChangeAccountDetails'
-// import ChangePassword from './components/ChangePassword'
-// import EditTransaction from './components/EditTransaction'
-// import LogOutPopUp from './components/LogOutPopUp'
-// import MpesaPopUp from './components/MpesaPopUp'
-import Insights from './pages/Insights'
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Register from './pages/Register';
+import AddTransaction from './pages/AddTransaction';
+import Home from './pages/Home';
+import Assets from './pages/Assets';
+import Budget from './pages/Budget';
+import Expenses from './pages/Expenses';
+import Income from './pages/Income';
+import Insights from './pages/Insights';
+import Login from './pages/Login';
+import MorePersonal from './pages/MorePersonal';
+import MoreBusiness from './pages/MoreBusiness';
+
+
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <Router>
       <div>
-        <Routes >
-          {/* <Route path="/changedetails" element={<ChangeAccountDetails />} /> */}
-          {/* <Route path="/changepassword" element={<ChangePassword />} />
-          <Route path="/edittransaction" element={<EditTransaction/>} />
-          <Route path="/logout" element={<LogOutPopUp />} />
-          <Route path="/mpesa" element={<MpesaPopUp />} /> */}
-          <Route path='/insights' element={<Insights />} />
-        </ Routes>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/add_transaction" element={<AddTransaction />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/assets" element={<Assets />} />
+          <Route path="/budget" element={<Budget />} />
+          <Route path="/expenses" element={<Expenses />} />
+          <Route path="/income" element={<Income />} />
+          <Route path="/insights" element={<Insights />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/p-more" element={<MorePersonal />} />
+          <Route path="/b-more" element={<MoreBusiness />} />
+        </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
