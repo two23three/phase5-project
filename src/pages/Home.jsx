@@ -1,5 +1,6 @@
 import  { useEffect, useState } from "react";
 import PieChart from "../components/PieChart";
+import InfoCard from "../components/InfoCard";
 
 function Home() {
     const [income, setIncome] = useState(0);
