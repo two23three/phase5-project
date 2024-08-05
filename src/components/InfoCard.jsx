@@ -3,7 +3,7 @@ import React from "react";
 
 function InfoCard({title, value}){
 return(
-    <div className="bg-white rounded-lg shadow-lg flex justify-between items-center p-4">
+    <div className="bg-white rounded-lg shadow-lg flex justify-between items-center p-4 text-black">
         <h2>{title}</h2> <h2>{value}</h2>
     </div>
 )
