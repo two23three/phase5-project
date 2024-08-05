@@ -1,6 +1,7 @@
 import  { useEffect, useState } from "react";
 import PieChart from "../components/PieChart";
 import InfoCard from "../components/InfoCard";
+import { Link } from 'react-router-dom';
 
 function Home() {
     const [income, setIncome] = useState(0);
@@ -116,8 +117,8 @@ function Home() {
                 <PieChart  totalIncome={income} totalExpense={expense}/>
             </div>
             <div>
-                <h1>${balance}</h1>
-                <p>left to spend</p>
+                <h1 className="text-5xl-xl font-bold text-white">${balance}</h1>
+                <p className="text-white">left to spend</p>
             </div>
             <div>
                 <div> 
