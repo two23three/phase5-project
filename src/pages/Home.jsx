@@ -120,10 +120,20 @@ function Home() {
                 <p>left to spend</p>
             </div>
             <div>
-                <InfoCard title="Income" value={income} />
-                <InfoCard title="Expense" value={expense} />
-                <InfoCard title="Debt" value={debt} />
-                <InfoCard title="Assets" value={assets} />
+                <div> 
+                </div>
+                    <Link to="/income">
+                        <InfoCard title="Income" value={income} />
+                    </Link>
+                    <Link to="/expenses">
+                        <InfoCard title="Expense" value={expense} />
+                    </Link>
+                    <Link to="/budget">
+                        <InfoCard title="Debt" value={debt} />
+                    </Link>
+                    <Link to="/assets">
+                        <InfoCard title="Assets" value={assets} />
+                    </Link>
             </div>
         </div>
     );
