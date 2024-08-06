@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
@@ -14,64 +14,108 @@ ChartJS.register(
     Filler,
 );
 
+
 const Insights = () => {
+
+    const [expenses, setExpenses] = useState([]);
+    const [incomes, setIncomes] = useState([]);
+    const [from, setFrom] = useState("");
+    const [to, setTo] = useState("");
+    const [change, setChange] = useState('')
+
+    useEffect(() => {
+        
+        // fetch expenses
+        fetch('http://localhost:3000/expenses')
+          .then(response => response.json())
+          .then(data => {
+
+            let sortedExpenses = data.filter(expense => expense.user_id === 2)
+            // console.log(sortedExpenses)
+            let list = combineAmountByDate(sortedExpenses);
+            setExpenses(list);
+    
+          })
+          .catch(error => console.log(error));
+
+          // fetch incomes
+          fetch('http://localhost:3000/incomes')
+          .then(response => response.json())
+          .then(data => {
+
+            let sortedIncomes = data.filter(income => income.user_id === 1)
+            let list = combineAmountByDate(sortedIncomes);
+            
+            setIncomes(list);
+    
+          })
+          .catch(error => console.log(error));
+      }, [change]);
+
+        // Function to combine incomes by date
+  const combineAmountByDate = (amounts) => {
+    // Sort by date
+    amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Combine incomes with the same date
+    const combined = [];
+    let currentDate = null;
+    let currentAmount = 0;
+
+    for (const amount of amounts) {
+      if (amount.date === currentDate) {
+        currentAmount += amount.amount;
+      } else {
+        if (currentDate !== null) {
+          combined.push(currentAmount);
+        }
+        currentDate = amount.date;
+        currentAmount = amount.amount;
+      }
+    }
+    if (currentDate !== null) {
+      combined.push(currentAmount);
+    }
+
+    console.log(combined);
+    return combined;
+  };
+
+  const filterByDate = () => {
+
+    console.log(from)
+    console.log(to)
+
+    let filteredExpenses = expenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
+    let filteredIncomes = incomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
+    setExpenses(combineAmountByDate(filteredExpenses));
+    setIncomes(combineAmountByDate(filteredIncomes));
+  };
+
+
     return (
-        <div className="Insights">
+        <div className="Insights" style={{ backgroundColor: 'black' }}>
+            <button onClick={() => setChange(prev => prev + 1)}>Press</button>
             <Navbar />
-            <DateFilter />
+            <DateFilter setTo={setTo} setFrom={setFrom}/>
             <TotalExpense amount={24000} />
-            <div style={{ background: 'white', margin: '10px' }}>
-                <InsightsChart />
+            <div style={{ background: 'white', }}>
+                <InsightsChart expenses={expenses} incomes={incomes}/>
                 <ExpenseCategoryList />
             </div>
         </div>
     );
 };
 
-const Navbar = () => {
-    return (
-        <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }} className="navbar">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifyContent='space-between'>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                <path d="M480-40q-112 0-206-51T120-227v107H40v-240h240v80h-99q48 72 126.5 116T480-120q75 0 140.5-28.5t114-77q48.5-48.5 77-114T840-480h80q0 91-34.5 171T791-169q-60 60-140 94.5T480-40Zm-36-160v-52q-47-11-76.5-40.5T324-370l66-26q12 41 37.5 61.5T486-314q33 0 56.5-15.5T566-378q0-29-24.5-47T454-466q-59-21-86.5-50T340-592q0-41 28.5-74.5T446-710v-50h70v50q36 3 65.5 29t40.5 61l-64 26q-8-23-26-38.5T482-648q-35 0-53.5 15T410-592q0 26 23 41t83 35q72 26 96 61t24 77q0 29-10 51t-26.5 37.5Q583-274 561-264.5T514-250v50h-70ZM40-480q0-91 34.5-171T169-791q60-60 140-94.5T480-920q112 0 206 51t154 136v-107h80v240H680v-80h99q-48-72-126.5-116T480-840q-75 0-140.5 28.5t-114 77q-48.5 48.5-77 114T120-480H40Z" />
-            </svg>
-        </nav>
-    );
-};
-
-const DateFilter = () => {
-    return (
-        <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ marginRight: 'auto' }}>
-                <label>From</label>
-                <input type="date" style={{ width: '120px' }} />
-            </div>
-            <div>
-                <label>To</label>
-                <input type="date" style={{ width: '120px' }} />
-            </div>
-        </div>
-    );
-};
-
-const TotalExpense = ({ amount }) => {
-    return (
-        <div className="total-expense">
-            <h2>Total expense</h2>
-            <p>Ksh {amount}</p>
-        </div>
-    );
-};
-
-const InsightsChart = () => {
+const InsightsChart = ({expenses, incomes}) => {
+    // console.log(expenses)
+    // console.log(incomes)
     const data = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
         datasets: [
             {
-                label: 'Expense Over Time',
-                data: [3000, 2000, 1500, 2200, 1800],
+                label: 'Income Over Time',
+                data: incomes,
                 fill: true,
                 backgroundColor: 'rgba(0, 128, 0, 0.2)',
                 borderColor: 'rgba(0, 128, 0, 1)',
@@ -79,8 +123,8 @@ const InsightsChart = () => {
                 tension: 0.4,
             },
             {
-                label: 'Income Over Time',
-                data: [6000, 2000, 3500, 2800, 1000],
+                label: 'Expense Over Time',
+                data: expenses,
                 fill: true,
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
@@ -96,6 +140,48 @@ const InsightsChart = () => {
         </div>
     );
 };
+
+const Navbar = () => {
+    return (
+        <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', padding: '10px', backgroundColor: '' }} className="navbar">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path d="M480-40q-112 0-206-51T120-227v107H40v-240h240v80h-99q48 72 126.5 116T480-120q75 0 140.5-28.5t114-77q48.5-48.5 77-114T840-480h80q0 91-34.5 171T791-169q-60 60-140 94.5T480-40Zm-36-160v-52q-47-11-76.5-40.5T324-370l66-26q12 41 37.5 61.5T486-314q33 0 56.5-15.5T566-378q0-29-24.5-47T454-466q-59-21-86.5-50T340-592q0-41 28.5-74.5T446-710v-50h70v50q36 3 65.5 29t40.5 61l-64 26q-8-23-26-38.5T482-648q-35 0-53.5 15T410-592q0 26 23 41t83 35q72 26 96 61t24 77q0 29-10 51t-26.5 37.5Q583-274 561-264.5T514-250v50h-70ZM40-480q0-91 34.5-171T169-791q60-60 140-94.5T480-920q112 0 206 51t154 136v-107h80v240H680v-80h99q-48-72-126.5-116T480-840q-75 0-140.5 28.5t-114 77q-48.5 48.5-77 114T120-480H40Z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifyContent='space-between'>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+            </svg>
+
+        </nav>
+    );
+};
+
+const DateFilter = ({setTo, setFrom}) => {
+    return (
+        <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ marginRight: 'auto' }}>
+                <label>From</label>
+                <input type="date" style={{ width: '120px' }} onChange={(event)=>{setFrom(event.value), filterByDate()}} />
+            </div>
+            <div>
+                <label>To</label>
+                <input type="date" style={{ width: '120px' }} onChange={(event)=>{setTo(event.value), filterByDate()}}/>
+            </div>
+        </div>
+    );
+};
+
+const TotalExpense = ({ amount }) => {
+    return (
+        <div className="total-expense">
+            <h2>Total expense</h2>
+            <p>Ksh {amount}</p>
+        </div>
+    );
+};
+
+
+
+
 
 const categories = [
     {
@@ -140,9 +226,9 @@ const ExpenseCategoryList = () => {
     const [visibleCategories, setVisibleCategories] = useState(categories);
 
     return (
-        <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '0 10px', margin: '0', borderRadius: '15px' }}>
+        <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '0', margin: '0', borderRadius: '15px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <p style={{ color: '#423E3E', fontSize: '10px', display: 'flex', marginRight: 'auto' }}>Expense categories</p>
+                <p style={{ color: '#423E3E', fontSize: '15px', display: 'flex', marginRight: 'auto' }}>Expense categories</p>
                 <Dropdown categories={categories} setVisibleCategories={setVisibleCategories} />
             </div>
             <div className="expense-category-list">
@@ -165,7 +251,7 @@ const Dropdown = ({ categories, setVisibleCategories }) => {
     };
 
     return (
-        <select className="dropdown" onChange={filterCategories}>
+        <select className="dropdown" onChange={filterCategories} style={{ backgroundColor: '#D1D1D1', color: '#423E3E', fontSize: '15px' }}>
             <option value="All">Categories</option>
             <option value="electricity">Electricity</option>
             <option value="rent">Rent</option>
@@ -180,7 +266,7 @@ const ExpenseCategoryItem = ({ category }) => {
         <div className="expense-category-item" style={{
             display: 'flex', justifyContent: 'space-between', padding: '10px 0',
             borderStyle: 'solid', borderRadius: '10px', margin: '10px 0', borderWidth: '1px',
-            backgroundColor: '#242424', width:'100%', height:'300',
+            backgroundColor: '#242424', width: '100%', height: '300',
         }}>
             <p style={{ margin: '0' }}>{category.icon}</p>
             <p style={{ margin: '0' }}>{category.name}</p>
