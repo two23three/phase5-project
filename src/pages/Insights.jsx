@@ -17,97 +17,126 @@ ChartJS.register(
 
 const Insights = () => {
 
+    const [fullExpenses, setFullExpenses] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [incomes, setIncomes] = useState([]);
-    const [from, setFrom] = useState("");
-    const [to, setTo] = useState("");
+    const [fullIncomes, setFullIncomes] = useState([]);
+    const [from, setFrom] = useState("from");
+    const [to, setTo] = useState("to");
     const [change, setChange] = useState('')
 
     useEffect(() => {
-        
+
         // fetch expenses
         fetch('http://localhost:3000/expenses')
-          .then(response => response.json())
-          .then(data => {
+            .then(response => response.json())
+            .then(data => {
 
-            let sortedExpenses = data.filter(expense => expense.user_id === 2)
-            // console.log(sortedExpenses)
-            let list = combineAmountByDate(sortedExpenses);
-            setExpenses(list);
-    
-          })
-          .catch(error => console.log(error));
+                let sortedExpenses = data.filter(expense => expense.user_id === 2)
+                setFullExpenses(sortedExpenses);
+                // console.log(sortedExpenses)
+                let list = combineAmountByDate(sortedExpenses);
+                setExpenses(list);
 
-          // fetch incomes
-          fetch('http://localhost:3000/incomes')
-          .then(response => response.json())
-          .then(data => {
+            })
+            .catch(error => console.log(error));
 
-            let sortedIncomes = data.filter(income => income.user_id === 1)
-            let list = combineAmountByDate(sortedIncomes);
-            
-            setIncomes(list);
-    
-          })
-          .catch(error => console.log(error));
-      }, [change]);
+        // fetch incomes
+        fetch('http://localhost:3000/incomes')
+            .then(response => response.json())
+            .then(data => {
 
-        // Function to combine incomes by date
-  const combineAmountByDate = (amounts) => {
-    // Sort by date
-    amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
+                let sortedIncomes = data.filter(income => income.user_id === 1)
+                setFullIncomes(sortedIncomes);
+                let list = combineAmountByDate(sortedIncomes);
 
-    // Combine incomes with the same date
-    const combined = [];
-    let currentDate = null;
-    let currentAmount = 0;
+                setIncomes(list);
 
-    for (const amount of amounts) {
-      if (amount.date === currentDate) {
-        currentAmount += amount.amount;
-      } else {
-        if (currentDate !== null) {
-          combined.push(currentAmount);
+            })
+            .catch(error => console.log(error));
+    }, [change]);
+
+    useEffect(() => {
+        filterByDate();
+
+    }, [from, to]
+    );
+
+    // Function to combine incomes by date
+    const combineAmountByDate = (amounts) => {
+        // Sort by date
+        amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Combine incomes with the same date
+        const combined = [];
+        let currentDate = null;
+        let currentAmount = 0;
+
+        for (const amount of amounts) {
+            if (amount.date === currentDate) {
+                currentAmount += amount.amount;
+            } else {
+                if (currentDate !== null) {
+                    combined.push(currentAmount);
+                }
+                currentDate = amount.date;
+                currentAmount = amount.amount;
+            }
         }
-        currentDate = amount.date;
-        currentAmount = amount.amount;
-      }
-    }
-    if (currentDate !== null) {
-      combined.push(currentAmount);
-    }
+        if (currentDate !== null) {
+            combined.push(currentAmount);
+        }
 
-    console.log(combined);
-    return combined;
-  };
+        console.log(combined);
+        return combined;
+    };
 
-  const filterByDate = () => {
+    const filterByDate = () => {
 
-    console.log(from)
-    console.log(to)
+        console.log(from)
+        console.log(to)
 
-    let filteredExpenses = expenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
-    let filteredIncomes = incomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
-    setExpenses(combineAmountByDate(filteredExpenses));
-    setIncomes(combineAmountByDate(filteredIncomes));
-  };
+        let filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
+        let filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
+        console.log(filteredExpenses)
+        console.log(filteredIncomes)
+        if ((filteredIncomes.length && filteredExpenses.length) !== 0) {
+            setExpenses(combineAmountByDate(filteredExpenses));
+            setIncomes(combineAmountByDate(filteredIncomes));
+        };
+    };
 
 
     return (
         <div className="Insights" style={{ backgroundColor: 'black' }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
             <Navbar />
-            <DateFilter setTo={setTo} setFrom={setFrom}/>
+            <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
             <TotalExpense amount={24000} />
             <div style={{ background: 'white', }}>
-                <InsightsChart expenses={expenses} incomes={incomes}/>
+                <InsightsChart expenses={expenses} incomes={incomes} />
                 <ExpenseCategoryList />
             </div>
         </div>
     );
 };
 
-const InsightsChart = ({expenses, incomes}) => {
+const DateFilter = ({ setTo, setFrom, from, to }) => {
+    return (
+        <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ marginRight: 'auto' }}>
+                <label>From</label>
+                <input type="date" style={{ width: '120px' }} value={from} onChange={(event) => { setFrom(event.target.value), console.log(event.target.value) }} />
+            </div>
+            <div>
+                <label>To</label>
+                <input type="date" style={{ width: '120px' }} value={to} onChange={(event) => { setTo(event.target.value), console.log(event.target.value) }} />
+            </div>
+        </div>
+    );
+};
+
+const InsightsChart = ({ expenses, incomes }) => {
     // console.log(expenses)
     // console.log(incomes)
     const data = {
@@ -155,20 +184,7 @@ const Navbar = () => {
     );
 };
 
-const DateFilter = ({setTo, setFrom}) => {
-    return (
-        <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ marginRight: 'auto' }}>
-                <label>From</label>
-                <input type="date" style={{ width: '120px' }} onChange={(event)=>{setFrom(event.value), filterByDate()}} />
-            </div>
-            <div>
-                <label>To</label>
-                <input type="date" style={{ width: '120px' }} onChange={(event)=>{setTo(event.value), filterByDate()}}/>
-            </div>
-        </div>
-    );
-};
+
 
 const TotalExpense = ({ amount }) => {
     return (
