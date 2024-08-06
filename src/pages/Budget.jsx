@@ -28,14 +28,14 @@ function Budget() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
+    <div className="min-h-screen  text-white p-4" style={{ backgroundColor: '#242424' }}>
       <div className="space-y-8">
         {/* Savings Goals */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Savings goals</h2>
+        <div className="p-4 rounded-lg bg-gray-500">
+          <h2 className="text-xl font-bold mb-4 text-left">Savings goals</h2>
           <div className="space-y-4">
             {goals.map((g, index) => (
-              <div key={index} className="bg-gray-700 p-2 rounded-lg">
+              <div key={index} className=" p-2 rounded-lg">
                 <div className="flex justify-between mb-2">
                   <span>{g.goal}</span>
                   <span className="text-green-500">Ksh {g.goalAmount}</span>
@@ -43,7 +43,7 @@ function Budget() {
               </div>
             ))}
             <button
-              className="flex items-center bg-gray-700 p-2 rounded-lg w-full justify-center text-gray-400 hover:text-white"
+              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
               onClick={() => setShowGoalModal(true)}
             >
               <span className="mr-2">+</span> Set new goal
@@ -52,11 +52,11 @@ function Budget() {
         </div>
 
         {/* Debt Management */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Debt Management</h2>
+        <div className="p-4 rounded-lg bg-gray-500">
+          <h2 className="text-xl font-bold mb-4 text-left">Debt Management</h2>
           <div className="space-y-4">
             {loans.map((l, index) => (
-              <div key={index} className="bg-gray-700 p-2 rounded-lg">
+              <div key={index} className="p-2 rounded-lg">
                 <div className="flex justify-between mb-2">
                   <span>{l.loan}</span>
                   <span className="text-red-500">Ksh {l.loanAmount}</span>
@@ -64,7 +64,7 @@ function Budget() {
               </div>
             ))}
             <button
-              className="flex items-center bg-gray-700 p-2 rounded-lg w-full justify-center text-gray-400 hover:text-white"
+              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black "
               onClick={() => setShowLoanModal(true)}
             >
               <span className="mr-2">+</span> Add loan
@@ -73,11 +73,11 @@ function Budget() {
         </div>
 
         {/* Limits */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Limits</h2>
+        <div className="p-4 rounded-lg bg-gray-500">
+          <h2 className="text-xl font-bold mb-4 text-left">Limits</h2>
           <div className="space-y-4">
             {limits.map((l, index) => (
-              <div key={index} className="bg-gray-700 p-2 rounded-lg">
+              <div key={index} className="p-2 rounded-lg">
                 <div className="flex justify-between mb-2">
                   <span>{l.limit}</span>
                   <span className="text-yellow-500">Ksh {l.limitAmount}</span>
@@ -85,7 +85,7 @@ function Budget() {
               </div>
             ))}
             <button
-              className="flex items-center bg-gray-700 p-2 rounded-lg w-full justify-center text-gray-400 hover:text-white"
+              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
               onClick={() => setShowLimitModal(true)}
             >
               <span className="mr-2">+</span> Add limit

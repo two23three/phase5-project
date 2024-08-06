@@ -19,9 +19,9 @@ function App() {
     <Router>
       <div>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/add_transaction" element={<AddTransaction />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/assets" element={<Assets />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/expenses" element={<Expenses />} />

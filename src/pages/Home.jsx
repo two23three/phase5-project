@@ -1,6 +1,8 @@
 import  { useEffect, useState } from "react";
 import PieChart from "../components/PieChart";
 import InfoCard from "../components/InfoCard";
+import { Link } from 'react-router-dom';
+import Navbar from "../components/Navbar";
 
 function Home() {
     const [income, setIncome] = useState(0);
@@ -116,15 +118,26 @@ function Home() {
                 <PieChart  totalIncome={income} totalExpense={expense}/>
             </div>
             <div>
-                <h1>${balance}</h1>
-                <p>left to spend</p>
+                <h1 className="text-5xl-xl font-bold text-white">${balance}</h1>
+                <p className="text-white">left to spend</p>
             </div>
             <div>
-                <InfoCard title="Income" value={income} />
-                <InfoCard title="Expense" value={expense} />
-                <InfoCard title="Debt" value={debt} />
-                <InfoCard title="Assets" value={assets} />
+                <div> 
+                </div>
+                    <Link to="/income">
+                        <InfoCard title="Income" value={income} />
+                    </Link>
+                    <Link to="/expenses">
+                        <InfoCard title="Expense" value={expense} />
+                    </Link>
+                    <Link to="/budget">
+                        <InfoCard title="Debt" value={debt} />
+                    </Link>
+                    <Link to="/assets">
+                        <InfoCard title="Assets" value={assets} />
+                    </Link>
             </div>
+            <Navbar />
         </div>
     );
 }

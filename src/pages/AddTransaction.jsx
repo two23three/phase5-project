@@ -49,15 +49,15 @@ const AddTransaction = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-800 p-8 rounded-lg">
+    <div className="max-w-md mx-auto p-8 rounded-lg" style={{ backgroundColor: '#242424' }}>
       <h2 className="text-2xl font-bold mb-4">Add Transaction</h2>
       {error && <div className="mb-4 text-red-500">{error}</div>}
       {success && <div className="mb-4 text-green-500">{success}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-300 mb-2" htmlFor="amount">Amount</label>
+          <label className="block text-gray-100 mb-2 text-left" htmlFor="amount">Amount:</label>
           <input
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-gray-300 text-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="amount"
             type="number"
             value={amount}
@@ -66,9 +66,9 @@ const AddTransaction = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-300 mb-2" htmlFor="transactionType">Transaction Type</label>
+          <label className="block text-gray-100 mb-2 text-left" htmlFor="transactionType">Transaction Type:</label>
           <select
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-gray-300 text-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="transactionType"
             value={transactionType}
             onChange={(e) => setTransactionType(e.target.value)}
@@ -79,38 +79,32 @@ const AddTransaction = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block text-gray-300 mb-2" htmlFor="category">Category</label>
-          <input
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          <label className="block text-gray-100 mb-2 text-left" htmlFor="category">Category:</label>
+          <select
+            className="w-full px-4 py-2 bg-gray-300 text-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="category"
-            type="text"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-          />
+            >
+              <option value="electricity">Home Expenses</option>
+              <option value="shopping">Shopping</option>
+              <option value="rent">Transport and Vehicle Expenses</option>
+              <option value="health">Health</option>
+              <option value="other">Other</option>
+            </select>
         </div>
         <div className="mb-4">
-          <label className="block text-gray-300 mb-2" htmlFor="date">Date</label>
-          <input
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="date"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-300 mb-2" htmlFor="description">Description</label>
+          <label className="block text-gray-100 mb-2 text-left" htmlFor="description">Description:</label>
           <textarea
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-gray-300 text-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         <button
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+          className="w-full bg-red-800 text-white py-2 rounded hover:bg-red-700 transition duration-200"
           type="submit"
         >
           Add Transaction
