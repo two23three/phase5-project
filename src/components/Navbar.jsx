@@ -5,7 +5,7 @@ import { faHome, faChartBar, faPlus, faWallet, faEllipsisH } from "@fortawesome/
 
 function Navbar() {
     return (
-        <nav id='navbar' className="flex space-x-4 bg-gray-800 position-fixed bottom-0 left-0 right-0 p-2">
+        <nav id='navbar' className=" rounded-b-xl flex space-x-4 bg-gray-800 position-fixed bottom left-0 right-0 p-2">
             <NavLink
                 to='/'
                 className={({ isActive }) =>

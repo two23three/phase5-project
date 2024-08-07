@@ -122,7 +122,7 @@ function Home() {
     const currencySymbol = currencySymbols[currency] || "$";
 
     return (
-        <div className="flex flex-col gap-4 bg-gray-900 p-4 min-h-screen">
+        <div className="rounded-b-2xl flex flex-col gap-4 bg-gray-900 p-1 ">
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <div>
                 <PieChart totalIncome={income} totalExpense={expense} />

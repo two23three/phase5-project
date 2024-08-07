@@ -109,7 +109,7 @@ const Insights = () => {
 
 
     return (
-        <div className="Insights" style={{ backgroundColor: 'black' }}>
+        <div className="Insights p-1" style={{ backgroundColor: 'grey' }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
             <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
