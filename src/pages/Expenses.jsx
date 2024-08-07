@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 
 ChartJS.register(
@@ -63,7 +64,7 @@ const TotalExpense = ({ amount }) => {
     );
 };
 
-const Navbar = () => {
+const Header = () => {
     return (
         <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }} className="navbar">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifyContent='space-between'>
@@ -79,10 +80,11 @@ const Navbar = () => {
 const Expenses = () => {
     return (
         <div className="expenses-page" >
-            <Navbar />
+            <Header />
             < DateFilter/>
             < TotalExpense amount={24000} />
             <ExpensessChart />
+            <Navbar/>
         </div>
     )
 }

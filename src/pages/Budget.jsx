@@ -4,6 +4,8 @@ import AddLoan from "../components/AddLoan";
 import AddLimit from "../components/AddLimit";
 import ProgressBar from "../components/ProgressBar";
 import UpdateAmountPopup from "../components/UpdateAmountPopup";
+import Navbar from "../components/Navbar";
+
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
@@ -146,7 +148,7 @@ function Budget() {
           label={updateLabel}
         />
       )}
-      
+      <Navbar />
     </div>
   );
 }
