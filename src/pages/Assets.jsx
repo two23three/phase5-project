@@ -92,7 +92,7 @@ function Assets() {
     };
 
     return (
-        <div className='min-h-screen bg-gray-900 text-white flex flex-col'>
+        <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col'>
             <h1 className="text-3xl font-bold mb-6 text-center">Assets</h1>
             <div className="flex flex-col items-center space-y-4 p-4 flex-grow">
                 {assets.length > 0 ? (

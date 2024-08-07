@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 
 function MorePersonal() {
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg overflow-hidden shadow-lg">
+    <div className="w-full max-w-sm bg-white rounded-b-xl overflow-hidden shadow-lg">
       <div className="flex items-center p-4">
         <img
           className="w-16 h-16 rounded-full"

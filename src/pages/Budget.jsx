@@ -60,7 +60,7 @@ function Budget() {
   };
 
   return (
-    <div className="min-h-screen text-white p-4" style={{ backgroundColor: '#242424' }}>
+    <div className="rounded-b-xl p-4 text-white " style={{ backgroundColor: '#242424' }}>
       <div className="space-y-8">
         {/* Savings Goals */}
         <div className="p-4 rounded-lg bg-gray-500">
