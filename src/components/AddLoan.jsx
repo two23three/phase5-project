@@ -6,7 +6,7 @@ const AddLoan = ({ onClose, onSave }) => {
 
   const handleLoanSubmit = (e) => {
     e.preventDefault();
-    onSave({ loan, loanAmount });
+    onSave({ loan, loanAmount: parseFloat(loanAmount) });
     setLoan('');
     setLoanAmount('');
   };

@@ -6,7 +6,7 @@ const AddLimit = ({ onClose, onSave }) => {
 
   const handleLimitSubmit = (e) => {
     e.preventDefault();
-    onSave({ limit, limitAmount });
+    onSave({ limit, limitAmount: parseFloat(limitAmount) });
     setLimit('');
     setLimitAmount('');
   };
@@ -28,7 +28,7 @@ const AddLimit = ({ onClose, onSave }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-900 mb-2 text-left" htmlFor="limitAmount">Amount</label>
+            <label className="block text-gray-900 mb-2 text-left" htmlFor="limitAmount">Amount:</label>
             <input
               className="w-full px-4 py-2 bg-neutral-500 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="limitAmount"

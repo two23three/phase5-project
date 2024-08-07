@@ -6,7 +6,7 @@ const SetGoalPopup = ({ onClose, onSave }) => {
 
   const handleGoalSubmit = (e) => {
     e.preventDefault();
-    onSave({ goal, goalAmount });
+    onSave({ goal, goalAmount: parseFloat(goalAmount) });
     setGoal('');
     setGoalAmount('');
   };
