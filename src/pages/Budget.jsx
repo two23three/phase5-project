@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SetGoalPopup from "../components/SetGoalPopup";
 import AddLoan from "../components/AddLoan";
 import AddLimit from "../components/AddLimit";
-import ProgressBar from "../components/ProgressBar
+import ProgressBar from "../components/ProgressBar"
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
