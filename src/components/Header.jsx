@@ -17,7 +17,7 @@ function Header({ onLogout, onCurrencyChange }) {
     };
 
     return (
-        <header className="flex justify-between items-center p-4 bg-gray-800 text-white">
+        <header className="flex justify-between items-center text-white">
             <div className="relative">
                 <button
                     className="flex items-center space-x-2"
