@@ -2,93 +2,131 @@ import React, { useState } from "react";
 import SetGoalPopup from "../components/SetGoalPopup";
 import AddLoan from "../components/AddLoan";
 import AddLimit from "../components/AddLimit";
+import ProgressBar from "../components/ProgressBar";
+import UpdateAmountPopup from "../components/UpdateAmountPopup";
+import Navbar from "../components/Navbar";
+
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showLoanModal, setShowLoanModal] = useState(false);
   const [showLimitModal, setShowLimitModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [updateIndex, setUpdateIndex] = useState(null);
+  const [updateType, setUpdateType] = useState(null);
+  const [updateLabel, setUpdateLabel] = useState('');
 
   const [goals, setGoals] = useState([]);
   const [loans, setLoans] = useState([]);
   const [limits, setLimits] = useState([]);
 
   const handleSaveGoal = (newGoal) => {
-    setGoals([...goals, newGoal]);
+    setGoals([...goals, { ...newGoal, currentAmount: 0 }]);
     setShowGoalModal(false);
   };
 
   const handleSaveLoan = (newLoan) => {
-    setLoans([...loans, newLoan]);
+    setLoans([...loans, { ...newLoan, currentAmount: 0 }]);
     setShowLoanModal(false);
   };
 
   const handleSaveLimit = (newLimit) => {
-    setLimits([...limits, newLimit]);
+    setLimits([...limits, { ...newLimit, currentAmount: 0 }]);
     setShowLimitModal(false);
   };
 
+  const handleUpdateAmount = (index, type, label) => {
+    setUpdateIndex(index);
+    setUpdateType(type);
+    setUpdateLabel(label);
+    setShowUpdateModal(true);
+  };
+
+  const updateAmount = (value) => {
+    if (updateType === 'goal') {
+      const updatedGoals = [...goals];
+      updatedGoals[updateIndex].currentAmount += value;
+      setGoals(updatedGoals);
+    } else if (updateType === 'loan') {
+      const updatedLoans = [...loans];
+      updatedLoans[updateIndex].currentAmount += value;
+      setLoans(updatedLoans);
+    } else if (updateType === 'limit') {
+      const updatedLimits = [...limits];
+      updatedLimits[updateIndex].currentAmount += value;
+      setLimits(updatedLimits);
+    }
+    setShowUpdateModal(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
+    <div className="min-h-screen text-white p-4" style={{ backgroundColor: '#242424' }}>
       <div className="space-y-8">
         {/* Savings Goals */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Savings goals</h2>
+        <div className="p-4 rounded-lg bg-gray-500">
+          <h2 className="text-xl font-bold mb-4 text-left">Savings Goals</h2>
           <div className="space-y-4">
             {goals.map((g, index) => (
-              <div key={index} className="bg-gray-700 p-2 rounded-lg">
-                <div className="flex justify-between mb-2">
-                  <span>{g.goal}</span>
-                  <span className="text-green-500">Ksh {g.goalAmount}</span>
-                </div>
-              </div>
+              <ProgressBar
+                key={index}
+                label={g.goal}
+                currentAmount={g.currentAmount}
+                targetAmount={g.goalAmount}
+                type="goal"
+                onUpdate={() => handleUpdateAmount(index, 'goal', g.goal)}
+              />
             ))}
             <button
-              className="flex items-center bg-gray-700 p-2 rounded-lg w-full justify-center text-gray-400 hover:text-white"
+              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
               onClick={() => setShowGoalModal(true)}
             >
-              <span className="mr-2">+</span> Set new goal
+              <span className="mr-2">+</span> Set New Goal
             </button>
           </div>
         </div>
 
         {/* Debt Management */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Debt Management</h2>
+        <div className="p-4 rounded-lg bg-gray-500">
+          <h2 className="text-xl font-bold mb-4 text-left">Debt Management</h2>
           <div className="space-y-4">
             {loans.map((l, index) => (
-              <div key={index} className="bg-gray-700 p-2 rounded-lg">
-                <div className="flex justify-between mb-2">
-                  <span>{l.loan}</span>
-                  <span className="text-red-500">Ksh {l.loanAmount}</span>
-                </div>
-              </div>
+              <ProgressBar
+                key={index}
+                label={l.loan}
+                currentAmount={l.currentAmount}
+                targetAmount={l.loanAmount}
+                type="loan"
+                onUpdate={() => handleUpdateAmount(index, 'loan', l.loan)}
+              />
             ))}
             <button
-              className="flex items-center bg-gray-700 p-2 rounded-lg w-full justify-center text-gray-400 hover:text-white"
+              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
               onClick={() => setShowLoanModal(true)}
             >
-              <span className="mr-2">+</span> Add loan
+              <span className="mr-2">+</span> Add Loan
             </button>
           </div>
         </div>
 
         {/* Limits */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-xl font-bold mb-4">Limits</h2>
+        <div className="p-4 rounded-lg bg-gray-500">
+          <h2 className="text-xl font-bold mb-4 text-left">Limits</h2>
           <div className="space-y-4">
             {limits.map((l, index) => (
-              <div key={index} className="bg-gray-700 p-2 rounded-lg">
-                <div className="flex justify-between mb-2">
-                  <span>{l.limit}</span>
-                  <span className="text-yellow-500">Ksh {l.limitAmount}</span>
-                </div>
-              </div>
+              <ProgressBar
+                key={index}
+                label={l.limit}
+                currentAmount={l.currentAmount}
+                targetAmount={l.limitAmount}
+                type="limit"
+                onUpdate={() => handleUpdateAmount(index, 'limit', l.limit)}
+              />
             ))}
             <button
-              className="flex items-center bg-gray-700 p-2 rounded-lg w-full justify-center text-gray-400 hover:text-white"
+              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
               onClick={() => setShowLimitModal(true)}
             >
-              <span className="mr-2">+</span> Add limit
+              <span className="mr-2">+</span> Add Limit
             </button>
           </div>
         </div>
@@ -103,6 +141,14 @@ function Budget() {
       {showLimitModal && (
         <AddLimit onClose={() => setShowLimitModal(false)} onSave={handleSaveLimit} />
       )}
+      {showUpdateModal && (
+        <UpdateAmountPopup
+          onClose={() => setShowUpdateModal(false)}
+          onSave={updateAmount}
+          label={updateLabel}
+        />
+      )}
+      <Navbar />
     </div>
   );
 }

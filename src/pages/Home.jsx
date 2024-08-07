@@ -1,16 +1,27 @@
-import  { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import PieChart from "../components/PieChart";
+import InfoCard from "../components/InfoCard";
+import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 
 function Home() {
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
-    const [debt, setDebt] = useState(0);    
+    const [debt, setDebt] = useState(0);
     const [assets, setAssets] = useState(0);
+    const [currency, setCurrency] = useState("Ksh");
 
     const userID = 1;
     const API_URL = "https://bizzgogo-70f9.onrender.com/";
 
-    // Fetching the user's income
+    const currencySymbols = {
+        USD: "$",
+        EUR: "€",
+        GBP: "£",
+        KES: "Ksh"
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -20,7 +31,6 @@ function Home() {
 
                 let totalIncome = 0;
 
-                // filtering the data for a specific user and summing up the amounts
                 incomes.forEach(income => {
                     if (income.user_id === userID) {
                         totalIncome += parseFloat(income.amount);
@@ -35,7 +45,6 @@ function Home() {
         fetchData();
     }, []);
 
-    // Fetching the user's expenses
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -59,7 +68,6 @@ function Home() {
         fetchData();
     }, []);
 
-    // Fetching the user's debt
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -83,7 +91,6 @@ function Home() {
         fetchData();
     }, []);
 
-    // Fetching the user's assets
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -107,24 +114,42 @@ function Home() {
         fetchData();
     }, []);
 
+    const handleCurrencyChange = (newCurrency) => {
+        setCurrency(newCurrency);
+    };
+
     let balance = income - expense;
+    const currencySymbol = currencySymbols[currency] || "$";
 
     return (
-        <div className="flex flex-col gap-4 bg-gray-900 p-4">
+        <div className="flex flex-col gap-4 bg-gray-900 p-4 min-h-screen">
+            <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <div>
-                <PieChart  totalIncome={income} totalExpense={expense}/>
+                <PieChart totalIncome={income} totalExpense={expense} />
             </div>
             <div>
-                <h1>${balance}</h1>
-                <p>left to spend</p>
+                <h1 className="text-5xl font-bold text-white">
+                    {currencySymbol} {balance.toFixed(2)}
+                </h1>
+                <p className="text-white">left to spend</p>
             </div>
             <div>
-                <InfoCard title="Income" value={income} />
-                <InfoCard title="Expense" value={expense} />
-                <InfoCard title="Debt" value={debt} />
-                <InfoCard title="Assets" value={assets} />
+                <Link to="/income">
+                    <InfoCard title="Income" value={`${currencySymbol} ${income.toFixed(2)}`} />
+                </Link>
+                <Link to="/expenses">
+                    <InfoCard title="Expense" value={`${currencySymbol} ${expense.toFixed(2)}`} />
+                </Link>
+                <Link to="/budget">
+                    <InfoCard title="Debt" value={`${currencySymbol} ${debt.toFixed(2)}`} />
+                </Link>
+                <Link to="/assets">
+                    <InfoCard title="Assets" value={`${currencySymbol} ${assets.toFixed(2)}`} />
+                </Link>
             </div>
+            <Navbar />
         </div>
     );
 }
-export default Home
+
+export default Home;
