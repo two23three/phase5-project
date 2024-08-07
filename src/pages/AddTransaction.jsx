@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const AddTransaction = () => {
   const [amount, setAmount] = useState('');
@@ -8,6 +9,13 @@ const AddTransaction = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleCancel = () => {
+    navigate('/');
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,6 +118,14 @@ const AddTransaction = () => {
         >
           Add Transaction
         </button>
+        <button
+          className=" text-white py-2 rounded hover:bg-gray-700 transition duration-200"
+          onClick={handleCancel}
+          type="button"
+        >
+          Cancel
+        </button>
+        <br></br>
       </form>
     </div>
   );
