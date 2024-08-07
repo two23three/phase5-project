@@ -20,17 +20,17 @@ const ProgressBar = ({ label, currentAmount, targetAmount, onUpdate, type }) => 
 
   return (
     <div className="p-2 rounded-lg bg-gray-700 mb-2">
-      <div className="flex justify-between items-center mb-2">
-        <div className="text-gray-400 font-bold">{label}</div>
-        <div className="text-gray-400">
-          Ksh {currentAmount.toLocaleString()} / Ksh {targetAmount.toLocaleString()}
-        </div>
+      <div className="mb-2 flex justify-between">
+        <div className="text-gray-400 font-bold text-left">{label}</div>
       </div>
       <div className="bg-gray-600 rounded h-4 overflow-hidden mb-2">
         <div
           className={`${barColor} h-4 rounded`}
           style={{ width: `${percentage}%` }}
         ></div>
+      </div>
+      <div className="text-gray-400 text-right mb-2">
+        Ksh {currentAmount.toLocaleString()} / Ksh {targetAmount.toLocaleString()}
       </div>
       <button
         className="bg-blue-500 text-white p-2 rounded-lg w-full"
