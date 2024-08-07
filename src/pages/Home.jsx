@@ -1,5 +1,5 @@
-// pages/Home.js
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import PieChart from "../components/PieChart";
 import InfoCard from "../components/InfoCard";
 import Navbar from "../components/Navbar";
@@ -10,7 +10,7 @@ function Home() {
     const [expense, setExpense] = useState(0);
     const [debt, setDebt] = useState(0);
     const [assets, setAssets] = useState(0);
-    const [currency, setCurrency] = useState("USD");
+    const [currency, setCurrency] = useState("Ksh");
 
     const userID = 1;
     const API_URL = "https://bizzgogo-70f9.onrender.com/";
@@ -129,22 +129,22 @@ function Home() {
             </div>
             <div>
                 <h1 className="text-5xl font-bold text-white">
-                    {currencySymbol}{balance.toFixed(2)}
+                    {currencySymbol} {balance.toFixed(2)}
                 </h1>
                 <p className="text-white">left to spend</p>
             </div>
             <div>
                 <Link to="/income">
-                    <InfoCard title="Income" value={`${currencySymbol}${income.toFixed(2)}`} />
+                    <InfoCard title="Income" value={`${currencySymbol} ${income.toFixed(2)}`} />
                 </Link>
                 <Link to="/expenses">
-                    <InfoCard title="Expense" value={`${currencySymbol}${expense.toFixed(2)}`} />
+                    <InfoCard title="Expense" value={`${currencySymbol} ${expense.toFixed(2)}`} />
                 </Link>
                 <Link to="/budget">
-                    <InfoCard title="Debt" value={`${currencySymbol}${debt.toFixed(2)}`} />
+                    <InfoCard title="Debt" value={`${currencySymbol} ${debt.toFixed(2)}`} />
                 </Link>
                 <Link to="/assets">
-                    <InfoCard title="Assets" value={`${currencySymbol}${assets.toFixed(2)}`} />
+                    <InfoCard title="Assets" value={`${currencySymbol} ${assets.toFixed(2)}`} />
                 </Link>
             </div>
             <Navbar />
