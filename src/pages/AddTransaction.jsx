@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const AddTransaction = () => {
   const [amount, setAmount] = useState('');
@@ -8,6 +9,13 @@ const AddTransaction = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleCancel = () => {
+    navigate('/');
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,8 +27,10 @@ const AddTransaction = () => {
       description,
     };
 
+    const endpoint = transactionType === 'income' ? 'https://bizzgogo-70f9.onrender.com/income/' : 'https://bizzgogo-70f9.onrender.com/expenses/';
+
     try {
-      const response = await fetch('https://bizzgogo-70f9.onrender.com/transactions/', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +45,6 @@ const AddTransaction = () => {
       const result = await response.json();
       setSuccess('Transaction added successfully!');
       setError('');
-
 
       setAmount('');
       setTransactionType('income');
@@ -86,13 +95,13 @@ const AddTransaction = () => {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-            >
-              <option value="electricity">Home Expenses</option>
-              <option value="shopping">Shopping</option>
-              <option value="rent">Transport and Vehicle Expenses</option>
-              <option value="health">Health</option>
-              <option value="other">Other</option>
-            </select>
+          >
+            <option value="electricity">Home Expenses</option>
+            <option value="shopping">Shopping</option>
+            <option value="rent">Transport and Vehicle Expenses</option>
+            <option value="health">Health</option>
+            <option value="other">Other</option>
+          </select>
         </div>
         <div className="mb-4">
           <label className="block text-gray-100 mb-2 text-left" htmlFor="description">Description:</label>
@@ -109,6 +118,14 @@ const AddTransaction = () => {
         >
           Add Transaction
         </button>
+        <button
+          className=" text-white py-2 rounded hover:bg-gray-700 transition duration-200"
+          onClick={handleCancel}
+          type="button"
+        >
+          Cancel
+        </button>
+        <br></br>
       </form>
     </div>
   );

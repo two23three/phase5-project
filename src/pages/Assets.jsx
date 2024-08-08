@@ -10,7 +10,7 @@ function Assets() {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
-    const userID = 9; // Make sure this matches the user_id in your data
+    const userID = 1;
     const API_URL = "https://bizzgogo-70f9.onrender.com/";
 
     useEffect(() => {
@@ -36,7 +36,7 @@ function Assets() {
             }
         };
         fetchData();
-    }, []); // Empty dependency array to run only once
+    }, []);
 
     const handleEdit = (asset) => {
         setSelectedAsset(asset);
@@ -92,7 +92,7 @@ function Assets() {
     };
 
     return (
-        <div className='min-h-screen bg-gray-900 text-white flex flex-col'>
+        <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col'>
             <h1 className="text-3xl font-bold mb-6 text-center">Assets</h1>
             <div className="flex flex-col items-center space-y-4 p-4 flex-grow">
                 {assets.length > 0 ? (

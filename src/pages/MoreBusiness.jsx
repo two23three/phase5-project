@@ -1,4 +1,6 @@
 import React from "react";
+import Navbar from "../components/Navbar";
+
 
 function MoreBusiness() {
   return (
@@ -80,6 +82,7 @@ function MoreBusiness() {
           </button>
         </div>
       </div>
+      <Navbar/>
     </div>
   );
 }
