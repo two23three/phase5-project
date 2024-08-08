@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
 
@@ -84,11 +83,13 @@ const Insights = () => {
     const filterByDate = () => {
         let filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
         let filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
+        console.log(filteredIncomes);
         
-        if (filteredIncomes.length && filteredExpenses.length) {
+        if (filteredIncomes && filteredExpenses){
             setExpenses(combineAmountByDate(filteredExpenses));
             setIncomes(combineAmountByDate(filteredIncomes));
         }
+        
     };
 
     const sortBycategories = (data) => {
@@ -114,7 +115,6 @@ const Insights = () => {
         }
         Bills.sum = Bills.electricity + Bills.shopping + Bills.rent + Bills.car;
 
-        console.log(Bills)
 
         const categoriesList = [
             {
@@ -159,16 +159,15 @@ const Insights = () => {
     };
 
     return (
-        <div className="Insights p-1" style={{ backgroundColor: 'grey' }}>
+        <div className="Insights" style={{ backgroundColor: 'black' }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
-            <Header />
+            <Navbar />
             <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
             <TotalExpense amount={24000} />
             <div style={{ background: 'white', }}>
                 <InsightsChart expenses={expenses} incomes={incomes} />
                 <ExpenseCategoryList categories={Categories} />
             </div>
-            <Navbar/>
         </div>
     );
 };
@@ -183,7 +182,6 @@ const ExpenseCategoryList = ({ categories }) => {
     }, [categories]);
 
     const [visibleCategories, setVisibleCategories] = useState(categories);
-    console.log(visibleCategories);
 
     return (
         <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '0', margin: '0', borderRadius: '15px' }}>
@@ -272,7 +270,7 @@ const InsightsChart = ({ expenses, incomes }) => {
     );
 };
 
-const Header = () => {
+const Navbar = () => {
     return (
         <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', padding: '10px', backgroundColor: '' }} className="navbar">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
@@ -303,6 +301,8 @@ const TotalExpense = ({ amount }) => {
 
 
 const ExpenseCategoryItem = ({ category }) => {
+
+
     return (
         <div className="expense-category-item" style={{
             display: 'flex', justifyContent: 'space-between', padding: '10px 0',
