@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 const ContactPopup = ({ isOpen, onClose }) => {
   const [name, setName] = useState('');
@@ -10,9 +11,31 @@ const ContactPopup = ({ isOpen, onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission logic here
     console.log('Form submitted:', { name, email, queryType, description });
-    onClose(); // Close the popup after submission
+    const serviceId = "service_lmj91i1";
+    const templateId = "template_wnap2mj";
+    const publicKey = "cOusq-JJGtgAA2dgt";
+
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      query_type: queryType,
+      description: description,
+      to_name: "Barnes Customer Support",
+    };
+
+    emailjs.send(serviceId, templateId, templateParams, publicKey)
+      .then((response) => {
+        console.log('Email sent successfully!', response.status);
+        setName('');
+        setEmail('');
+        setQueryType('');
+        setDescription('');
+      })
+      .catch((error) => {
+        console.log('Error in Sending Email...', error);
+      });
+    onClose();
   };
 
   return (
