@@ -10,7 +10,7 @@ import Insights from './pages/Insights';
 import Login from './pages/Login';
 import MorePersonal from './pages/MorePersonal';
 import MoreBusiness from './pages/MoreBusiness';
-
+import ErrorPage from './pages/ErrorPage';
 
 import './App.css';
 
@@ -30,6 +30,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/p-more" element={<MorePersonal />} />
           <Route path="/b-more" element={<MoreBusiness />} />
+          <Route path="*" element={<ErrorPage />} /> 
         </Routes>
       </div>
     </Router>
