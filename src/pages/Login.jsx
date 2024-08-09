@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function Login() {
   return (
@@ -36,11 +37,14 @@ function Login() {
         </form>
         <div className="flex items-center justify-center mt-6">
           <div className="border-t border-gray-600 w-full"></div>
-          <span className="px-7  text-gray-400">Don’t have an account?</span>
+          <span className="px-9  text-gray-400">Don’t have an account?</span>
           <div className="border-t border-gray-600 w-full"></div>
         </div>
         <div className="text-center mt-4">
-          <a href="#" className="text-white font-bold hover:underline">Sign Up</a>
+          <NavLink
+            to='/register'>
+            <a href="#" className="text-white font-bold hover:underline">Sign Up</a>
+          </NavLink>
         </div>
       </div>
     </div>

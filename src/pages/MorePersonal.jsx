@@ -43,7 +43,7 @@ function MorePersonal() {
           alt="Profile"
         />
         <div className="ml-4">
-          <p className="text-gray-500 font-semibold text-center mt-2 mb-2 text-left">Personal Account</p>
+          <p className="text-gray-500 font-semibold mt-2 mb-2 text-left">Personal Account</p>
           <h2 className="text-neutral-800 text-lg font-semibold text-left">Susan Kamau</h2>
           <p className="text-neutral-800">skamau@gmail.com</p>
           <p className="text-neutral-600 text-left">Referral points: 9</p>
