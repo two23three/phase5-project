@@ -5,7 +5,7 @@ import EditDetailsPopup from "../components/EditDetailsPopup";
 import ChangePasswordPopup from "../components/ChangePasswordPopup";
 import Logout from "../components/Logout";
 import DeleteAccount from "../components/DeleteAccount";
-import AboutUsPopup from "../components/AboutUsPoput";
+import AboutUsPopup from "../components/AboutUsPopup";
 
 function MorePersonal() {
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
@@ -56,7 +56,7 @@ function MorePersonal() {
           </button>
         </div>
       </div>
-      <div className="bg-gray-900 p-4">
+      <div className="bg-gray-900 p-4 rounded-t-xl">
         <div className="text-gray-400 mb-2 text-left text-xs">CUSTOMER SUPPORT</div>
         <div className="space-y-2">
           <button className="w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
