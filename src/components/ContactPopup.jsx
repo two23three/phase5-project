@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import emailjs from '@emailjs/browser';
+// import emailjs from '@emailjs/browser';
 
 const ContactPopup = ({ isOpen, onClose }) => {
   const [name, setName] = useState('');
