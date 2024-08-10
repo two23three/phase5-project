@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 const UpdateAmountPopup = ({ onClose, onSave, label }) => {
-  const [updateAmount, setUpdateAmount] = useState('');
+  const [updateAmount, setUpdateAmount] = useState("");
 
   const handleUpdateSubmit = (e) => {
     e.preventDefault();
-    onSave(parseFloat(updateAmount));
+    onSave(parseInt(updateAmount));
     setUpdateAmount('');
   };
 
@@ -28,6 +28,7 @@ const UpdateAmountPopup = ({ onClose, onSave, label }) => {
           <button
             className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-200"
             type="submit"
+            onSubmit={(e) => setUpdateAmount(e.target.value)}
           >
             Update Amount
           </button>
