@@ -1,4 +1,6 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './components/AuthProvider';
 import Register from './pages/Register';
 import AddTransaction from './pages/AddTransaction';
 import Home from './pages/Home';
@@ -11,29 +13,32 @@ import Login from './pages/Login';
 import MorePersonal from './pages/MorePersonal';
 import MoreBusiness from './pages/MoreBusiness';
 import ErrorPage from './pages/ErrorPage';
+import PrivateRoute from './components/PrivateRoute';
 
 import './App.css';
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/add_transaction" element={<AddTransaction />} />
-          <Route path="/assets" element={<Assets />} />
-          <Route path="/budget" element={<Budget />} />
-          <Route path="/expenses" element={<Expenses />} />
-          <Route path="/income" element={<Income />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/p-more" element={<MorePersonal />} />
-          <Route path="/b-more" element={<MoreBusiness />} />
-          <Route path="*" element={<ErrorPage />} /> 
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div>
+          <Routes>
+            <Route path="/" element={<PrivateRoute element={Home} />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/add_transaction" element={<PrivateRoute element={AddTransaction} />} />
+            <Route path="/assets" element={<PrivateRoute element={Assets} />} />
+            <Route path="/budget" element={<PrivateRoute element={Budget} />} />
+            <Route path="/expenses" element={<PrivateRoute element={Expenses} />} />
+            <Route path="/income" element={<PrivateRoute element={Income} />} />
+            <Route path="/insights" element={<PrivateRoute element={Insights} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/p-more" element={<PrivateRoute element={MorePersonal} />} />
+            <Route path="/b-more" element={<PrivateRoute element={MoreBusiness} />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

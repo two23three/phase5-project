@@ -4,6 +4,8 @@ import PieChart from "../components/PieChart";
 import InfoCard from "../components/InfoCard";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
+import Logout from "../components/Logout";
+
 
 function Home() {
     const [income, setIncome] = useState(0);
@@ -14,6 +16,8 @@ function Home() {
 
     const userID = 1;
     const API_URL = "https://bizzgogo-70f9.onrender.com/";
+
+    
 
     const currencySymbols = {
         USD: "$",
@@ -124,6 +128,7 @@ function Home() {
     return (
         <div className="rounded-b-2xl flex flex-col gap-4 bg-gray-900 p-1 ">
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+            <Logout onLogout={() => console.log("Logging out...")} />
             <div>
                 <PieChart totalIncome={income} totalExpense={expense} />
             </div>
