@@ -13,7 +13,7 @@ function Home() {
     const [currency, setCurrency] = useState("Ksh");
 
     const userID = 1;
-    const API_URL = "https://bizzgogo-70f9.onrender.com/";
+    const API_URL = "https://barnes.onrender.com/";
 
     const currencySymbols = {
         USD: "$",
