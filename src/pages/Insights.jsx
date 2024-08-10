@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
+import Navbar from "../components/Navbar";
 
 ChartJS.register(
     LineElement,
@@ -172,13 +173,14 @@ const Insights = () => {
     return (
         <div className="Insights" style={{ backgroundColor: 'black' }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
-            <Navbar />
+            <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
             <TotalExpense amount={24000} />
             <div style={{ background: 'white', }}>
                 <InsightsChart expenses={expenses} incomes={incomes} />
                 <ExpenseCategoryList categories={Categories} />
             </div>
+            <Navbar></Navbar>
         </div>
     );
 };
@@ -302,7 +304,7 @@ const InsightsChart = ({ expenses, incomes }) => {
     );
 };
 
-const Navbar = () => {
+const Header = () => {
     return (
         <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', padding: '10px', backgroundColor: '' }} className="navbar">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">

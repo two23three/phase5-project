@@ -1,7 +1,8 @@
-// components/Header.js
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthProvider';// Assuming you have a useAuth hook
 
 function Header({ onLogout, onCurrencyChange }) {
     const [selectedCurrency, setSelectedCurrency] = useState("USD");
@@ -16,6 +17,16 @@ function Header({ onLogout, onCurrencyChange }) {
         onCurrencyChange(currency);
     };
 
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    const handleLogout = () => {
+        logout(); // Call logout function which removes the token
+        navigate('/login'); // Redirect to login page
+        setShowLogoutPopup(false);
+        onLogout();
+    };
+
     return (
         <header className="flex justify-between items-center text-white">
             <div className="relative">
@@ -27,11 +38,11 @@ function Header({ onLogout, onCurrencyChange }) {
                     <FontAwesomeIcon icon={faCaretDown} />
                 </button>
                 {showCurrencyDropdown && (
-                    <div className="absolute left-0 mt-2 w-32 bg-white text-black rounded shadow-lg">
+                    <div className="absolute bg-white shadow-md rounded mt-2">
                         {currencies.map((currency) => (
                             <button
                                 key={currency}
-                                className="block w-full text-left px-4 py-2 hover:bg-gray-200"
+                                className="block px-4 py-2 text-black hover:bg-gray-200"
                                 onClick={() => handleCurrencySelect(currency)}
                             >
                                 {currency}
@@ -48,13 +59,13 @@ function Header({ onLogout, onCurrencyChange }) {
                 <span>Logout</span>
             </button>
             {showLogoutPopup && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded shadow-lg text-black text-centre">
-                        <p>Are you sure you want to Logout?</p>
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded shadow-lg text-black">
+                        <p>Are you sure you want to logout?</p>
                         <div className="flex space-x-4 mt-4">
                             <button
                                 className="bg-red-500 text-white px-4 py-2 rounded"
-                                onClick={onLogout}
+                                onClick={handleLogout}
                             >
                                 Yes
                             </button>
