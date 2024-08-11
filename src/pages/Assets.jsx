@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 function Assets() {
     const [assets, setAssets] = useState([]);
@@ -95,6 +96,8 @@ function Assets() {
                 }
                 const newAsset = await response.json();
                 setAssets([...assets, newAsset]);
+                // Reloading the page
+                window.location.reload();
             } catch (error) {
                 console.log("Error adding new asset:", error);
             }
@@ -115,6 +118,8 @@ function Assets() {
                 setAssets(assets.map(asset =>
                     asset.id === updatedAssetFromServer.id ? updatedAssetFromServer : asset
                 ));
+                // Reloading the page
+                window.location.reload();
             } catch (error) {
                 console.log("Error updating asset:", error);
             }
@@ -151,7 +156,7 @@ function Assets() {
                                     className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     onClick={() => toggleDropdown(asset.id)}
                                 >
-                                    Actions
+                                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
                                 </button>
 
                                 {openDropdownId === asset.id && (
