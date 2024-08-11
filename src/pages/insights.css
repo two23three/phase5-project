@@ -30,6 +30,20 @@
     min-width: 600px; /* Set a minimum width for the chart */
 }
 
+.income-chart {
+    background: white;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.income-chart canvas {
+    min-width: 400px; /* Ensures the chart has a minimum width */
+    max-width: 500px;
+}
+
+
 .Insights {
     background-color: black;
     color: white;
@@ -131,4 +145,38 @@
     background-color: #ffffff;
     border-radius: 10px;
     margin: 10px 0;
+}
+
+/* for income and expense pages */
+
+.expenses-page {
+    display: flex;
+    flex-direction: column;
+    height: fit-content; 
+    padding: 0px;
+    font-family: Arial, sans-serif;
+    background-color: #000000; 
+}
+
+.transaction-table {
+    width: 100%;
+    max-width: 800px; 
+    padding: 0;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #D1D1D1;
+    color: #000000;
+}
+
+table, td {
+    border-bottom: solid 1px #423E3E;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
 }
