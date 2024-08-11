@@ -23,11 +23,11 @@ const Expenses = () => {
 
     useEffect(() => {
         // Fetch transactions from the API
-        fetch('http://localhost:3000/transactions')
+        fetch('https://barnes.onrender.com/transactions')
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                let expenses = data.filter(expense => expense.transaction_type === 'expense' && expense.user_id === 1);
+                let expenses = data.transactions.filter(expense => expense.transaction_type === 'expense' && expense.user_id === 1);
                 setTranzactions(combineAmountByDate(expenses));
                 setTransactions(expenses);
             })
@@ -75,7 +75,7 @@ const Expenses = () => {
 
     return (
         <div className="expenses-page" style={{ backgroundColor: 'black' }} >
-            <Header />
+            <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
             <TotalExpense amount={24000} />
             <ExpensesChart list={tranzactions} />
@@ -115,20 +115,20 @@ const DateFilter = ({ from, to, setFrom, setTo }) => {
         <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
                 <label>From</label>
-                <input 
-                    type="date" 
-                    value={from} 
-                    onChange={(e) => setFrom(e.target.value)} 
-                    style={{ width: '120px' }} 
+                <input
+                    type="date"
+                    value={from}
+                    onChange={(e) => setFrom(e.target.value)}
+                    style={{ width: '120px' }}
                 />
             </div>
             <div>
                 <label>To</label>
-                <input 
-                    type="date" 
-                    value={to} 
-                    onChange={(e) => setTo(e.target.value)} 
-                    style={{ width: '120px' }} 
+                <input
+                    type="date"
+                    value={to}
+                    onChange={(e) => setTo(e.target.value)}
+                    style={{ width: '120px' }}
                 />
             </div>
         </div>
@@ -151,9 +151,24 @@ const ExpensesChart = ({ list }) => {
         ]
     };
 
+    const options = {
+        scales: {
+            x: {
+                type: 'category',
+                display: true,
+            },
+            y: {
+                beginAtZero: true
+            }
+        },
+        maintainAspectRatio: false,
+    };
+
     return (
-        <div className="expense-chart" style={{ background: 'white' }}>
-            <Line data={data} />
+        <div className={list.length>10? 'chart-container': null}>
+            <div className={list.length>10? 'chart-container': 'expense-chart'}>
+                <Line data={data} options={options} />
+            </div>
         </div>
     );
 };

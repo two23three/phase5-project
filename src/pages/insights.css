@@ -3,3 +3,132 @@
 @tailwind utilities;
 
 
+.expense-chart {
+    background: white;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.expense-chart canvas {
+    min-width: 500px; /* Ensures the chart has a minimum width */
+    max-width: 600px;
+}
+
+.chart-container {
+    width: 100%; /* Set the width of the container */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.chart-inner {
+    width: auto; /* Adjust based on the chart's width */
+    min-width: 600px; /* Set a minimum width for the chart */
+}
+
+.Insights {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#navbar {
+    background-color: #242424;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.expense-filter {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.expense-filter label {
+    color: #e8eaed;
+    margin-right: 10px;
+}
+
+.expense-filter input[type="date"] {
+    background-color: #444;
+    color: #e8eaed;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.total-expense {
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    padding: 0px 4px;
+    margin: 10px 0;
+}
+
+.total-expense h2 {
+    margin: 0;
+    color: #e8eaed;
+}
+
+.total-expense p {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.expense-category-container {
+    background-color: #D1D1D1;
+    border-radius: 15px;
+    margin: 10px 0;
+    width: auto;
+}
+
+.expense-category-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.expense-category-item {
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #242424;
+    color: #e8eaed;
+    border: 1px solid #333;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.expense-category-item:hover {
+    color:#646cff;
+    cursor: pointer;
+};
+
+.expense-category-item p {
+    margin: 0;
+}
+
+.dropdown {
+    background-color: #D1D1D1;
+    color: #423E3E;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.expense-chart {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 10px 0;
+}
