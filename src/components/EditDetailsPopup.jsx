@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const EditDetailsPopup = ({ isOpen, onClose, userDetails, onSave }) => {
+const EditDetailsPopup = ({ isOpen, onClose, userDetails = {}, onSave }) => {
   const [name, setName] = useState(userDetails.name || '');
   const [email, setEmail] = useState(userDetails.email || '');
   const [phoneNumber, setPhoneNumber] = useState(userDetails.phoneNumber || '');

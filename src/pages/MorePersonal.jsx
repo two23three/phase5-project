@@ -6,6 +6,9 @@ import ChangePasswordPopup from "../components/ChangePasswordPopup";
 import Logout from "../components/Logout";
 import DeleteAccount from "../components/DeleteAccount";
 import AboutUsPopup from "../components/AboutUsPopup";
+import SwitchAccount from "../components/SwitchAccount";
+import { useAuth } from '../components/AuthProvider';
+
 
 function MorePersonal({ emailOrPhone }) {
   const [userInfo, setUserInfo] = useState({
@@ -20,6 +23,8 @@ function MorePersonal({ emailOrPhone }) {
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isAboutUsPopupOpen, setIsAboutUsPopupOpen] = useState(false);
+  const { login } = useAuth();
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -30,6 +35,8 @@ function MorePersonal({ emailOrPhone }) {
         const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
 
         if (user) {
+          login(loginData.access_token, user)
+          console.log('Logged in user:', user)
           setUserInfo({
             name: user.name,
             email: user.email,
@@ -113,12 +120,7 @@ function MorePersonal({ emailOrPhone }) {
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">ACCOUNT</div>
         <div className="space-y-2">
-          <button className="w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700">
-            <svg className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-            </svg>
-            Switch to Business Account
-          </button>
+        <SwitchAccount onLogout={() => console.log("Logging out...")} />
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">YOUR REFERRAL CODE</div>
         <div className="flex items-center h-13 text-lg bg-slate-700 text-center text-white py-1 px-4 rounded">
