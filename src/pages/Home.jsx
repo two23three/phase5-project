@@ -128,7 +128,6 @@ function Home() {
     return (
         <div className="rounded-b-2xl flex flex-col gap-4 bg-gray-900 p-1 ">
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-            <Logout onLogout={() => console.log("Logging out...")} />
             <div>
                 <PieChart totalIncome={income} totalExpense={expense} />
             </div>
@@ -152,7 +151,6 @@ function Home() {
                     <InfoCard title="Assets" value={`${currencySymbol} ${assets.toFixed(2)}`} />
                 </Link>
             </div>
-            <Navbar />
         </div>
     );
 }
