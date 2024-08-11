@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AssetsInfoCard from "../components/AssetsInfoCard";
 import EditAssetModal from "../components/EditAssetModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "../components/Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
 
 function Assets() {
@@ -11,6 +11,7 @@ function Assets() {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
+    const [openDropdownId, setOpenDropdownId] = useState(null); // Track open dropdown
     const userID = 3;
     const API_URL = "https://barnes.onrender.com/";
 
@@ -121,40 +122,66 @@ function Assets() {
         setIsModalOpen(false);
     };
     
-    
-
     const handleAddNew = () => {
         setSelectedAsset(null);
         setIsAddingNew(true);
         setIsModalOpen(true);
     };
 
+    const toggleDropdown = (id) => {
+        setOpenDropdownId(openDropdownId === id ? null : id);
+    };
+
     return (
         <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col p-4'>
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <h1 className="text-3xl font-bold mb-6 text-center">Assets</h1>
-            <div className="flex flex-col items-center space-y-4 p-4 flex-grow">
+            <div className="flex flex-col items-left space-y-4 p-4 flex-grow">
                 {assets.length > 0 ? (
                     assets.map((asset) => (
-                        <div key={asset.id} className="flex items-center space-x-4 bg-white rounded-lg p-4">
+                        <div key={asset.id} className="flex items-center space-x-4 bg-white rounded-lg p-4 relative">
                             <AssetsInfoCard
                                 name={asset.name}
                                 description={asset.description}
                                 value={`${currencySymbol}${formatNumber(asset.value)}`}
                             />
-                            <div className="flex flex-col space-y-2">
+                            <div className="relative">
                                 <button
-                                    onClick={() => handleEdit(asset)}
-                                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                                    type="button"
+                                    className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    onClick={() => toggleDropdown(asset.id)}
                                 >
-                                    <FontAwesomeIcon icon={faEdit} />
+                                    Actions
                                 </button>
-                                <button
-                                    onClick={() => handleDelete(asset.id)}
-                                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
-                                >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
+
+                                {openDropdownId === asset.id && (
+                                    <div
+                                        className="origin-top-right absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu"
+                                        aria-orientation="vertical"
+                                        aria-labelledby="menu-button"
+                                        tabIndex="-1"
+                                    >
+                                        <div className="py-1" role="none">
+                                            <button
+                                                onClick={() => handleEdit(asset)}
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                                role="menuitem"
+                                                tabIndex="-1"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(asset.id)}
+                                                className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                                                role="menuitem"
+                                                tabIndex="-1"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))
