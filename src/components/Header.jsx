@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthProvider';// Assuming you have a useAuth hook
 
 function Header({ onLogout, onCurrencyChange }) {
-    const [selectedCurrency, setSelectedCurrency] = useState("USD");
+    const [selectedCurrency, setSelectedCurrency] = useState("KES");
     const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
     const currencies = ["USD", "EUR", "GBP", "KES"];
+    
 
     const handleCurrencySelect = (currency) => {
         setSelectedCurrency(currency);

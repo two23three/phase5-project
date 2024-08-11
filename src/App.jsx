@@ -37,8 +37,8 @@ function App() {
             <Route path="/b-more" element={<PrivateRoute element={MoreBusiness} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
+          <Navbar />
         </div>
-        <Navbar />
       </Router>
     </AuthProvider>
   );
