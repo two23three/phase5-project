@@ -128,6 +128,12 @@ function Home() {
     let balance = income - expense;
     const currencySymbol = currencySymbols[currency] || "Ksh";
 
+    // Calculating temporary debt
+    let tempDebt;
+    if (balance < 0) {
+        tempDebt = Math.abs(balance);
+    }
+
     return (
         <div className="rounded-b-2xl flex flex-col gap-4 bg-gray-900 p-1 ">
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
@@ -148,7 +154,7 @@ function Home() {
                     <InfoCard title="Expense" value={`${currencySymbol} ${formatNumber(expense)}`} />
                 </Link>
                 <Link to="/budget">
-                    <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt)}`} />
+                    <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt + tempDebt)}`} />
                 </Link>
                 <Link to="/assets">
                     <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
