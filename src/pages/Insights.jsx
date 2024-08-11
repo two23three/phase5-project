@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
+import Navbar from "../components/Navbar";
 
 ChartJS.register(
     LineElement,
@@ -28,29 +28,38 @@ const Insights = () => {
     const [amount, setAmount] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3000/expenses')
+        fetch('https://barnes.onrender.com/expenses')
             .then(response => response.json())
             .then(data => {
-                let sortedExpenses = data.filter(expense => expense.user_id === 2)
+                let sortedExpenses = data.expenses.filter(expense => expense.user_id === 3)
                 setFullExpenses(sortedExpenses);
                 let list = combineAmountByDate(sortedExpenses);
                 setExpenses(list);
 
                 let c = sortBycategories(sortedExpenses);
                 setCategories(c);
-                
             })
             .catch(error => console.log(error));
 
-        fetch('http://localhost:3000/incomes')
+        fetch('https://barnes.onrender.com/incomes')
             .then(response => response.json())
             .then(data => {
-                let sortedIncomes = data.filter(income => income.user_id === 1)
+
+                let sortedIncomes = data.incomes.filter(income => income.user_id === 3)
                 setFullIncomes(sortedIncomes);
                 let list = combineAmountByDate(sortedIncomes);
                 setIncomes(list);
             })
             .catch(error => console.log(error));
+
+            // fetch('https://barnes.onrender.com/users')
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log(data);
+            // })
+            // .catch(error => console.log(error));
+        
+
     }, [change]);
 
     useEffect(() => {
@@ -59,36 +68,40 @@ const Insights = () => {
 
     const combineAmountByDate = (amounts) => {
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
         const combined = [];
         let currentDate = null;
         let currentAmount = 0;
 
         for (const amount of amounts) {
             if (amount.date === currentDate) {
-                currentAmount += amount.amount;
+                currentAmount += parseInt(amount.amount);
             } else {
                 if (currentDate !== null) {
                     combined.push(currentAmount);
                 }
                 currentDate = amount.date;
-                currentAmount = amount.amount;
+                currentAmount = parseInt(amount.amount);
             }
         }
         if (currentDate !== null) {
             combined.push(currentAmount);
         }
 
+        console.log(combined);
         return combined;
     };
 
     const filterByDate = () => {
         let filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
         let filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
+        console.log(filteredIncomes);
         
-        if (filteredIncomes.length && filteredExpenses.length) {
+        if (filteredIncomes && filteredExpenses){
             setExpenses(combineAmountByDate(filteredExpenses));
             setIncomes(combineAmountByDate(filteredIncomes));
         }
+        
     };
 
     const sortBycategories = (data) => {
@@ -102,19 +115,18 @@ const Insights = () => {
         
 
         for (let expense of data){
-            if (expense.category_id === 1){
-                Bills.electricity += expense.amount
-            } else if(expense.category_id === 2){
-                Bills.shopping += expense.amount
+            if (expense.category_id === 2){
+                Bills.electricity += parseInt(expense.amount)
             } else if(expense.category_id === 3){
-                Bills.rent += expense.amount
+                Bills.shopping += parseInt(expense.amount)
+            } else if(expense.category_id === 4){
+                Bills.rent += parseInt(expense.amount)
             } else {
-                Bills.car += expense.amount
+                Bills.car += parseInt(expense.amount)
             };
         }
         Bills.sum = Bills.electricity + Bills.shopping + Bills.rent + Bills.car;
 
-        console.log(Bills)
 
         const categoriesList = [
             {
@@ -159,7 +171,7 @@ const Insights = () => {
     };
 
     return (
-        <div className="Insights p-1" style={{ backgroundColor: 'grey' }}>
+        <div className="Insights" style={{ backgroundColor: 'black' }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
             <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
@@ -168,7 +180,7 @@ const Insights = () => {
                 <InsightsChart expenses={expenses} incomes={incomes} />
                 <ExpenseCategoryList categories={Categories} />
             </div>
-            <Navbar/>
+            <Navbar></Navbar>
         </div>
     );
 };
@@ -177,13 +189,11 @@ const Insights = () => {
 
 
 const ExpenseCategoryList = ({ categories }) => {
+    const [visibleCategories, setVisibleCategories] = useState(categories);
 
     useEffect(() => {
         setVisibleCategories(categories);
     }, [categories]);
-
-    const [visibleCategories, setVisibleCategories] = useState(categories);
-    console.log(visibleCategories);
 
     return (
         <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '0', margin: '0', borderRadius: '15px' }}>
@@ -201,24 +211,46 @@ const ExpenseCategoryList = ({ categories }) => {
 };
 
 const Dropdown = ({ categories, setVisibleCategories }) => {
+
+    const [value, setValue] = useState("All")
+
+    useEffect(() => {
+        fetch('http://localhost:3000/transactions')
+        .then(res => res.json())
+        .then((data)=>{
+            
+            if(value === "All"){
+                setVisibleCategories(categories);
+            } else {
+                const filteredCategories = data.filter(transaction => (transaction.category_id === parseInt(value)) && (transaction.transaction_type === "expense"));
+                console.log(filteredCategories);
+                setVisibleCategories(filteredCategories);
+            }
+
+        })
+        .catch(err => console.error(err));
+    }, [value]
+    );
+
     const filterCategories = (event) => {
         const selectedCategory = event.target.value;
         if (selectedCategory === "All") {
-            setVisibleCategories(categories); 
+            setValue("All"); 
         } else {
             
-            const filteredCategories = categories.filter(c => c.category.toLowerCase() === selectedCategory.toLowerCase());
-            setVisibleCategories(filteredCategories);
+            setValue(event.target.value);
+
         }
     };
+    console.log(value);
 
     return (
         <select className="dropdown" onChange={filterCategories} style={{ backgroundColor: '#D1D1D1', color: '#423E3E', fontSize: '15px' }}>
             <option value="All">All Categories</option>
-            <option value="electricity">Electricity</option>
-            <option value="rent">Rent</option>
-            <option value="shopping">Shopping</option>
-            <option value="car">Car</option>
+            <option value="2">Electricity</option>
+            <option value="3">Rent</option>
+            <option value="4">Shopping</option>
+            <option value="5">Car</option>
         </select>
     );
 };
@@ -303,16 +335,18 @@ const TotalExpense = ({ amount }) => {
 
 
 const ExpenseCategoryItem = ({ category }) => {
+
+
     return (
         <div className="expense-category-item" style={{
             display: 'flex', justifyContent: 'space-between', padding: '10px 0',
             borderStyle: 'solid', borderRadius: '10px', margin: '10px 0', borderWidth: '1px',
             backgroundColor: '#242424', width: '100%', height: '300',
         }}>
-            <p style={{ margin: '0' }}>{category.icon}</p>
-            <p style={{ margin: '0' }}>{category.name}</p>
+            <p style={{ margin: '0' }}>{category.icon ? category.icon : category.id}</p>
+            <p style={{ margin: '0' }}>{category.name? category.name : category.description}</p>
             <p style={{ margin: '0' }}>{category.amount}</p>
-            <p style={{ margin: '0' }}>{category.percentage}%</p>
+            <p style={{ margin: '0' }}>{category.percentage? `${category.percentage}%` : null}</p>
         </div>
     );
 };

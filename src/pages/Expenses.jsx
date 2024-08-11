@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
@@ -14,30 +14,134 @@ ChartJS.register(
     Filler,
 )
 
+const Expenses = () => {
+    const [transactions, setTransactions] = useState([]);
+    const [tranzactions, setTranzactions] = useState([]);
+    const [table, setTable] = useState(undefined);
+    const [from, setFrom] = useState('');
+    const [to, setTo] = useState('');
+
+    useEffect(() => {
+        // Fetch transactions from the API
+        fetch('http://localhost:3000/transactions')
+            .then(response => response.json())
+            .then(data => {
+                // Filter expenses for a specific user and type
+                let expenses = data.filter(expense => expense.transaction_type === 'expense' && expense.user_id === 1);
+                setTranzactions(combineAmountByDate(expenses));
+                setTransactions(expenses);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []); // Empty dependency array to fetch only on mount
+
+    console.log(table);
+
+    const combineAmountByDate = (amounts) => {
+        amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
+        const combined = [];
+        let currentDate = null;
+        let currentAmount = 0;
+
+        for (const amount of amounts) {
+            if (amount.date === currentDate) {
+                currentAmount += amount.amount;
+            } else {
+                if (currentDate !== null) {
+                    combined.push(currentAmount);
+                }
+                currentDate = amount.date;
+                currentAmount = amount.amount;
+            }
+        }
+        if (currentDate !== null) {
+            combined.push(currentAmount);
+        }
+
+        return combined;
+    };
+
+    const filterByDate = () => {
+        if (from && to) {
+            const filteredExpenses = transactions.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
+            setTranzactions(combineAmountByDate(filteredExpenses));
+            setTable(filteredExpenses);
+            console.log(table);
+        }
+    };
+
+    useEffect(() => {
+        filterByDate();
+    }, [from, to]); // Trigger filtering when dates change
+
+    return (
+        <div className="expenses-page" style={{ backgroundColor: 'black' }} >
+            <Header />
+            <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
+            <TotalExpense amount={24000} />
+            <ExpensesChart list={tranzactions} />
+            <TransactionTable data={table ? table : transactions} />
+            <Navbar />
+        </div>
+    );
+};
+
+const TransactionTable = (data) => {
+    const headers = ['Date', 'Description', 'Category', 'Amount'];
+
+    return (
+        <table>
+            <thead>
+                <tr>
+                    {headers.map((header, index) => <th key={index}>{header}</th>)}
+                </tr>
+            </thead>
+            <tbody>
+                {data.data.map((transaction, index) => (
+                    <tr key={index}>
+                        <td>{transaction.date}</td>
+                        <td>{transaction.transaction_type}</td>
+                        <td>{transaction.description}</td>
+                        <td>{transaction.amount}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+};
 
 
-const DateFilter = () => {
+const DateFilter = ({ from, to, setFrom, setTo }) => {
     return (
         <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
                 <label>From</label>
-                <input type="date" style={{ width: '120px' }} />
+                <input 
+                    type="date" 
+                    value={from} 
+                    onChange={(e) => setFrom(e.target.value)} 
+                    style={{ width: '120px' }} 
+                />
             </div>
             <div>
                 <label>To</label>
-                <input type="date" style={{ width: '120px' }} />
+                <input 
+                    type="date" 
+                    value={to} 
+                    onChange={(e) => setTo(e.target.value)} 
+                    style={{ width: '120px' }} 
+                />
             </div>
         </div>
     );
 };
 
-const ExpensessChart = () => {
+const ExpensesChart = ({ list }) => {
     const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], // Adjust labels based on the data you have
         datasets: [
             {
                 label: 'Expense Over Time',
-                data: [3000, 2000, 1500, 2200, 1800],
+                data: list,
                 fill: true,
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
@@ -45,7 +149,6 @@ const ExpensessChart = () => {
                 tension: 0.4,
             },
         ]
-    
     };
 
     return (
@@ -54,6 +157,7 @@ const ExpensessChart = () => {
         </div>
     );
 };
+
 
 const TotalExpense = ({ amount }) => {
     return (
@@ -66,7 +170,7 @@ const TotalExpense = ({ amount }) => {
 
 const Header = () => {
     return (
-        <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }} className="navbar">
+        <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', backgroundColor: 'black' }} className="navbar">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifyContent='space-between'>
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
             </svg>
@@ -77,16 +181,6 @@ const Header = () => {
     );
 };
 
-const Expenses = () => {
-    return (
-        <div className="expenses-page" >
-            <Header />
-            < DateFilter/>
-            < TotalExpense amount={24000} />
-            <ExpensessChart />
-            <Navbar/>
-        </div>
-    )
-}
+
 
 export default Expenses;

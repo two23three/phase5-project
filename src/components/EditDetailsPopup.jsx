@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const EditDetailsPopup = ({ isOpen, onClose }) => {
+const EditDetailsPopup = ({ isOpen, onClose, userDetails, onSave }) => {
+  const [name, setName] = useState(userDetails.name || '');
+  const [email, setEmail] = useState(userDetails.email || '');
+  const [phoneNumber, setPhoneNumber] = useState(userDetails.phoneNumber || '');
+
+  useEffect(() => {
+    // Update local state when userDetails prop changes
+    setName(userDetails.name || '');
+    setEmail(userDetails.email || '');
+    setPhoneNumber(userDetails.phoneNumber || '');
+  }, [userDetails]);
+
   const handleEditSubmit = (event) => {
     event.preventDefault();
-    // Add form submission logic here
+    // Call onSave with updated details
+    onSave({ name, email, phoneNumber });
     onClose(); // Close the popup after submission
   };
 
@@ -18,6 +30,8 @@ const EditDetailsPopup = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium text-gray-700">Name</label>
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white text-black placeholder-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="Enter your name"
               required
@@ -27,6 +41,8 @@ const EditDetailsPopup = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium text-gray-700">Email Address</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white text-black placeholder-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="Enter your email"
               required
@@ -36,6 +52,8 @@ const EditDetailsPopup = ({ isOpen, onClose }) => {
             <label className="block text-sm font-medium text-gray-700">Phone Number</label>
             <input
               type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white text-black placeholder-black focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               placeholder="Enter your phone number"
               required

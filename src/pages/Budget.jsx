@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SetGoalPopup from "../components/SetGoalPopup";
 import AddLoan from "../components/AddLoan";
 import AddLimit from "../components/AddLimit";
 import ProgressBar from "../components/ProgressBar";
 import UpdateAmountPopup from "../components/UpdateAmountPopup";
 import Navbar from "../components/Navbar";
-
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
@@ -20,19 +19,58 @@ function Budget() {
   const [loans, setLoans] = useState([]);
   const [limits, setLimits] = useState([]);
 
-  const handleSaveGoal = (newGoal) => {
-    setGoals([...goals, { ...newGoal, currentAmount: 0 }]);
-    setShowGoalModal(false);
-  };
 
-  const handleSaveLoan = (newLoan) => {
-    setLoans([...loans, { ...newLoan, currentAmount: 0 }]);
-    setShowLoanModal(false);
-  };
+  useEffect(() => {
+    fetch("https://barnes.onrender.com/savings")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        let goalFilter = data.savings_goals.filter(goal => goal.user_id === 25)
+        setGoals(goalFilter);
+        console.log(data);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }, []);
+  console.log(goals)
 
-  const handleSaveLimit = (newLimit) => {
-    setLimits([...limits, { ...newLimit, currentAmount: 0 }]);
-    setShowLimitModal(false);
+
+  const save = goals.map((goal, index)=>{
+    console.log(goal)
+    console.log(index)
+  } )
+  console.log(save)
+
+  const handleSaveGoal = async (newGoal) => {
+    console.log('Saving goal:', newGoal);
+
+    try {
+      const response = await fetch('https://barnes.onrender.com/savings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newGoal),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${errorText}`);
+      }
+
+      const data = await response.json();
+
+      setGoals(prevGoals => [...prevGoals, { ...newGoal, current_amount: 0 }]);
+      setShowGoalModal(false);
+
+    } catch (error) {
+      console.error('Error saving new goal:', error);
+    }
   };
 
   const handleUpdateAmount = (index, type, label) => {
@@ -45,15 +83,19 @@ function Budget() {
   const updateAmount = (value) => {
     if (updateType === 'goal') {
       const updatedGoals = [...goals];
-      updatedGoals[updateIndex].currentAmount += value;
+      let current = parseInt(updatedGoals[updateIndex].current_amount)
+      current += parseInt(value);
+      updatedGoals[updateIndex].current_amount = current
+      console.log(updatedGoals[updateIndex].current_amount)
       setGoals(updatedGoals);
+
     } else if (updateType === 'loan') {
       const updatedLoans = [...loans];
-      updatedLoans[updateIndex].currentAmount += value;
+      updatedLoans[updateIndex].current_amount += parseInt(value);
       setLoans(updatedLoans);
     } else if (updateType === 'limit') {
       const updatedLimits = [...limits];
-      updatedLimits[updateIndex].currentAmount += value;
+      updatedLimits[updateIndex].current_amount += parseInt(value);
       setLimits(updatedLimits);
     }
     setShowUpdateModal(false);
@@ -67,14 +109,18 @@ function Budget() {
           <h2 className="text-xl font-bold mb-4 text-left">Savings Goals</h2>
           <div className="space-y-4">
             {goals.map((g, index) => (
-              <ProgressBar
-                key={index}
-                label={g.goal}
-                currentAmount={g.currentAmount}
-                targetAmount={g.goalAmount}
-                type="goal"
-                onUpdate={() => handleUpdateAmount(index, 'goal', g.goal)}
-              />
+              <div key={index}>
+                <h3 className="font-bold text-lg">{g.name}</h3>
+                <p>User ID: {g.user_id}</p>
+                <p>Start Date: {g.start_date}</p>
+                <ProgressBar
+                  label={g.name}
+                  current_amount={parseInt(g.current_amount)}
+                  target_amount={parseInt(g.target_amount)}
+                  type="goal"
+                  onUpdate={() => handleUpdateAmount(index, 'goal', g.name)}
+                />
+              </div>
             ))}
             <button
               className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
@@ -93,8 +139,8 @@ function Budget() {
               <ProgressBar
                 key={index}
                 label={l.loan}
-                currentAmount={l.currentAmount}
-                targetAmount={l.loanAmount}
+                current_amount={l.current_amount}
+                target_amount={l.loanAmount}
                 type="loan"
                 onUpdate={() => handleUpdateAmount(index, 'loan', l.loan)}
               />
@@ -116,8 +162,8 @@ function Budget() {
               <ProgressBar
                 key={index}
                 label={l.limit}
-                currentAmount={l.currentAmount}
-                targetAmount={l.limitAmount}
+                current_amount={l.current_amount}
+                target_amount={l.limitAmount}
                 type="limit"
                 onUpdate={() => handleUpdateAmount(index, 'limit', l.limit)}
               />

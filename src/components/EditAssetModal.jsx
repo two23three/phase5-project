@@ -1,22 +1,27 @@
-// components/EditAssetModal.js
 import React, { useState, useEffect } from "react";
 
 function EditAssetModal({ asset, isOpen, onClose, onSave }) {
     const [formData, setFormData] = useState({
         name: '',
-        value: ''
+        value: '',
+        purchase_date: '',
+        description: ''
     });
 
     useEffect(() => {
         if (asset) {
             setFormData({
-                name: asset.name,
-                value: asset.value
+                name: asset.name || '',
+                value: asset.value || '',
+                purchase_date: asset.purchase_date || '',
+                description: asset.description || ''
             });
         } else {
             setFormData({
                 name: '',
-                value: ''
+                value: '',
+                purchase_date: '',
+                description: ''
             });
         }
     }, [asset]);
@@ -31,13 +36,19 @@ function EditAssetModal({ asset, isOpen, onClose, onSave }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Validate required fields
+        if (!formData.name || !formData.value || !formData.purchase_date) {
+            alert("Please fill out all required fields (Name, Value, Purchase Date).");
+            return;
+        }
+
         onSave(formData);
     };
-
+    
     if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded shadow-lg">
                 <h2 className="text-2xl mb-4">{asset ? 'Edit Asset' : 'Add New Asset'}</h2>
                 <form onSubmit={handleSubmit}>
@@ -59,6 +70,26 @@ function EditAssetModal({ asset, isOpen, onClose, onSave }) {
                             value={formData.value}
                             onChange={handleChange}
                             className="w-full p-2 border rounded text-black bg-white"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700">Purchase Date</label>
+                        <input
+                            type="date"
+                            name="purchase_date"
+                            value={formData.purchase_date}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded text-black bg-white"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700">Description (optional)</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded text-black bg-white"
+                            rows="3"
                         />
                     </div>
                     <div className="flex justify-end space-x-4">

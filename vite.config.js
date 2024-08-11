@@ -6,7 +6,16 @@ export default defineConfig({
   plugins: [react()],
   css: {
     postcss: {
-      plugins:[tailwindcss()]
-    }
-  }
+      plugins: [tailwindcss()],
+    },
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://barnes.onrender.com', 
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''), 
+      },
+    },
+  },
 })

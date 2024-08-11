@@ -1,7 +1,7 @@
 import React from 'react';
 
-const ProgressBar = ({ label, currentAmount, targetAmount, onUpdate, type }) => {
-  const percentage = (currentAmount / targetAmount) * 100;
+const ProgressBar = ({ label, current_amount, target_amount, onUpdate, type }) => {
+  const percentage = (current_amount / target_amount) * 100;
 
   let barColor;
   switch (type) {
@@ -30,7 +30,7 @@ const ProgressBar = ({ label, currentAmount, targetAmount, onUpdate, type }) => 
         ></div>
       </div>
       <div className="text-gray-400 text-right mb-2">
-        Ksh {currentAmount.toLocaleString()} / Ksh {targetAmount.toLocaleString()}
+        Ksh {current_amount.toLocaleString()} / Ksh {target_amount.toLocaleString()}
       </div>
       <button
         className="bg-blue-500 text-white p-2 rounded-lg w-full"

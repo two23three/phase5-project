@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import ContactPopup from "../components/ContactPopup";
 import EditDetailsPopup from "../components/EditDetailsPopup";
@@ -7,21 +7,51 @@ import Logout from "../components/Logout";
 import DeleteAccount from "../components/DeleteAccount";
 import AboutUsPopup from "../components/AboutUsPopup";
 
-function MorePersonal() {
+function MorePersonal({ emailOrPhone }) {
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    email: '',
+    referralCode: '',
+    referralPoints: 0
+  });
+
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const referralCode = "skamau12345";
+  const [isAboutUsPopupOpen, setIsAboutUsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const usersResponse = await fetch('https://barnes.onrender.com/users');
+        const usersData = await usersResponse.json();
+
+        const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
+
+        if (user) {
+          setUserInfo({
+            name: user.name,
+            email: user.email,
+            referralCode: user.referral_code,
+            referralPoints: user.referral_points
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [emailOrPhone]);
 
   const handleChangePasswordSubmit = (currentPassword, newPassword) => {
     console.log("Current Password:", currentPassword);
     console.log("New Password:", newPassword);
-
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(referralCode).then(() => {
+    navigator.clipboard.writeText(userInfo.referralCode).then(() => {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     });
@@ -31,8 +61,12 @@ function MorePersonal() {
     console.log("Account deleted");
   };
 
-
-  const [isAboutUsPopupOpen, setIsAboutUsPopupOpen] = useState(false);
+  const handleUpdateUserDetails = (updatedDetails) => {
+    setUserInfo(prev => ({
+      ...prev,
+      ...updatedDetails
+    }));
+  };
 
   return (
     <div className="w-full max-w-sm bg-white rounded-b-xl overflow-hidden shadow-lg">
@@ -44,9 +78,9 @@ function MorePersonal() {
         />
         <div className="ml-4">
           <p className="text-gray-500 font-semibold mt-2 mb-2 text-left">Personal Account</p>
-          <h2 className="text-neutral-800 text-lg font-semibold text-left">Susan Kamau</h2>
-          <p className="text-neutral-800">skamau@gmail.com</p>
-          <p className="text-neutral-600 text-left">Referral points: 9</p>
+          <h2 className="text-neutral-800 text-lg font-semibold text-left">{userInfo.name || 'User Name'}</h2>
+          <p className="text-neutral-800">{userInfo.email || 'user@example.com'}</p>
+          <p className="text-neutral-600 text-left">Referral points: {userInfo.referralPoints || 0}</p>
         </div>
         <div className="ml-auto">
           <button onClick={() => setIsEditPopupOpen(true)}>
@@ -65,7 +99,6 @@ function MorePersonal() {
             <svg className="h-8 w-6 text-slate-400 text-left" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-
             <span className="ml-2">What is Barnes?</span>
           </button>
           <button
@@ -89,7 +122,7 @@ function MorePersonal() {
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">YOUR REFERRAL CODE</div>
         <div className="flex items-center h-13 text-lg bg-slate-700 text-center text-white py-1 px-4 rounded">
-          <div className="flex-1">{referralCode}</div>
+          <div className="flex-1">{userInfo.referralCode || 'Referral Code'}</div>
           <button className="button" onClick={handleCopy}>
             <svg className="h-6 w-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
@@ -123,10 +156,15 @@ function MorePersonal() {
         isOpen={isAboutUsPopupOpen}
         onClose={() => setIsAboutUsPopupOpen(false)}
       />
-
       <Navbar />
       <ContactPopup isOpen={isContactPopupOpen} onClose={() => setIsContactPopupOpen(false)} />
-      <EditDetailsPopup isOpen={isEditPopupOpen} onClose={() => setIsEditPopupOpen(false)} />
+      <EditDetailsPopup
+        isOpen={isEditPopupOpen}
+        onClose={() => setIsEditPopupOpen(false)}
+        userDetails={userInfo}
+        onSave={handleUpdateUserDetails}
+      />
+
       {isChangePasswordPopupOpen && (
         <ChangePasswordPopup
           onClose={() => setIsChangePasswordPopupOpen(false)}
