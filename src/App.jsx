@@ -18,6 +18,8 @@ import PrivateRoute from './components/PrivateRoute';
 import './App.css';
 
 function App() {
+
+  // const [user, setUser] = useState(1);
   return (
     <AuthProvider>
       <Router>
