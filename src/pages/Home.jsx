@@ -136,7 +136,7 @@ function Home() {
             </div>
             <div>
                 <h1 className="text-5xl font-bold text-white">
-                    {currencySymbol} {balance.toFixed(2)}
+                    {currencySymbol} {formatNumber(balance)}
                 </h1>
                 <p className="text-white">left to spend</p>
             </div>
