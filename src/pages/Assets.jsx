@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from "../components/AuthProvider";
 
 function Assets() {
     const [assets, setAssets] = useState([]);
@@ -14,7 +15,9 @@ function Assets() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [openDropdownId, setOpenDropdownId] = useState(null); // Track open dropdown
-    const userID = 3;
+
+    const {getUserId} = useAuth();
+    const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
     // Header settings

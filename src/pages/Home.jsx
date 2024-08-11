@@ -5,6 +5,7 @@ import InfoCard from "../components/InfoCard";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { formatNumber } from "chart.js/helpers";
+import { useAuth } from "../components/AuthProvider";
 
 
 function Home() {
@@ -14,7 +15,8 @@ function Home() {
     const [assets, setAssets] = useState(0);
     const [currency, setCurrency] = useState("Ksh");
 
-    const userID = 3;
+    const {getUserId} = useAuth();
+    const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
     
@@ -133,6 +135,8 @@ function Home() {
     let tempDebt;
     if (balance < 0) {
         tempDebt = Math.abs(balance);
+    }else{
+        tempDebt = 0;
     }
 
     return (
