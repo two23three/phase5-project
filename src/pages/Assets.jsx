@@ -4,9 +4,8 @@ import EditAssetModal from "../components/EditAssetModal";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "../components/AuthProvider";
 
 function Assets() {
@@ -14,9 +13,9 @@ function Assets() {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
-    const [openDropdownId, setOpenDropdownId] = useState(null); // Track open dropdown
+    const [openDropdownId, setOpenDropdownId] = useState(null);
 
-    const {getUserId} = useAuth();
+    const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
@@ -42,11 +41,8 @@ function Assets() {
                 }
                 const data = await response.json();
 
-                console.log("Fetched data:", data);
-
                 if (Array.isArray(data.assets)) {
                     const userAssets = data.assets.filter(asset => asset.user_id === userID);
-                    console.log("Filtered assets:", userAssets);
                     setAssets(userAssets);
                 } else {
                     console.log("Data structure is not as expected.");
@@ -55,8 +51,10 @@ function Assets() {
                 console.log("Error fetching assets:", error);
             }
         };
-        fetchData();
-    }, []);
+        if (userID) {
+            fetchData();
+        }
+    }, [userID]);
 
     const handleEdit = (asset) => {
         setSelectedAsset(asset);
@@ -72,7 +70,6 @@ function Assets() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            console.log("Deleted asset with ID:", id);
             setAssets(assets.filter(asset => asset.id !== id));
         } catch (error) {
             console.log("Error deleting asset:", error);
@@ -80,13 +77,13 @@ function Assets() {
     };
 
     const handleSave = async (updatedAsset) => {
-        if (isAddingNew) {Nav
+        if (isAddingNew) {
             // Adding a new asset
             if (!updatedAsset.name || !updatedAsset.value || !updatedAsset.purchase_date) {
                 alert("Please fill out all required fields.");
                 return;
             }
-    
+
             try {
                 const response = await fetch(`${API_URL}assets`, {
                     method: 'POST',
@@ -130,7 +127,7 @@ function Assets() {
         }
         setIsModalOpen(false);
     };
-    
+
     const handleAddNew = () => {
         setSelectedAsset(null);
         setIsAddingNew(true);
@@ -160,7 +157,7 @@ function Assets() {
                                     className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     onClick={() => toggleDropdown(asset.id)}
                                 >
-                                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
+                                    <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
                                 </button>
 
                                 {openDropdownId === asset.id && (
@@ -213,7 +210,7 @@ function Assets() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
-            <Navbar/>
+            <Navbar />
         </div>
     );
 }
