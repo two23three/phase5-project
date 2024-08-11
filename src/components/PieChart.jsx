@@ -12,7 +12,7 @@ function PieChart({totalIncome, totalExpense }) {
             data: [totalIncome, totalExpense],
             backgroundColor: ["green", "red"],
             hoverOffset: 4,
-            cutout: '70%',
+            cutout: '75%',
         }
     ]
 };

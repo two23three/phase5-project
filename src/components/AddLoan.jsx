@@ -6,7 +6,16 @@ const AddLoan = ({ onClose, onSave }) => {
 
   const handleLoanSubmit = (e) => {
     e.preventDefault();
-    onSave({ loan, loanAmount: parseFloat(loanAmount) });
+
+    const currentDate = new Date().toISOString().split('T')[0]; // Formats date as YYYY-MM-DD
+
+    onSave({
+      name: loan,
+      remaining_balance: parseFloat(loanAmount),
+      due_date: currentDate,
+      principal_amount: 0,
+      user_id: 25
+    });
     setLoan('');
     setLoanAmount('');
   };

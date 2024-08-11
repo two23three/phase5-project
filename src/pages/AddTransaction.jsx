@@ -1,33 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const AddTransaction = () => {
   const [amount, setAmount] = useState('');
-  const [transactionType, setTransactionType] = useState('income');
+  const [transaction_type, setTransaction_type] = useState('income');
   const [category, setCategory] = useState('');
-  const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const navigate = useNavigate();
 
+  const expenseCategoryMapping = {
+    food: 1,
+    electricity: 2,
+    rent: 3,
+    car: 4,
+    shopping: 5,
+  };
+
+  const incomeCategoryMapping = {
+    side_hustle: 1,
+    monthly_salary: 2,
+  };
+
+  const [availableCategories, setAvailableCategories] = useState(Object.keys(incomeCategoryMapping));
+
+  useEffect(() => {
+    if (transaction_type === 'income') {
+      setAvailableCategories(Object.keys(incomeCategoryMapping));
+    } else {
+      setAvailableCategories(Object.keys(expenseCategoryMapping));
+    }
+    setCategory(''); 
+  }, [transaction_type]);
+
   const handleCancel = () => {
     navigate('/');
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const date = new Date().toISOString().split('T')[0]; // Formats date as YYYY-MM-DD
+
+    const categoryMapping = transaction_type === 'income' ? incomeCategoryMapping : expenseCategoryMapping;
+
     const newTransaction = {
       amount,
-      transactionType,
-      category,
-      date,
+      transaction_type,
+      category_id: categoryMapping[category], // Use the ID from the appropriate mapping
       description,
+      user_id: 25,
+      date
     };
 
-    const endpoint = transactionType === 'income' ? 'https://bizzgogo-70f9.onrender.com/income/' : 'https://bizzgogo-70f9.onrender.com/expenses/';
+    const endpoint = transaction_type === 'income' ? 'https://barnes.onrender.com/income/' : 'https://barnes.onrender.com/expenses/';
 
     try {
       const response = await fetch(endpoint, {
@@ -47,9 +75,8 @@ const AddTransaction = () => {
       setError('');
 
       setAmount('');
-      setTransactionType('income');
+      setTransaction_type('income');
       setCategory('');
-      setDate('');
       setDescription('');
     } catch (error) {
       setError(error.message);
@@ -78,9 +105,9 @@ const AddTransaction = () => {
           <label className="block text-gray-100 mb-2 text-left" htmlFor="transactionType">Transaction Type:</label>
           <select
             className="w-full px-4 py-2 bg-gray-300 text-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            id="transactionType"
-            value={transactionType}
-            onChange={(e) => setTransactionType(e.target.value)}
+            id="transaction_type"
+            value={transaction_type}
+            onChange={(e) => setTransaction_type(e.target.value)}
             required
           >
             <option value="income">Income</option>
@@ -96,11 +123,10 @@ const AddTransaction = () => {
             onChange={(e) => setCategory(e.target.value)}
             required
           >
-            <option value="electricity">Home Expenses</option>
-            <option value="shopping">Shopping</option>
-            <option value="rent">Transport and Vehicle Expenses</option>
-            <option value="health">Health</option>
-            <option value="other">Other</option>
+            <option value="" disabled>Select a category</option>
+            {availableCategories.map((cat) => (
+              <option key={cat} value={cat}>{cat.replace('_', ' ')}</option>
+            ))}
           </select>
         </div>
         <div className="mb-4">
@@ -125,7 +151,7 @@ const AddTransaction = () => {
         >
           Cancel
         </button>
-        <br></br>
+        <br />
       </form>
     </div>
   );

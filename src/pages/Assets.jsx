@@ -1,17 +1,37 @@
 import React, { useEffect, useState } from "react";
-import InfoCard from "../components/InfoCard";
-import Navbar from "../components/Navbar";
+import AssetsInfoCard from "../components/AssetsInfoCard";
 import EditAssetModal from "../components/EditAssetModal";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { formatNumber } from "chart.js/helpers";
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from "../components/AuthProvider";
 
 function Assets() {
     const [assets, setAssets] = useState([]);
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
-    const userID = 1;
-    const API_URL = "https://bizzgogo-70f9.onrender.com/";
+    const [openDropdownId, setOpenDropdownId] = useState(null); // Track open dropdown
+
+    const {getUserId} = useAuth();
+    const userID = getUserId();
+    const API_URL = "https://barnes.onrender.com/";
+
+    // Header settings
+    const [currency, setCurrency] = useState("Ksh");
+    const handleCurrencyChange = (newCurrency) => {
+        setCurrency(newCurrency);
+    };
+    const currencySymbols = {
+        USD: "$",
+        EUR: "€",
+        GBP: "£",
+        KES: "Ksh"
+    };
+    const currencySymbol = currencySymbols[currency] || "Ksh";
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,7 +80,13 @@ function Assets() {
     };
 
     const handleSave = async (updatedAsset) => {
-        if (isAddingNew) {
+        if (isAddingNew) {Nav
+            // Adding a new asset
+            if (!updatedAsset.name || !updatedAsset.value || !updatedAsset.purchase_date) {
+                alert("Please fill out all required fields.");
+                return;
+            }
+    
             try {
                 const response = await fetch(`${API_URL}assets`, {
                     method: 'POST',
@@ -74,47 +100,97 @@ function Assets() {
                 }
                 const newAsset = await response.json();
                 setAssets([...assets, newAsset]);
+                // Reloading the page
+                window.location.reload();
             } catch (error) {
                 console.log("Error adding new asset:", error);
             }
         } else {
-            setAssets(assets.map(asset =>
-                asset.id === selectedAsset.id ? { ...asset, ...updatedAsset } : asset
-            ));
+            // Editing an existing asset
+            try {
+                const response = await fetch(`${API_URL}assets/${selectedAsset.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ...updatedAsset, user_id: userID }),
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const updatedAssetFromServer = await response.json();
+                setAssets(assets.map(asset =>
+                    asset.id === updatedAssetFromServer.id ? updatedAssetFromServer : asset
+                ));
+                // Reloading the page
+                window.location.reload();
+            } catch (error) {
+                console.log("Error updating asset:", error);
+            }
         }
         setIsModalOpen(false);
     };
-
+    
     const handleAddNew = () => {
         setSelectedAsset(null);
         setIsAddingNew(true);
         setIsModalOpen(true);
     };
 
+    const toggleDropdown = (id) => {
+        setOpenDropdownId(openDropdownId === id ? null : id);
+    };
+
     return (
-        <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col'>
+        <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col p-4'>
+            <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <h1 className="text-3xl font-bold mb-6 text-center">Assets</h1>
-            <div className="flex flex-col items-center space-y-4 p-4 flex-grow">
+            <div className="flex flex-col items-left space-y-4 p-4 flex-grow">
                 {assets.length > 0 ? (
                     assets.map((asset) => (
-                        <div key={asset.id} className="flex items-center space-x-4 bg-white rounded-lg p-4">
-                            <InfoCard
-                                title={asset.name}
-                                value={`Value: ${asset.value}`}
+                        <div key={asset.id} className="flex items-center space-x-4 bg-white rounded-lg p-4 relative">
+                            <AssetsInfoCard
+                                name={asset.name}
+                                description={asset.description}
+                                value={`${currencySymbol}${formatNumber(asset.value)}`}
                             />
-                            <div className="flex flex-col space-y-2">
+                            <div className="relative">
                                 <button
-                                    onClick={() => handleEdit(asset)}
-                                    className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                                    type="button"
+                                    className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    onClick={() => toggleDropdown(asset.id)}
                                 >
-                                    <FontAwesomeIcon icon={faEdit} />
+                                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
                                 </button>
-                                <button
-                                    onClick={() => handleDelete(asset.id)}
-                                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
-                                >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
+
+                                {openDropdownId === asset.id && (
+                                    <div
+                                        className="origin-top-right absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        role="menu"
+                                        aria-orientation="vertical"
+                                        aria-labelledby="menu-button"
+                                        tabIndex="-1"
+                                    >
+                                        <div className="py-1" role="none">
+                                            <button
+                                                onClick={() => handleEdit(asset)}
+                                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                                role="menuitem"
+                                                tabIndex="-1"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(asset.id)}
+                                                className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                                                role="menuitem"
+                                                tabIndex="-1"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))
@@ -131,13 +207,13 @@ function Assets() {
                     Add New Asset
                 </button>
             </div>
-            <Navbar />
             <EditAssetModal
                 asset={selectedAsset}
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
+            <Navbar/>
         </div>
     );
 }
