@@ -75,7 +75,7 @@ function Assets() {
 
     const handleSave = async (updatedAsset) => {
         if (isAddingNew) {
-            // Ensure required fields are present
+            // Adding a new asset
             if (!updatedAsset.name || !updatedAsset.value || !updatedAsset.purchase_date) {
                 alert("Please fill out all required fields.");
                 return;
@@ -98,6 +98,7 @@ function Assets() {
                 console.log("Error adding new asset:", error);
             }
         } else {
+            // Editing an existing asset
             try {
                 const response = await fetch(`${API_URL}assets/${selectedAsset.id}`, {
                     method: 'PUT',
