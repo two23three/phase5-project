@@ -10,8 +10,7 @@ import Expenses from './pages/Expenses';
 import Income from './pages/Income';
 import Insights from './pages/Insights';
 import Login from './pages/Login';
-import MorePersonal from './pages/MorePersonal';
-import MoreBusiness from './pages/MoreBusiness';
+import More from './pages/More';
 import ErrorPage from './pages/ErrorPage';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -34,8 +33,7 @@ function App() {
             <Route path="/income" element={<PrivateRoute element={Income} />} />
             <Route path="/insights" element={<PrivateRoute element={Insights} />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/p-more" element={<PrivateRoute element={MorePersonal} />} />
-            <Route path="/b-more" element={<PrivateRoute element={MoreBusiness} />} />
+            <Route path="/more" element={<PrivateRoute element={More} />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>

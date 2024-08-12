@@ -39,7 +39,7 @@ function Navbar() {
                 <span>Budget</span>
             </NavLink>
             <NavLink
-                to='/p-more'
+                to='/more'
                 className={({ isActive }) =>
                     isActive ? "flex flex-col items-center text-black-400" : "flex flex-col items-center text-white"
                 }
