@@ -101,7 +101,7 @@ const Header = () => {
 };
 
 const TransactionTable = ({ data }) => {
-    const headers = ['Date', 'Description', 'Category', 'Amount'];
+    const headers = ['Date', 'Description', 'Frequecy', 'Amount'];
 
     return (
         <div className='transaction-table'>
@@ -115,8 +115,8 @@ const TransactionTable = ({ data }) => {
                 {data.map((transaction, index) => (
                     <tr key={index}>
                         <td>{transaction.date}</td>
-                        <td>{transaction.transaction_type}</td>
-                        <td>{transaction.category_id}</td>
+                        <td>{transaction.description}</td>
+                        <td>{transaction.is_recurring === true? 'recurring':'not recurring'}</td>
                         <td>{transaction.amount}</td>
                     </tr>
                 ))}
@@ -158,14 +158,14 @@ const Income = () => {
 
         for (const amount of amounts) {
             if (amount.date === currentDate) {
-                currentAmount += amount.amount;
+                currentAmount += parseInt(amount.amount);
             } else {
                 if (currentDate !== null) {
                     combined.list.push(currentAmount);
                     combined.labels.push(currentDate);
                 }
                 currentDate = amount.date;
-                currentAmount = amount.amount;
+                currentAmount = parseInt(amount.amount);
             }
         }
         if (currentDate !== null) {
