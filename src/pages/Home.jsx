@@ -93,7 +93,7 @@ function Home() {
 
                 debts.forEach(debt => {
                     if (debt.user_id === userID) {
-                        totalDebt += parseFloat(debt.principal_amount);
+                        totalDebt += parseFloat(debt.remaining_balance);
                     }
                 });
 

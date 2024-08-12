@@ -32,7 +32,7 @@ const Insights = () => {
         fetch('https://barnes.onrender.com/expenses')
             .then(response => response.json())
             .then(data => {
-                let sortedExpenses = data.expenses.filter(expense => expense.user_id === 3);
+                let sortedExpenses = data.expenses.filter(expense => expense.user_id === 6);
                 setFullExpenses(sortedExpenses);
                 let list = combineAmountByDate(sortedExpenses);
                 setExpenses(list);
@@ -46,7 +46,7 @@ const Insights = () => {
         fetch('https://barnes.onrender.com/incomes')
             .then(response => response.json())
             .then(data => {
-                let sortedIncomes = data.incomes.filter(income => income.user_id === 3);
+                let sortedIncomes = data.incomes.filter(income => income.user_id === 6);
                 setFullIncomes(sortedIncomes);
                 let list = combineAmountByDate(sortedIncomes);
                 setIncomes(list);
