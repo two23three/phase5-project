@@ -9,7 +9,6 @@ import AboutUsPopup from "../components/AboutUsPopup";
 import SwitchAccount from "../components/SwitchAccount";
 import { useAuth } from '../components/AuthProvider';
 
-
 function MorePersonal({ emailOrPhone }) {
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -18,38 +17,43 @@ function MorePersonal({ emailOrPhone }) {
     referralPoints: 0
   });
 
+  const [isLoading, setIsLoading] = useState(true); // New loading state
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isAboutUsPopupOpen, setIsAboutUsPopupOpen] = useState(false);
   const { login } = useAuth();
-
+  const { getUserId } = useAuth();
+  const userID = getUserId();
+  const API_URL = "https://barnes.onrender.com/";
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
-        const usersResponse = await fetch('https://barnes.onrender.com/users');
-        const usersData = await usersResponse.json();
+        const response = await fetch(`${API_URL}users`);
+        const data = await response.json();
+        const users = data.users;
 
-        const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
-
-        if (user) {
-          login(loginData.access_token, user)
-          console.log('Logged in user:', user)
-          setUserInfo({
-            name: user.name,
-            email: user.email,
-            referralCode: user.referral_code,
-            referralPoints: user.referral_points
-          });
-        }
+        users.forEach(user => {
+          if (user.id === userID) {
+            console.log('Logged in user:', user)
+            setUserInfo({
+              name: user.name,
+              email: user.email,
+              referralCode: user.referral_code,
+              referralPoints: user.referral_points
+            });
+          }
+        });
+        setIsLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setIsLoading(false); // Ensure loading state is updated even on error
       }
     };
 
-    fetchUserData();
+    fetchData();
   }, [emailOrPhone]);
 
   const handleChangePasswordSubmit = (currentPassword, newPassword) => {
@@ -75,18 +79,33 @@ function MorePersonal({ emailOrPhone }) {
     }));
   };
 
+  if (isLoading) {
+    // Show a loading spinner or message while fetching data
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <svg className="animate-spin h-8 w-8 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p className="mt-2 text-gray-600">Loading user data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-sm bg-white rounded-b-xl overflow-hidden shadow-lg">
       <div className="flex items-center p-4">
-        <img
+        {/* <img
           className="w-16 h-16 rounded-full"
           src="https://via.placeholder.com/150"
           alt="Profile"
-        />
+        /> */}
         <div className="ml-4">
           <p className="text-gray-500 font-semibold mt-2 mb-2 text-left">Personal Account</p>
           <h2 className="text-neutral-800 text-lg font-semibold text-left">{userInfo.name || 'User Name'}</h2>
-          <p className="text-neutral-800">{userInfo.email || 'user@example.com'}</p>
+          <p className="text-neutral-800 text-left">{userInfo.email || 'user@example.com'}</p>
           <p className="text-neutral-600 text-left">Referral points: {userInfo.referralPoints || 0}</p>
         </div>
         <div className="ml-auto">
@@ -120,7 +139,7 @@ function MorePersonal({ emailOrPhone }) {
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">ACCOUNT</div>
         <div className="space-y-2">
-        <SwitchAccount onLogout={() => console.log("Logging out...")} />
+          <SwitchAccount onLogout={() => console.log("Logging out...")} />
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">YOUR REFERRAL CODE</div>
         <div className="flex items-center h-13 text-lg bg-slate-700 text-center text-white py-1 px-4 rounded">
@@ -154,24 +173,26 @@ function MorePersonal({ emailOrPhone }) {
           </button>
         </div>
       </div>
-      <AboutUsPopup
-        isOpen={isAboutUsPopupOpen}
-        onClose={() => setIsAboutUsPopupOpen(false)}
-      />
-      <Navbar />
-      <ContactPopup isOpen={isContactPopupOpen} onClose={() => setIsContactPopupOpen(false)} />
-      <EditDetailsPopup
-        isOpen={isEditPopupOpen}
-        onClose={() => setIsEditPopupOpen(false)}
-        userDetails={userInfo}
-        onSave={handleUpdateUserDetails}
-      />
-
+      <Navbar/>
+      {/* Render popups conditionally */}
+      {isContactPopupOpen && (
+        <ContactPopup onClose={() => setIsContactPopupOpen(false)} />
+      )}
+      {isEditPopupOpen && (
+        <EditDetailsPopup
+          currentDetails={userInfo}
+          onClose={() => setIsEditPopupOpen(false)}
+          onUpdate={handleUpdateUserDetails}
+        />
+      )}
       {isChangePasswordPopupOpen && (
         <ChangePasswordPopup
           onClose={() => setIsChangePasswordPopupOpen(false)}
           onSubmit={handleChangePasswordSubmit}
         />
+      )}
+      {isAboutUsPopupOpen && (
+        <AboutUsPopup onClose={() => setIsAboutUsPopupOpen(false)} />
       )}
     </div>
   );

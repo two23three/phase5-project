@@ -4,6 +4,8 @@ import AddLoan from "../components/AddLoan";
 import AddLimit from "../components/AddLimit";
 import ProgressBar from "../components/ProgressBar";
 import UpdateAmountPopup from "../components/UpdateAmountPopup";
+import { useAuth } from "../components/AuthProvider";
+import Navbar from "../components/Navbar";
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
@@ -18,6 +20,9 @@ function Budget() {
   const [loans, setLoans] = useState([]);
   const [limits, setLimits] = useState([]);
 
+  const {getUserId} = useAuth();
+  const userID = getUserId();
+
   // Fetch savings
   useEffect(() => {
     fetch("https://barnes.onrender.com/savings")
@@ -28,7 +33,7 @@ function Budget() {
         return response.json();
       })
       .then(data => {
-        let goalFilter = data.savings_goals.filter(goal => goal.user_id === 25)
+        let goalFilter = data.savings_goals.filter(goal => goal.user_id === userID);
         setGoals(goalFilter);
         console.log(data);
       })
@@ -419,6 +424,7 @@ function Budget() {
           label={updateLabel}
         />
       )}
+      <Navbar />
     </div>
   );
 }

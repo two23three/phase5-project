@@ -4,9 +4,8 @@ import EditAssetModal from "../components/EditAssetModal";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "../components/AuthProvider";
 
 function Assets() {
@@ -14,9 +13,10 @@ function Assets() {
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
-    const [openDropdownId, setOpenDropdownId] = useState(null); // Track open dropdown
+    const [openDropdownId, setOpenDropdownId] = useState(null);
+    const [totalAssets, setTotalAssets] = useState(0);
 
-    const {getUserId} = useAuth();
+    const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
@@ -32,7 +32,31 @@ function Assets() {
         KES: "Ksh"
     };
     const currencySymbol = currencySymbols[currency] || "Ksh";
+    // Fetching total assets
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_URL}assets`);
+                const data = await response.json();
+                console.log("Fetched data:", data);
+                const assets = data.assets;
 
+                let totalAssetsValue = 0;
+
+                assets.forEach(asset => {
+                    if (asset.user_id === userID) {
+                        totalAssetsValue += parseFloat(asset.value);
+                    }
+                });
+
+                setTotalAssets(totalAssetsValue);
+            } catch (error) {
+                console.log("Error fetching assets:", error);
+            }
+        };
+        fetchData();
+    }, []);
+    // Fetch assets and returning a list
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -42,11 +66,9 @@ function Assets() {
                 }
                 const data = await response.json();
 
-                console.log("Fetched data:", data);
 
                 if (Array.isArray(data.assets)) {
                     const userAssets = data.assets.filter(asset => asset.user_id === userID);
-                    console.log("Filtered assets:", userAssets);
                     setAssets(userAssets);
                 } else {
                     console.log("Data structure is not as expected.");
@@ -55,8 +77,10 @@ function Assets() {
                 console.log("Error fetching assets:", error);
             }
         };
-        fetchData();
-    }, []);
+        if (userID) {
+            fetchData();
+        }
+    }, [userID]);
 
     const handleEdit = (asset) => {
         setSelectedAsset(asset);
@@ -72,7 +96,6 @@ function Assets() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            console.log("Deleted asset with ID:", id);
             setAssets(assets.filter(asset => asset.id !== id));
         } catch (error) {
             console.log("Error deleting asset:", error);
@@ -80,13 +103,13 @@ function Assets() {
     };
 
     const handleSave = async (updatedAsset) => {
-        if (isAddingNew) {Nav
+        if (isAddingNew) {
             // Adding a new asset
             if (!updatedAsset.name || !updatedAsset.value || !updatedAsset.purchase_date) {
                 alert("Please fill out all required fields.");
                 return;
             }
-    
+
             try {
                 const response = await fetch(`${API_URL}assets`, {
                     method: 'POST',
@@ -130,7 +153,7 @@ function Assets() {
         }
         setIsModalOpen(false);
     };
-    
+
     const handleAddNew = () => {
         setSelectedAsset(null);
         setIsAddingNew(true);
@@ -144,7 +167,8 @@ function Assets() {
     return (
         <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col p-4'>
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-            <h1 className="text-3xl font-bold mb-6 text-center">Assets</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">Total Assets</h1>
+            <h2 className="text-3xl font-bold mb-6 text-center">{currencySymbol}{formatNumber(totalAssets)}</h2>
             <div className="flex flex-col items-left space-y-4 p-4 flex-grow">
                 {assets.length > 0 ? (
                     assets.map((asset) => (
@@ -154,13 +178,13 @@ function Assets() {
                                 description={asset.description}
                                 value={`${currencySymbol}${formatNumber(asset.value)}`}
                             />
-                            <div className="relative">
+                            <div className="flex items-left">
                                 <button
                                     type="button"
                                     className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     onClick={() => toggleDropdown(asset.id)}
                                 >
-                                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
+                                    <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
                                 </button>
 
                                 {openDropdownId === asset.id && (
@@ -213,7 +237,7 @@ function Assets() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
-            <Navbar/>
+            <Navbar />
         </div>
     );
 }

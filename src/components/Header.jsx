@@ -39,7 +39,7 @@ function Header({ onLogout, onCurrencyChange }) {
                     <FontAwesomeIcon icon={faCaretDown} />
                 </button>
                 {showCurrencyDropdown && (
-                    <div className="absolute bg-white shadow-md rounded mt-2">
+                    <div className="absolute bg-white shadow-md rounded mt-2 z-10">
                         {currencies.map((currency) => (
                             <button
                                 key={currency}
