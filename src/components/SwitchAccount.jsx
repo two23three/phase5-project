@@ -22,13 +22,13 @@ function Logout() {
         <svg className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
             </svg>
-        Switch to Business account
+        Switch Account Type
       </button>
 
       {showLogoutPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded shadow-lg text-black">
-            <p>Are you sure you want to<br></br> Switch To Business Account?</p>
+            <p>Are you sure you want to<br></br> Switch Account Type?</p>
             <div className="flex space-x-4 mt-4">
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded"
