@@ -3,6 +3,7 @@ import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
 import Navbar from "../components/Navbar";
+import { useAuth } from "../components/AuthProvider";
 
 ChartJS.register(
     LineElement,
@@ -17,6 +18,11 @@ ChartJS.register(
 
 
 const Insights = () => {
+
+    const {getUserId} = useAuth();
+    const userID = getUserId();
+    const API_URL = "https://barnes.onrender.com/";
+
     const [fullExpenses, setFullExpenses] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [incomes, setIncomes] = useState([]);
@@ -32,7 +38,7 @@ const Insights = () => {
         fetch('https://barnes.onrender.com/expenses')
             .then(response => response.json())
             .then(data => {
-                let sortedExpenses = data.expenses.filter(expense => expense.user_id === 3);
+                let sortedExpenses = data.expenses.filter(expense => expense.user_id === 6);
                 setFullExpenses(sortedExpenses);
                 let list = combineAmountByDate(sortedExpenses);
                 setExpenses(list);
@@ -46,7 +52,7 @@ const Insights = () => {
         fetch('https://barnes.onrender.com/incomes')
             .then(response => response.json())
             .then(data => {
-                let sortedIncomes = data.incomes.filter(income => income.user_id === 3);
+                let sortedIncomes = data.incomes.filter(income => income.user_id === 6);
                 setFullIncomes(sortedIncomes);
                 let list = combineAmountByDate(sortedIncomes);
                 setIncomes(list);
@@ -207,14 +213,14 @@ const Dropdown = ({ categories, setVisibleCategories }) => {
     const [value, setValue] = useState("All")
 
     useEffect(() => {
-        fetch('http://localhost:3000/transactions')
+        fetch('http://localhost:3000/expenses')
         .then(res => res.json())
         .then((data)=>{
             
             if(value === "All"){
                 setVisibleCategories(categories);
             } else {
-                const filteredCategories = data.filter(transaction => (transaction.category_id === parseInt(value)) && (transaction.transaction_type === "expense"));
+                const filteredCategories = data.filter(transaction => (transaction.category_id === parseInt(value)));
                 console.log(filteredCategories);
                 setVisibleCategories(filteredCategories);
             }
