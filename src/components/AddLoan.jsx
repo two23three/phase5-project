@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddLoan = ({ onClose, onSave }) => {
+const AddLoan = ({ onClose, onSave, userID }) => {
   const [loan, setLoan] = useState('');
   const [loanAmount, setLoanAmount] = useState('');
 
@@ -13,8 +13,9 @@ const AddLoan = ({ onClose, onSave }) => {
       name: loan,
       remaining_balance: parseFloat(loanAmount),
       due_date: currentDate,
-      principal_amount: 0,
-      user_id: 25
+      principal_amount: parseFloat(loanAmount),
+      interest_rate: 0,
+      user_id: userID
     });
     setLoan('');
     setLoanAmount('');
