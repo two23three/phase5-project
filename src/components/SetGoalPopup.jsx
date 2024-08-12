@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "./AuthProvider";
 
-const SetGoalPopup = ({ onClose, onSave }) => {
+const SetGoalPopup = ({ onClose, onSave, userID }) => {
   const [goalName, setGoalName] = useState('');
   const [targetAmount, setTargetAmount] = useState('');
 
@@ -10,8 +10,6 @@ const SetGoalPopup = ({ onClose, onSave }) => {
 
     const currentDate = new Date().toISOString().split('T')[0]; // Formats date as YYYY-MM-DD
 
-    const {getUserId} = useAuth();
-    const userID = getUserId();
     onSave({
       name: goalName,
       target_amount: parseFloat(targetAmount),
