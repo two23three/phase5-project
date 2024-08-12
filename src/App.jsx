@@ -14,7 +14,6 @@ import MorePersonal from './pages/MorePersonal';
 import MoreBusiness from './pages/MoreBusiness';
 import ErrorPage from './pages/ErrorPage';
 import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar';
 
 import './App.css';
 

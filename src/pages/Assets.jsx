@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AssetsInfoCard from "../components/AssetsInfoCard";
 import EditAssetModal from "../components/EditAssetModal";
 import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
@@ -76,7 +77,7 @@ function Assets() {
     };
 
     const handleSave = async (updatedAsset) => {
-        if (isAddingNew) {
+        if (isAddingNew) {Nav
             // Adding a new asset
             if (!updatedAsset.name || !updatedAsset.value || !updatedAsset.purchase_date) {
                 alert("Please fill out all required fields.");
@@ -209,6 +210,7 @@ function Assets() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
+            <Navbar/>
         </div>
     );
 }
