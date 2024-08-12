@@ -6,6 +6,7 @@ import ProgressBar from "../components/ProgressBar";
 import UpdateAmountPopup from "../components/UpdateAmountPopup";
 import { useAuth } from "../components/AuthProvider";
 import Navbar from "../components/Navbar";
+import DebtManagement from "../components/DebtManagement";
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
@@ -82,7 +83,7 @@ function Budget() {
         return response.json();
       })
       .then(data => {
-        const loanFilter = data.debts.filter(loan => loan.user_id === 25);
+        const loanFilter = data.debts.filter(loan => loan.user_id === userID);
         setLoans(loanFilter);
         console.log(data);
       })
@@ -121,6 +122,7 @@ function Budget() {
       }
     }
   }, [loans]);
+  console.log(loans);
 
   // Persist changes to limits
   useEffect(() => {
@@ -179,6 +181,7 @@ function Budget() {
 
   const handleSaveLoan = async (newLoan) => {
     console.log('Saving loan:', newLoan);
+    console.log(JSON.stringify(newLoan));
 
     try {
       const response = await fetch('https://barnes.onrender.com/debts', {
@@ -190,7 +193,7 @@ function Budget() {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
+        const errorText = await response.json();
         throw new Error(`Server error: ${errorText}`);
       }
 
@@ -216,7 +219,7 @@ function Budget() {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
+        const errorText = await response.json();
         throw new Error(`Server error: ${errorText}`);
       }
 
@@ -246,9 +249,9 @@ function Budget() {
 
     } else if (updateType === 'loan') {
       const updatedLoans = [...loans];
-      let principal = parseInt(updatedLoans[updateIndex].principal_amount);
-      principal += parseInt(value);
-      updatedLoans[updateIndex].principal_amount = principal;
+      let principal = parseInt(updatedLoans[updateIndex].remaining_balance);
+      principal -= parseInt(value);
+      updatedLoans[updateIndex].remaining_balance = principal;
       setLoans(updatedLoans);
 
     } else if (updateType === 'limit') {
@@ -268,6 +271,7 @@ function Budget() {
       endpoint = `https://barnes.onrender.com/savings/${itemToDelete.id}`;
     } else if (type === 'loan') {
       itemToDelete = loans[index];
+      console.log(itemToDelete)
       endpoint = `https://barnes.onrender.com/debts/${itemToDelete.id}`;
     } else if (type === 'limit') {
       itemToDelete = limits[index];
@@ -340,41 +344,8 @@ function Budget() {
           </div>
         </div>
 
-        {/* Debt Management */}
-        <div className="p-4 rounded-lg bg-gray-500">
-          <h2 className="text-xl font-bold mb-4 text-left">Debt Management</h2>
-          <div className="space-y-4">
-            {loans.map((l, index) => (
-              <div key={index} className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-bold text-lg">{l.name}</h3>
-                  <p>User ID: {l.user_id}</p>
-                  <p>Start Date: {l.due_date}</p>
-                  <ProgressBar
-                    key={index}
-                    label={l.name}
-                    current_amount={parseInt(l.principal_amount)}
-                    target_amount={parseInt(l.remaining_balance)}
-                    type="loan"
-                    onUpdate={() => handleUpdateAmount(index, 'loan', l.loan)}
-                  />
-                </div>
-                <button
-                  className="ml-4 bg-red-500 text-white p-2 rounded"
-                  onClick={() => handleDelete(index, 'loan')}
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
-            <button
-              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
-              onClick={() => setShowLoanModal(true)}
-            >
-              <span className="mr-2">+</span> Add Loan
-            </button>
-          </div>
-        </div>
+       < DebtManagement loans={loans} handleUpdateAmount={handleUpdateAmount} handleDelete={handleDelete} setShowLoanModal={setShowLoanModal} />
+
 
         {/* Limits */}
         <div className="p-4 rounded-lg bg-gray-500">
@@ -412,7 +383,7 @@ function Budget() {
         <SetGoalPopup onClose={() => setShowGoalModal(false)} onSave={handleSaveGoal} />
       )}
       {showLoanModal && (
-        <AddLoan onClose={() => setShowLoanModal(false)} onSave={handleSaveLoan} />
+        <AddLoan onClose={() => setShowLoanModal(false)} onSave={handleSaveLoan} userID={userID} />
       )}
       {showLimitModal && (
         <AddLimit onClose={() => setShowLimitModal(false)} onSave={handleSaveLimit} />
