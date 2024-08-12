@@ -7,6 +7,7 @@ import Logout from "../components/Logout";
 import DeleteAccount from "../components/DeleteAccount";
 import AboutUsPopup from "../components/AboutUsPopup";
 import SwitchAccount from "../components/SwitchAccount";
+import { useAuth } from '../components/AuthProvider';
 
 
 function MorePersonal({ emailOrPhone }) {
@@ -22,6 +23,8 @@ function MorePersonal({ emailOrPhone }) {
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isAboutUsPopupOpen, setIsAboutUsPopupOpen] = useState(false);
+  const { login } = useAuth();
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,6 +35,8 @@ function MorePersonal({ emailOrPhone }) {
         const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
 
         if (user) {
+          login(loginData.access_token, user)
+          console.log('Logged in user:', user)
           setUserInfo({
             name: user.name,
             email: user.email,

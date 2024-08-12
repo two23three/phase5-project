@@ -9,15 +9,15 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null); 
 
   const login = (newToken, userData) => {
-    setToken(newToken);// Save the taoken for the user logged in
-    setUser(userData); // Save user data for the user logged in
+    setToken(newToken);
+    setUser(userData); 
     localStorage.setItem('token', newToken);
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {
     setToken('');
-    setUser(null); // Clear user data
+    setUser(null); 
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   };

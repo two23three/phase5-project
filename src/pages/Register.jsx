@@ -122,7 +122,7 @@ function Register() {
             <label className="block text-gray-400">Phone Number<span className="text-red-500">*</span></label>
             <input
               type="text"
-              placeholder="Enter phone number (format 07xxxxxx)"
+              placeholder="Enter Phone ( 07xxxxxx)"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"

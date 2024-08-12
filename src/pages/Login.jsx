@@ -14,7 +14,7 @@ function Login() {
 
     // Determine if the input is an email or phone number
     const isEmail = emailOrPhone.includes('@');
-    const isPhoneNumber = /^07\d{8}$/.test(emailOrPhone);
+    const isPhoneNumber = /^(2547\d{8}|07\d{8})$/.test(emailOrPhone);
 
     if (!isEmail && !isPhoneNumber) {
       alert('Please enter a valid email or phone number');
