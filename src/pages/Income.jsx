@@ -71,7 +71,7 @@ const IncomeChart = ({ list, labels }) => {
 
     return (
         <div className={list.length > 10 ? 'chart-container' : null}>
-            <div className={list.length > 10 ? 'chart-container' : 'income-chart'}>
+                       <div className={list.length>10? 'chart-container': 'expense-chart'} style={{borderBottomRightRadius:'0px', borderBottomLeftRadius:'0px', borderTopLeftRadius:'10px', borderTopRightRadius:'10px', marginBottom:'0px'}}>
                 <Line data={data} options={options} />
             </div>
         </div>
@@ -137,11 +137,12 @@ const Income = () => {
 
     useEffect(() => {
         // Fetch transactions from the API
-        fetch('http://localhost:3000/transactions')
+        fetch('https://barnes.onrender.com/incomes')
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                let expenses = data.filter(income => income.transaction_type === 'income' && income.user_id === 1);
+                console.log(data)
+                let expenses = data.incomes.filter(income =>  income.user_id === 6);
                 const combinedData = combineAmountByDate(expenses);
                 setTranzactions(combinedData);
                 setTransactions(expenses);
@@ -190,7 +191,7 @@ const Income = () => {
     }, [from, to]);
 
     return (
-        <div className="p-4" style={{ backgroundColor: 'black' }}>
+        <div className="p-4" style={{ backgroundColor: 'black', padding: '0px' }}>
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />

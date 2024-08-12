@@ -663,7 +663,7 @@
       "amount": 600.00,
       "category_id": 2,
       "date": "2024-05-10",
-      "description": "Groceries",
+      "description": "electricity",
       "is_recurring": true,
       "created_at": "2024-05-10T00:00:00Z",
       "updated_at": "2024-05-10T00:00:00Z"

@@ -24,11 +24,11 @@ const Expenses = () => {
 
     useEffect(() => {
         // Fetch transactions from the API
-        fetch('http://localhost:3000/transactions')
+        fetch('https://barnes.onrender.com/expenses')
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                let expenses = data.filter(expense => expense.transaction_type === 'expense' && expense.user_id === 1);
+                let expenses = data.expenses.filter(expense => expense.user_id === 6);
                 const combinedData = combineAmountByDate(expenses);
                 setTranzactions(combinedData);
                 setTransactions(expenses);
@@ -44,14 +44,14 @@ const Expenses = () => {
 
         for (const amount of amounts) {
             if (amount.date === currentDate) {
-                currentAmount += amount.amount;
+                currentAmount += parseInt(amount.amount);
             } else {
                 if (currentDate !== null) {
                     combined.list.push(currentAmount);
                     combined.labels.push(currentDate);
                 }
                 currentDate = amount.date;
-                currentAmount = amount.amount;
+                currentAmount = parseInt(amount.amount);
             }
         }
         if (currentDate !== null) {
@@ -59,7 +59,6 @@ const Expenses = () => {
             combined.labels.push(currentDate);
         }
 
-        console.log(combined);
         return combined;
     };
 
@@ -77,7 +76,7 @@ const Expenses = () => {
     }, [from, to]);
 
     return (
-        <div className="p-4" style={{ backgroundColor: 'black' }}>
+        <div className="p-4" style={{ backgroundColor: 'black', padding:'0px' }}>
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
@@ -107,7 +106,7 @@ const TransactionTable = (data) => {
                     <tr key={index}>
                         <td>{transaction.date}</td>
                         <td>{transaction.description}</td>
-                        <td>{transaction.transaction_type}</td>
+                        <td>{transaction.is_recurring === true? 'recurring':'not recurring'}</td>
                         <td>{transaction.amount}</td>
                     </tr>
                 ))}
@@ -173,8 +172,8 @@ const ExpensesChart = ({ list, labels }) => {
     };
 
     return (
-        <div className={list.length>10? 'chart-container': null}>
-            <div className={list.length>10? 'chart-container': 'expense-chart'}>
+        <div className={list.length>10? 'chart-container': null} >
+            <div className={list.length>10? 'chart-container': 'expense-chart'} style={{borderBottomRightRadius:'0px', borderBottomLeftRadius:'0px', borderTopLeftRadius:'10px', borderTopRightRadius:'10px', marginBottom:'0px'}}>
                 <Line data={data} options={options} />
             </div>
         </div>
