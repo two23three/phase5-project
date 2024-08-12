@@ -43,8 +43,7 @@ function Login() {
 
         if (user) {
           login(loginData.access_token, user);  // Save token and user info
-          console.log('Logged in user:', user)
-          console.log('Your active token:', access_token); // Log user data to the console
+          console.log('Logged in user:', user); // Log user data to the console
           navigate('/');  // Redirect to the home page after successful login
         } else {
           console.log('User not found');
