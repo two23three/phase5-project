@@ -15,6 +15,7 @@ import ErrorPage from './pages/ErrorPage';
 import PrivateRoute from './components/PrivateRoute';
 
 import './App.css';
+import LandingPage from './pages/LandingPage';
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/more" element={<PrivateRoute element={More} />} />
             <Route path="*" element={<ErrorPage />} />
+            <Route path='/landing' element={<LandingPage/>} />
           </Routes>
         </div>
       </Router>
