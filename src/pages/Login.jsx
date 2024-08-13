@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthProvider';
+import backgroundImage from '../assets/loginbackground.png'; 
 
 function Login() {
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -12,9 +13,8 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Determine if the input is an email or phone number
     const isEmail = emailOrPhone.includes('@');
-    const isPhoneNumber = /^07\d{8}$/.test(emailOrPhone);
+    const isPhoneNumber = /^(2547\d{8}|07\d{8})$/.test(emailOrPhone);
 
     if (!isEmail && !isPhoneNumber) {
       alert('Please enter a valid email or phone number');
@@ -22,7 +22,6 @@ function Login() {
     }
 
     try {
-      // Perform the login request
       const loginResponse = await fetch('https://barnes.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -35,16 +34,15 @@ function Login() {
       const loginData = await loginResponse.json();
 
       if (loginResponse.ok) {
-        // Fetch all users and filter based on email or phone number
         const usersResponse = await fetch('https://barnes.onrender.com/users');
         const usersData = await usersResponse.json();
 
         const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
 
         if (user) {
-          login(loginData.access_token, user);  // Save token and user info
-          console.log('Logged in user:', user); // Log user data to the console
-          navigate('/');  // Redirect to the home page after successful login
+          login(loginData.access_token, user);  
+          console.log('Logged in user:', user); 
+          navigate('/home'); 
         } else {
           console.log('User not found');
         }
@@ -61,8 +59,12 @@ function Login() {
   };
 
   return (
-    <div className="w-full max-w-xs">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
+    <div
+      className="bg-cover bg-center h-screen w-screen flex items-center justify-center"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+    <div className="pl-4 pr-4 max-w-xs">
+      <div className="bg-[#242424] p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Login to Barnes!</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
@@ -106,6 +108,7 @@ function Login() {
           <a href="/register" className="text-white font-bold hover:underline">Sign Up</a>
         </div>
       </div>
+    </div>
     </div>
   );
 }

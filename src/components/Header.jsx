@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCaretDown, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthProvider';// Assuming you have a useAuth hook
+import { useAuth } from './AuthProvider'; // Assuming you have a useAuth hook
 
 function Header({ onLogout, onCurrencyChange }) {
     const [selectedCurrency, setSelectedCurrency] = useState("KES");
@@ -10,7 +10,6 @@ function Header({ onLogout, onCurrencyChange }) {
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
     const currencies = ["USD", "EUR", "GBP", "KES"];
-    
 
     const handleCurrencySelect = (currency) => {
         setSelectedCurrency(currency);
@@ -29,17 +28,17 @@ function Header({ onLogout, onCurrencyChange }) {
     };
 
     return (
-        <header className="flex justify-between items-center text-white">
+        <header className="flex justify-between items-center text-white pt-4 pl-4 pr-4">
             <div className="relative">
                 <button
-                    className="flex items-center space-x-2"
+                    className="flex items-center space-x-2 text-black"
                     onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
                 >
                     <span>{selectedCurrency}</span>
-                    <FontAwesomeIcon icon={faCaretDown} />
+                    <FontAwesomeIcon icon={faCaretDown} className="text-black" />
                 </button>
                 {showCurrencyDropdown && (
-                    <div className="absolute bg-white shadow-md rounded mt-2">
+                    <div className="absolute bg-white shadow-md rounded mt-2 z-10">
                         {currencies.map((currency) => (
                             <button
                                 key={currency}
@@ -53,10 +52,10 @@ function Header({ onLogout, onCurrencyChange }) {
                 )}
             </div>
             <button
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 text-black"
                 onClick={() => setShowLogoutPopup(true)}
             >
-                <FontAwesomeIcon icon={faSignOutAlt} />
+                <FontAwesomeIcon icon={faSignOutAlt} className="text-black" />
                 <span>Logout</span>
             </button>
             {showLogoutPopup && (

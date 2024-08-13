@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
+import './insights.css';
 
 ChartJS.register(
     LineElement,
@@ -16,45 +17,46 @@ ChartJS.register(
 
 const Expenses = () => {
     const [transactions, setTransactions] = useState([]);
-    const [tranzactions, setTranzactions] = useState([]);
-    const [table, setTable] = useState(undefined);
+    const [tranzactions, setTranzactions] = useState({ list: [], labels: [] });
+    const [table, setTable] = useState([]);
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
 
     useEffect(() => {
         // Fetch transactions from the API
-        fetch('http://localhost:3000/transactions')
+        fetch('https://barnes.onrender.com/expenses')
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                let expenses = data.filter(expense => expense.transaction_type === 'expense' && expense.user_id === 1);
-                setTranzactions(combineAmountByDate(expenses));
+                let expenses = data.expenses.filter(expense => expense.user_id === 6);
+                const combinedData = combineAmountByDate(expenses);
+                setTranzactions(combinedData);
                 setTransactions(expenses);
             })
             .catch(error => console.error('Error fetching data:', error));
     }, []); // Empty dependency array to fetch only on mount
 
-    console.log(table);
-
     const combineAmountByDate = (amounts) => {
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
-        const combined = [];
+        const combined = { list: [], labels: [] };
         let currentDate = null;
         let currentAmount = 0;
 
         for (const amount of amounts) {
             if (amount.date === currentDate) {
-                currentAmount += amount.amount;
+                currentAmount += parseInt(amount.amount);
             } else {
                 if (currentDate !== null) {
-                    combined.push(currentAmount);
+                    combined.list.push(currentAmount);
+                    combined.labels.push(currentDate);
                 }
                 currentDate = amount.date;
-                currentAmount = amount.amount;
+                currentAmount = parseInt(amount.amount);
             }
         }
         if (currentDate !== null) {
-            combined.push(currentAmount);
+            combined.list.push(currentAmount);
+            combined.labels.push(currentDate);
         }
 
         return combined;
@@ -63,32 +65,36 @@ const Expenses = () => {
     const filterByDate = () => {
         if (from && to) {
             const filteredExpenses = transactions.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
-            setTranzactions(combineAmountByDate(filteredExpenses));
+            const combinedData = combineAmountByDate(filteredExpenses);
+            setTranzactions(combinedData);
             setTable(filteredExpenses);
-            console.log(table);
         }
     };
 
     useEffect(() => {
         filterByDate();
-    }, [from, to]); // Trigger filtering when dates change
+    }, [from, to]);
 
     return (
-        <div className="expenses-page" style={{ backgroundColor: 'black' }} >
-            <Header />
-            <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
-            <TotalExpense amount={24000} />
-            <ExpensesChart list={tranzactions} />
-            <TransactionTable data={table ? table : transactions} />
-            <Navbar />
+        <div className="p-4" style={{ backgroundColor: 'black', padding:'0px' }}>
+            <div className="expenses-page" style={{ backgroundColor: 'black' }}>
+                <Header />
+                <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
+                <TotalExpense amount={tranzactions.list.reduce((a, b) => a + b, 0)} />
+                <ExpensesChart list={tranzactions.list} labels={tranzactions.labels} />
+                <TransactionTable data={table.length > 0 ? table : transactions} />
+                <Navbar />
+            </div>
         </div>
     );
 };
+
 
 const TransactionTable = (data) => {
     const headers = ['Date', 'Description', 'Category', 'Amount'];
 
     return (
+        <div className='transaction-table'>
         <table>
             <thead>
                 <tr>
@@ -99,13 +105,14 @@ const TransactionTable = (data) => {
                 {data.data.map((transaction, index) => (
                     <tr key={index}>
                         <td>{transaction.date}</td>
-                        <td>{transaction.transaction_type}</td>
                         <td>{transaction.description}</td>
+                        <td>{transaction.is_recurring === true? 'recurring':'not recurring'}</td>
                         <td>{transaction.amount}</td>
                     </tr>
                 ))}
             </tbody>
         </table>
+        </div>
     );
 };
 
@@ -115,29 +122,29 @@ const DateFilter = ({ from, to, setFrom, setTo }) => {
         <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
                 <label>From</label>
-                <input 
-                    type="date" 
-                    value={from} 
-                    onChange={(e) => setFrom(e.target.value)} 
-                    style={{ width: '120px' }} 
+                <input
+                    type="date"
+                    value={from}
+                    onChange={(e) => setFrom(e.target.value)}
+                    style={{ width: '120px' }}
                 />
             </div>
             <div>
                 <label>To</label>
-                <input 
-                    type="date" 
-                    value={to} 
-                    onChange={(e) => setTo(e.target.value)} 
-                    style={{ width: '120px' }} 
+                <input
+                    type="date"
+                    value={to}
+                    onChange={(e) => setTo(e.target.value)}
+                    style={{ width: '120px' }}
                 />
             </div>
         </div>
     );
 };
 
-const ExpensesChart = ({ list }) => {
+const ExpensesChart = ({ list, labels }) => {
     const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], // Adjust labels based on the data you have
+        labels: labels, // Adjust labels based on the data you have
         datasets: [
             {
                 label: 'Expense Over Time',
@@ -151,9 +158,24 @@ const ExpensesChart = ({ list }) => {
         ]
     };
 
+    const options = {
+        scales: {
+            x: {
+                type: 'category',
+                display: true,
+            },
+            y: {
+                beginAtZero: true
+            }
+        },
+        maintainAspectRatio: false,
+    };
+
     return (
-        <div className="expense-chart" style={{ background: 'white' }}>
-            <Line data={data} />
+        <div className={list.length>10? 'chart-container': null} >
+            <div className={list.length>10? 'chart-container': 'expense-chart'} style={{borderBottomRightRadius:'0px', borderBottomLeftRadius:'0px', borderTopLeftRadius:'10px', borderTopRightRadius:'10px', marginBottom:'0px'}}>
+                <Line data={data} options={options} />
+            </div>
         </div>
     );
 };

@@ -4,17 +4,21 @@ import EditAssetModal from "../components/EditAssetModal";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from "../components/AuthProvider";
 
 function Assets() {
     const [assets, setAssets] = useState([]);
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAddingNew, setIsAddingNew] = useState(false);
-    const [openDropdownId, setOpenDropdownId] = useState(null); // Track open dropdown
-    const userID = 3;
+    const [openDropdownId, setOpenDropdownId] = useState(null);
+    const [totalAssets, setTotalAssets] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const { getUserId } = useAuth();
+    const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
     // Header settings
@@ -29,7 +33,31 @@ function Assets() {
         KES: "Ksh"
     };
     const currencySymbol = currencySymbols[currency] || "Ksh";
+    // Fetching total assets
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_URL}assets`);
+                const data = await response.json();
+                console.log("Fetched data:", data);
+                const assets = data.assets;
 
+                let totalAssetsValue = 0;
+
+                assets.forEach(asset => {
+                    if (asset.user_id === userID) {
+                        totalAssetsValue += parseFloat(asset.value);
+                    }
+                });
+
+                setTotalAssets(totalAssetsValue);
+            } catch (error) {
+                console.log("Error fetching assets:", error);
+            }
+        };
+        fetchData();
+    }, []);
+    // Fetch assets and returning a list
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -39,21 +67,24 @@ function Assets() {
                 }
                 const data = await response.json();
 
-                console.log("Fetched data:", data);
 
                 if (Array.isArray(data.assets)) {
                     const userAssets = data.assets.filter(asset => asset.user_id === userID);
-                    console.log("Filtered assets:", userAssets);
                     setAssets(userAssets);
                 } else {
                     console.log("Data structure is not as expected.");
                 }
+
+                setIsLoading(false);
             } catch (error) {
                 console.log("Error fetching assets:", error);
+                setIsLoading(false);
             }
         };
-        fetchData();
-    }, []);
+        if (userID) {
+            fetchData();
+        }
+    }, [userID]);
 
     const handleEdit = (asset) => {
         setSelectedAsset(asset);
@@ -69,7 +100,6 @@ function Assets() {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            console.log("Deleted asset with ID:", id);
             setAssets(assets.filter(asset => asset.id !== id));
         } catch (error) {
             console.log("Error deleting asset:", error);
@@ -77,13 +107,13 @@ function Assets() {
     };
 
     const handleSave = async (updatedAsset) => {
-        if (isAddingNew) {Nav
+        if (isAddingNew) {
             // Adding a new asset
             if (!updatedAsset.name || !updatedAsset.value || !updatedAsset.purchase_date) {
                 alert("Please fill out all required fields.");
                 return;
             }
-    
+
             try {
                 const response = await fetch(`${API_URL}assets`, {
                     method: 'POST',
@@ -127,7 +157,7 @@ function Assets() {
         }
         setIsModalOpen(false);
     };
-    
+
     const handleAddNew = () => {
         setSelectedAsset(null);
         setIsAddingNew(true);
@@ -138,26 +168,44 @@ function Assets() {
         setOpenDropdownId(openDropdownId === id ? null : id);
     };
 
+    if(isLoading){
+        return (
+            <div className="flex items-center justify-center h-screen">
+              <div className="text-center">
+                <svg className="animate-spin h-8 w-8 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p className="mt-2 text-gray-600">Loading user data...</p>
+              </div>
+            </div>
+          );
+        }
+        
     return (
-        <div className='min-h-screen rounded-b-xl bg-gray-900 text-white flex flex-col p-4'>
+        <div className='width-full height-full rounded-b-xl bg-white text-white flex flex-col p-4'>
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-            <h1 className="text-3xl font-bold mb-6 text-center">Assets</h1>
+            <div className="bg-[#242424] p-4 text-white font-bold mb-4 rounded-b-xl">
+            <h1>Total Assets</h1>
+            </div>
+
+            <h2 className="text-3xl font-bold mb-6 text-center text-black">{currencySymbol}{formatNumber(totalAssets)}</h2>
             <div className="flex flex-col items-left space-y-4 p-4 flex-grow">
                 {assets.length > 0 ? (
                     assets.map((asset) => (
-                        <div key={asset.id} className="flex items-center space-x-4 bg-white rounded-lg p-4 relative">
+                        <div key={asset.id} className="flex items-center space-x-4 bg-[#242424] rounded-lg p-4 relative">
                             <AssetsInfoCard
                                 name={asset.name}
                                 description={asset.description}
                                 value={`${currencySymbol}${formatNumber(asset.value)}`}
                             />
-                            <div className="relative">
+                            <div className="flex items-left">
                                 <button
                                     type="button"
-                                    className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                                    className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-[#242424]text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     onClick={() => toggleDropdown(asset.id)}
                                 >
-                                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
+                                    <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
                                 </button>
 
                                 {openDropdownId === asset.id && (
@@ -198,10 +246,9 @@ function Assets() {
             <div className="flex justify-center mt-4 mb-6">
                 <button
                     onClick={handleAddNew}
-                    className="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 flex items-center"
+                    className="bg-[#932B16] text-white p-2 rounded-full hover:bg-[#7a1e12] flex items-center p-3 font-bold ml-auto"
                 >
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    Add New Asset
+                    Add Asset
                 </button>
             </div>
             <EditAssetModal
@@ -210,7 +257,7 @@ function Assets() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
-            <Navbar/>
+            <Navbar />
         </div>
     );
 }
