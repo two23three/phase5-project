@@ -98,14 +98,15 @@ function Budget() {
   useEffect(() => {
     if (loans.length > 0) {
       const updatedLoan = loans[updateIndex];
+      console.log(updatedLoan);
       if (updatedLoan) {
-        const { id, principal_amount } = updatedLoan;
+        const { id, remaining_balance } = updatedLoan;
         fetch(`https://barnes.onrender.com/debts/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ principal_amount }),
+          body: JSON.stringify({ remaining_balance }),
         })
           .then(response => {
             if (!response.ok) {

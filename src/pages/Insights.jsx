@@ -4,6 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import './insights.css';
 import Navbar from "../components/Navbar";
 import { useAuth } from "../components/AuthProvider";
+import {FaLightbulb} from "react-icons/fa"
 
 ChartJS.register(
     LineElement,
@@ -31,6 +32,7 @@ const Insights = () => {
     const [to, setTo] = useState("to");
     const [change, setChange] = useState('');
     const [categories, setCategories] = useState([]);
+    const [fetchedCategories, setFetchedCategories] = useState([]);
     const [labels, setLabels] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
 
@@ -43,10 +45,11 @@ const Insights = () => {
                 let list = combineAmountByDate(sortedExpenses);
                 setExpenses(list);
 
-                let c = sortByCategories(sortedExpenses);
+                let c = sortByCategories(sortedExpenses, fetchedCategories);
                 setCategories(c);
             })
             .catch(error => console.log(error));
+            console.log(categories);
 
             //http://localhost:3000/
         fetch('https://barnes.onrender.com/incomes')
@@ -63,6 +66,15 @@ const Insights = () => {
     useEffect(() => {
         filterByDate();
     }, [from, to]);
+
+    useEffect(()=>{
+        fetch('https://barnes.onrender.com/categories')
+        .then(response => response.json())
+        .then (d => {
+            setCategories(d.categories);
+            setFetchedCategories(d.categories);
+        })},[change]
+    );
 
     const combineAmountByDate = (amounts) => {
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -104,71 +116,54 @@ const Insights = () => {
         }
     };
 
-    const sortByCategories = (data) => {
-        let Bills = {
-            electricity: 0,
-            shopping: 0,
-            rent: 0,
-            car: 0,
-            sum: 0
-        }
-
+    const sortByCategories = (data, categories) => {
+        let categoriesList = [];
+      
+       
+        let categoryTotals = {};
+        categories.forEach(category => {
+          categoryTotals[category.name.toLowerCase()] = 0;
+        });
+      
+        
         for (let expense of data) {
-            if (expense.category_id === 2) {
-                Bills.electricity += parseInt(expense.amount);
-            } else if (expense.category_id === 3) {
-                Bills.shopping += parseInt(expense.amount);
-            } else if (expense.category_id === 4) {
-                Bills.rent += parseInt(expense.amount);
-            } else {
-                Bills.car += parseInt(expense.amount);
-            };
+          
+          const matchingCategory = categories.find(category => category.id === expense.category_id);
+      
+          if (matchingCategory) {
+            
+            categoryTotals[matchingCategory.name.toLowerCase()] += parseInt(expense.amount);
+          }
         }
-        Bills.sum = Bills.electricity + Bills.shopping + Bills.rent + Bills.car;
-        setTotalAmount(Bills.sum);
-
-        const categoriesList = [
-            {
-                name: 'Electricity', amount: Bills.electricity, percentage: Math.floor(((Bills.electricity / Bills.sum) * 100)), category: 'electricity', icon:
-                    <svg className="h-8 w-8 text-stone-400" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="M3 12h1M12 3v1M20 12h1M5.6 5.6l.7 .7M18.4 5.6l-.7 .7" />
-                        <path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3" />
-                        <line x1="9.7" y1="17" x2="14.3" y2="17" />
-                    </svg>,
-            },
-            {
-                name: 'Shopping', amount: Bills.shopping, percentage: Math.ceil(((Bills.shopping / Bills.sum) * 100)), category: 'shopping', icon:
-                    <svg className="h-8 w-8 text-stone-400" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx="9" cy="19" r="2" />
-                        <circle cx="17" cy="19" r="2" />
-                        <path d="M3 3h2l2 12a3 3 0 0 0 3 2h7a3 3 0 0 0 3 -2l1 -7h-15.2" />
-                    </svg>,
-            },
-            {
-                name: 'Rent', amount: Bills.rent, percentage: Math.ceil(((Bills.rent / Bills.sum) * 100)), category: 'rent', icon:
-                    <svg className="h-8 w-8 text-stone-400" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <polyline points="5 12 3 12 12 3 21 12 19 12" />
-                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                    </svg>,
-            },
-            {
-                name: 'Car', amount: Bills.car, percentage: Math.floor(((Bills.car / Bills.sum) * 100)), category: 'car', icon:
-                    <svg className="h-8 w-8 text-stone-400" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <circle cx="7" cy="17" r="2" />
-                        <circle cx="17" cy="17" r="2" />
-                        <path d="M5 17h-2v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" />
-                    </svg>,
-            },
-        ];
-
+      
+        
+        const totalAmount = Object.values(categoryTotals).reduce((sum, amount) => sum + amount, 0);
+      
+        
+        categories.forEach(category => {
+          const amount = categoryTotals[category.name.toLowerCase()];
+          if (amount > 0) { 
+            const percentage = totalAmount ? Math.round((amount / totalAmount) * 100) : 0;
+            const categoryExists = categoriesList.some(cat => cat.category === category.name.toLowerCase());
+      
+            if (!categoryExists) {
+              categoriesList.push({
+                name: category.name,
+                id: category.id,
+                amount: amount,
+                percentage: percentage,
+                category: category.name.toLowerCase(),
+              });
+            }
+          }
+        });
+      
+        setTotalAmount(totalAmount); 
+      
         return categoriesList;
-    };
-
+      };
+      
+      
     return (
         <div className="Insights" style={{ backgroundColor: 'black' }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
@@ -187,6 +182,7 @@ const Insights = () => {
 
 
 const ExpenseCategoryList = ({ categories }) => {
+    console.log(categories);
     const [visibleCategories, setVisibleCategories] = useState(categories);
 
     useEffect(() => {
@@ -213,14 +209,14 @@ const Dropdown = ({ categories, setVisibleCategories }) => {
     const [value, setValue] = useState("All")
 
     useEffect(() => {
-        fetch('http://localhost:3000/expenses')
+        fetch('https://barnes.onrender.com/expenses')
         .then(res => res.json())
         .then((data)=>{
             
             if(value === "All"){
                 setVisibleCategories(categories);
             } else {
-                const filteredCategories = data.filter(transaction => (transaction.category_id === parseInt(value)));
+                const filteredCategories = data.expenses.filter(transaction => (transaction.category_id === parseInt(value)) && (transaction.user_id === 6));
                 console.log(filteredCategories);
                 setVisibleCategories(filteredCategories);
             }
@@ -235,20 +231,17 @@ const Dropdown = ({ categories, setVisibleCategories }) => {
         if (selectedCategory === "All") {
             setValue("All"); 
         } else {
-            
             setValue(event.target.value);
-
         }
     };
     console.log(value);
 
     return (
         <select className="dropdown" onChange={filterCategories} style={{ backgroundColor: '#D1D1D1', color: '#423E3E', fontSize: '15px' }}>
-            <option value="All">All Categories</option>
-            <option value="2">Electricity</option>
-            <option value="3">Rent</option>
-            <option value="4">Shopping</option>
-            <option value="5">Car</option>
+            <option value="All">All</option>
+            {categories.map((category, index) => (
+                <option key={index} value={category.id}>{category.name}</option>
+            ))}
         </select>
     );
 };
@@ -354,7 +347,7 @@ const ExpenseCategoryItem = ({ category }) => {
             borderStyle: 'solid', borderRadius: '10px', borderWidth: '1px',
             backgroundColor: '#242424', width: '100%', height: '300',
         }}>
-            <p style={{ margin: '0' }}>{category.icon ? category.icon : category.id}</p>
+            {/* <p style={{ margin: '0' }}>{category.icon ? category.icon : category.id}</p> */}
             <p style={{ margin: '0' }}>{category.name? category.name : category.description}</p>
             <p style={{ margin: '0' }}>{category.amount}</p>
             <p style={{ margin: '0' }}>{category.percentage? `${category.percentage}%` : '0%'}</p>
