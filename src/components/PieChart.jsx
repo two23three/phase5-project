@@ -26,7 +26,9 @@ function PieChart({ totalIncome, totalExpense }) {
     };
 
     return (
-        <Doughnut data={chartData} options={chartOptions} />
+        <div>
+            <Doughnut data={chartData} options={chartOptions} />
+        </div>
     );
 }
 

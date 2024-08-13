@@ -165,7 +165,7 @@ function Home() {
         );
     }
     return (
-        <div className="flex flex-col bg-[url()] h-full w-full "
+        <div className="flex flex-col bg-[url()] h-screen w-screen "
         style={{ backgroundImage: `url(${homeBackground})` }}
         >
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />

@@ -63,7 +63,7 @@ function Login() {
 
   return (
     <div
-      className="bg-cover bg-center min-h-screen flex items-center justify-center"
+      className="bg-cover bg-center h-screen w-screen flex items-center justify-center"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
     <div className="pl-4 pr-4 max-w-xs">
