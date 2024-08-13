@@ -164,33 +164,36 @@ function Home() {
         );
     }
     return (
-        <div className="flex flex-col bg-gray-900 h-screen w-screen">
+        <div className="flex flex-col bg-white h-full w-full ">
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-            <div className="flex justify-center">
+            <div className="flex justify-center items-center ">
                 <PieChart totalIncome={income} totalExpense={expense} />
             </div>
             <div className="text-center">
-                <h1 className="text-3xl md:text-5xl font-bold text-white">
+                <h1 className="text-3xl md:text-5xl font-bold text-black">
                     {currencySymbol} {formatNumber(balance)}
                 </h1>
-                <p className="text-white">left to spend</p>
+                <p className="text-black font-bold">left to spend</p>
             </div>
-            <div className="gap-4 mx-[5%] my-auto">
-                <Link to="/income">
-                    <InfoCard title="Income" value={`${currencySymbol} ${formatNumber(income)}`} />
-                </Link>
-                <Link to="/expenses">
-                    <InfoCard title="Expense" value={`${currencySymbol} ${formatNumber(expense)}`} />
-                </Link>
-                <Link to="/budget">
-                    <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt + tempDebt)}`} />
-                </Link>
-                <Link to="/assets">
-                    <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
-                </Link>
+            <div className="bg-[#242424] pt-7 rounded-t-lg">
+                <div className="gap-4 mx-[5%] my-auto">
+                    <Link to="/income">
+                        <InfoCard title="Income" value={`${currencySymbol} ${formatNumber(income)}`} />
+                    </Link>
+                    <Link to="/expenses">
+                        <InfoCard title="Expense" value={`${currencySymbol} ${formatNumber(expense)}`} />
+                    </Link>
+                    <Link to="/budget">
+                        <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt + tempDebt)}`} />
+                    </Link>
+                    <Link to="/assets">
+                        <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
+                    </Link>
+                </div>
+                <Navbar />
             </div>
-            <Navbar />
-        </div>
+                
+            </div>
     );
 }
 
