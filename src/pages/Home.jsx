@@ -175,6 +175,7 @@ function Home() {
                 </h1>
                 <p className="text-black font-bold">left to spend</p>
             </div>
+
             <div className="bg-[#242424] pt-7 rounded-t-lg">
                 <div className="gap-4 mx-[5%] my-auto">
                     <Link to="/income">
