@@ -3,7 +3,7 @@ import { useAuth } from './AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 function SwitchAccount() {
-  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const [showLogoutPopup, setShowSwitchPopup] = useState(false);
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const API_URL = "api/"; // Replace with your actual API URL
@@ -37,7 +37,7 @@ function SwitchAccount() {
     } catch (error) {
       console.error('Error switching account type:', error);
     } finally {
-      setShowLogoutPopup(false);
+      setShowSwitchPopup(false);
     }
   };
 
@@ -45,7 +45,7 @@ function SwitchAccount() {
     <div>
       <button
         className="w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
-        onClick={() => setShowLogoutPopup(true)}
+        onClick={() => setShowSwitchPopup(true)}
       >
         <svg className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -66,7 +66,7 @@ function SwitchAccount() {
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => setShowLogoutPopup(false)}
+                onClick={() => setShowSwitchPopup(false)}
               >
                 No
               </button>
