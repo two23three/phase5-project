@@ -111,7 +111,7 @@ function More({ emailOrPhone }) {
           <div className="ml-auto ">
             <button onClick={() => setIsEditPopupOpen(true)} >
               <svg className=" h-6 w-7 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
 
               <i className="fas fa-edit"></i>
@@ -140,7 +140,7 @@ function More({ emailOrPhone }) {
           </div>
           <div className="text-gray-400 mt-4 mb-2 text-left text-xs ">ACCOUNT</div>
           <div className="space-y-2">
-            <SwitchAccount onLogout={() => console.log("Logging out...")} />
+            <SwitchAccount  />
           </div>
 
           <div className="text-gray-400 mt-4 mb-2 text-left text-xs">PREFERENCES</div>
@@ -148,7 +148,7 @@ function More({ emailOrPhone }) {
             <button className="w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
               onClick={() => setIsChangePasswordPopupOpen(true)}
             >
-              <svg class="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
               </svg>
 
@@ -226,7 +226,7 @@ function More({ emailOrPhone }) {
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">ACCOUNT</div>
         <div className="space-y-2">
-          <SwitchAccount onLogout={() => console.log("Logging out...")} />
+          <SwitchAccount  />
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">YOUR REFERRAL CODE</div>
         <div className="flex items-center h-13 text-lg bg-slate-700 text-center text-white py-1 px-4 rounded">

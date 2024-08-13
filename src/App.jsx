@@ -19,6 +19,7 @@ import CategoryCreationPopup from './components/CategoryCreationPopup';
 import Navbar from './components/Navbar';
 
 import './App.css';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   const [showTransactionTypePopup, setShowTransactionTypePopup] = useState(false);
@@ -66,6 +67,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/more" element={<PrivateRoute element={More} />} />
             <Route path="*" element={<ErrorPage />} />
+            <Route path='/landing' element={<LandingPage/>} />
           </Routes>
 
           {showTransactionTypePopup && (
