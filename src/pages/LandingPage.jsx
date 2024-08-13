@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import mockupImage from '../assets/mockup.png'; 
+import mockupImage from '../assets/mockup.png';
 
 function LandingPage() {
     const API_URL = "https://barnes.onrender.com/";
@@ -24,14 +24,18 @@ function LandingPage() {
         <div className="bg-[#242424] min-h-screen flex flex-col items-center justify-center p-10">
             <h1 className="text-5xl font-bold mb-6 text-center text-white">Barnes</h1>
             <h3 className="text-3xl mb-6 text-center text-white">
-                The Financial Manager to {totalUsers} users worldwide
+                The Financial Manager to <span
+                    className="animate-counter"
+                    style={{ '--num-start': 0, '--num-end': totalUsers }}
+                >  K users worldwide
+                </span>
             </h3>
             <div className="flex flex-col md:flex-row items-center justify-center gap-8">
                 <div className="text-center md:text-left max-w-lg">
                     <p className="text-lg mb-4 text-white">
-                        A smart wallet for your financial needs. Control your <span className="underline">budget</span>, 
-                        track your <span className="underline">expenses</span> and <span className="underline">income</span>, 
-                        track your <span className="underline">assets</span> and <span className="underline">loans</span>, 
+                        A smart wallet for your financial needs. Control your <span className="underline">budget</span>,
+                        track your <span className="underline">expenses</span> and <span className="underline">income</span>,
+                        track your <span className="underline">assets</span> and <span className="underline">loans</span>,
                         and set goals and limits within one application.
                     </p>
                 </div>
@@ -50,7 +54,7 @@ function LandingPage() {
                             <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                 <span
                                     className="animate-counter"
-                                    style={{ '--num-start': 0, '--num-end': 300}}
+                                    style={{ '--num-start': 0, '--num-end': 300 }}
                                 >  K +
                                 </span>
                             </dd>
