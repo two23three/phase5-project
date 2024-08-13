@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TermsPopup from "../components/TermsPopup";
 import PrivacyPolicyPopup from "../components/PrivacyPolicyPopup";
-import Logout from "../components/Logout";
-
 
 function Register() {
   const [name, setName] = useState('');
@@ -16,6 +14,8 @@ function Register() {
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [role, setRole] = useState('Personal'); // Default role
+  const [referralCode, setReferralCode] = useState('');
+
   const navigate = useNavigate();
 
   const handleTermsClick = (e) => {
@@ -70,7 +70,8 @@ function Register() {
           email,
           phone_number: formattedPhoneNumber,
           password,
-          role_id: roleId, 
+          role_id: roleId,
+          referral_code: referralCode, 
         }),
       });
   
@@ -179,6 +180,16 @@ function Register() {
               </span>
             </div>
           </div>
+          <div>
+            <label className="block text-gray-400">Referral Code:</label>
+            <input
+              type="text"
+              placeholder="Referral code (Optional)"
+              value={referralCode}
+              onChange={(e) => setReferralCode(e.target.value)}
+              className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -204,6 +215,7 @@ function Register() {
               </button>
             </span>
           </div>
+          
           <button
             type="submit"
             className="w-full py-3 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition duration-200"
@@ -211,12 +223,12 @@ function Register() {
             Register
           </button>
         </form>
-        <div className="text-center mt-4">
-          <a href="/login" className="text-white font-bold hover:underline">Already have an account? Login</a>
+        <div className="text-center text-gray-500 mt-4">
+          Already have an account? <a href="/login" className="text-red-500 hover:underline">Log in</a>
         </div>
       </div>
-      <TermsPopup show={showTerms} onClose={closeTermsPopup} />
-      <PrivacyPolicyPopup show={showPrivacy} onClose={closePrivacyPopup} />
+      {showTerms && <TermsPopup onClose={closeTermsPopup} />}
+      {showPrivacy && <PrivacyPolicyPopup onClose={closePrivacyPopup} />}
     </div>
   );
 }
