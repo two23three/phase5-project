@@ -3,14 +3,13 @@ import React, { useState, useEffect } from "react";
 
 const SavingsGoals = ({goals, handleUpdateAmount, handleDelete, setShowGoalModal}) =>{
     return(
-        <div className="p-4 rounded-lg bg-neutral-00">
+        <div className="p-4 rounded-lg bg-gray-500">
           <h2 className="text-xl font-bold mb-4 text-left">Savings Goals</h2>
           <div className="space-y-4">
             {goals.map((g, index) => (
               <div key={index} className="flex justify-between items-center">
                 <div>
                   <h3 className="font-bold text-lg">{g.name}</h3>
-                  <p>User ID: {g.user_id}</p>
                   <p>Start Date: {g.start_date}</p>
                   <ProgressBar
                     label={g.name}
