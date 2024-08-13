@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { formatNumber } from "chart.js/helpers";
 import { useAuth } from "../components/AuthProvider";
+import homeBackground from "../assets/homebackground.png";
 
 function Home() {
     const [income, setIncome] = useState(0);
@@ -164,7 +165,9 @@ function Home() {
         );
     }
     return (
-        <div className="flex flex-col bg-white h-full w-full ">
+        <div className="flex flex-col bg-[url()] h-full w-full "
+        style={{ backgroundImage: `url(${homeBackground})` }}
+        >
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <div className="flex justify-center items-center ">
                 <PieChart totalIncome={income} totalExpense={expense} />
@@ -194,7 +197,7 @@ function Home() {
                 <Navbar />
             </div>
                 
-            </div>
+        </div>
     );
 }
 
