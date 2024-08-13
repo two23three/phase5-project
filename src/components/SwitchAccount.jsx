@@ -6,19 +6,17 @@ function SwitchAccount() {
   const [showLogoutPopup, setShowSwitchPopup] = useState(false);
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
-  const API_URL = "api/"; // Replace with your actual API URL
+  const API_URL = "api/"; 
 
   const handleSwitchRole = async () => {
     try {
-      // Determine the new role
       const newRoleId = user.role_id === 1 ? 2 : 1;
 
-      // Send the PUT request to update the role
       const response = await fetch(`${API_URL}users/${user.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`, // Assuming you have a token
+          'Authorization': `Bearer ${user.token}`,
         },
         body: JSON.stringify({ role_id: newRoleId }),
       });
@@ -29,10 +27,8 @@ function SwitchAccount() {
 
       const updatedUser = await response.json();
 
-      // Update the user in AuthContext
       setUser(updatedUser);
 
-      // Reload the page to reflect the new role
       window.location.reload();
     } catch (error) {
       console.error('Error switching account type:', error);

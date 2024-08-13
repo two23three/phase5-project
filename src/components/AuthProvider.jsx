@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateUserRole = async (userId, newRoleId) => {
     try {
-      const API_URL = "https://barnes.onrender.com/";
+      const API_URL = "api/";
       const response = await fetch(`${API_URL}users/${userId}/role`, {
         method: 'PUT',
         headers: {

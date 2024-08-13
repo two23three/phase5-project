@@ -13,7 +13,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Determine if the input is an email or phone number
     const isEmail = emailOrPhone.includes('@');
     const isPhoneNumber = /^(2547\d{8}|07\d{8})$/.test(emailOrPhone);
 
@@ -23,7 +22,6 @@ function Login() {
     }
 
     try {
-      // Perform the login request
       const loginResponse = await fetch('https://barnes.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -36,16 +34,15 @@ function Login() {
       const loginData = await loginResponse.json();
 
       if (loginResponse.ok) {
-        // Fetch all users and filter based on email or phone number
         const usersResponse = await fetch('https://barnes.onrender.com/users');
         const usersData = await usersResponse.json();
 
         const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
 
         if (user) {
-          login(loginData.access_token, user);  // Save token and user info
-          console.log('Logged in user:', user); // Log user data to the console
-          navigate('/');  // Redirect to the home page after successful login
+          login(loginData.access_token, user);  
+          console.log('Logged in user:', user); 
+          navigate('/home'); 
         } else {
           console.log('User not found');
         }

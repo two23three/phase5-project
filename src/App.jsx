@@ -44,18 +44,17 @@ function App() {
 
   const handleCreateCategory = (newCategory) => {
     setShowCategoryPopup(false);
-    window.location.href = '/add_expense_transaction'; // Full-page reload
+    window.location.href = '/add_expense_transaction'; 
   };
 
 
-  // const [user, setUser] = useState(1);
   return (
     <AuthProvider>
       <Router>
         <div>
        
           <Routes>
-            <Route path="/" element={<PrivateRoute element={Home} />} />
+            <Route path="/home" element={<PrivateRoute element={Home} />} />
             <Route path="/register" element={<Register />} />
             <Route path="/add_income_transaction" element={<PrivateRoute element={AddIncomeTransaction} />} />
             <Route path="/add_expense_transaction" element ={<PrivateRoute element={AddExpenseTransaction} />} />
@@ -67,7 +66,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/more" element={<PrivateRoute element={More} />} />
             <Route path="*" element={<ErrorPage />} />
-            <Route path='/landing' element={<LandingPage/>} />
+            <Route path='/' element={<LandingPage/>} />
           </Routes>
 
           {showTransactionTypePopup && (
