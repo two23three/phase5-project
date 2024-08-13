@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import mockupImage from '../assets/mockup.png'; // Adjust the path as needed
+import mockupImage from '../assets/mockup.png'; 
 
 function LandingPage() {
     const API_URL = "https://barnes.onrender.com/";
@@ -21,7 +21,7 @@ function LandingPage() {
     }, []);
 
     return (
-        <div className="p-6 bg-[#242424] min-h-screen flex flex-col items-center justify-center">
+        <div className="p-6 bg-[#242424] min-h-screen flex flex-col items-center justify-center p-10">
             <h1 className="text-5xl font-bold mb-6 text-center text-white">Barnes</h1>
             <h3 className="text-3xl mb-6 text-center text-white">
                 The Financial Manager to {totalUsers} users worldwide

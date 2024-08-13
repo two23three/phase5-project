@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthProvider';
+import backgroundImage from '../assets/loginbackground.png'; 
 
 function Login() {
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -61,8 +62,12 @@ function Login() {
   };
 
   return (
-    <div className="w-full max-w-xs">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
+    <div
+      className="bg-cover bg-center min-h-screen flex items-center justify-center"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
+    <div className="pl-4 pr-4 max-w-xs">
+      <div className="bg-[#242424] p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Login to Barnes!</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
@@ -106,6 +111,7 @@ function Login() {
           <a href="/register" className="text-white font-bold hover:underline">Sign Up</a>
         </div>
       </div>
+    </div>
     </div>
   );
 }
