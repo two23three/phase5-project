@@ -17,7 +17,7 @@ function More({ emailOrPhone }) {
     referralPoints: 0
   });
 
-  const [isLoading, setIsLoading] = useState(true); // New loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [isContactPopupOpen, setIsContactPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
@@ -46,10 +46,10 @@ function More({ emailOrPhone }) {
             });
           }
         });
-        setIsLoading(false); // Set loading to false after data is fetched
+        setIsLoading(false); 
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setIsLoading(false); // Ensure loading state is updated even on error
+        setIsLoading(false); 
       }
     };
 
@@ -80,7 +80,6 @@ function More({ emailOrPhone }) {
   };
 
   if (isLoading) {
-    // Show a  spinner and message while fetching data
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
@@ -111,7 +110,7 @@ function More({ emailOrPhone }) {
           <div className="ml-auto ">
             <button onClick={() => setIsEditPopupOpen(true)} >
               <svg className=" h-6 w-7 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
 
               <i className="fas fa-edit"></i>
@@ -133,14 +132,14 @@ function More({ emailOrPhone }) {
               onClick={() => setIsContactPopupOpen(true)}
             >
               <svg className="mr-2 h-8 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
               Contact Us
             </button>
           </div>
           <div className="text-gray-400 mt-4 mb-2 text-left text-xs ">ACCOUNT</div>
           <div className="space-y-2">
-            <SwitchAccount onLogout={() => console.log("Logging out...")} />
+            <SwitchAccount  />
           </div>
 
           <div className="text-gray-400 mt-4 mb-2 text-left text-xs">PREFERENCES</div>
@@ -148,8 +147,8 @@ function More({ emailOrPhone }) {
             <button className="w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
               onClick={() => setIsChangePasswordPopupOpen(true)}
             >
-              <svg class="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" stroke-linejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+              <svg className="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
               </svg>
 
               <i className="fas fa-lock mr-2"></i>Change Password
@@ -226,7 +225,7 @@ function More({ emailOrPhone }) {
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">ACCOUNT</div>
         <div className="space-y-2">
-          <SwitchAccount onLogout={() => console.log("Logging out...")} />
+          <SwitchAccount  />
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">YOUR REFERRAL CODE</div>
         <div className="flex items-center h-13 text-lg bg-slate-700 text-center text-white py-1 px-4 rounded">
