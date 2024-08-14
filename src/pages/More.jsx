@@ -237,7 +237,7 @@ function More({ emailOrPhone }) {
           </button>
         </div>
         {isCopied && (
-          <div className="mt-2 text-green-500">Code has been successfully copied!</div>
+          <div className="mt-2 text-green-500">Code has been copied to Clipboard</div>
         )}
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">SECURITY</div>
         <div className="space-y-2">
