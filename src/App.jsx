@@ -48,7 +48,7 @@ function App() {
     window.location.href = '/add_expense_transaction'; 
   };
 
-
+//
   return (
     <AuthProvider>
       <Router>
