@@ -30,11 +30,11 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
             </div>
             <div className="flex space-x-2">
               <button
-              className="w-full py-2 px-4 rounded bg-green-500 text-white font-bold hover:bg-green-600 transition duration-200"
+              className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200"
                 onClick={() => openMpesaModal(g.name)}
               >
-                Add via M-Pesa
-              </button>
+                Add funds via M-Pesa
+              </button>{/* Leave this here, it re-directs the user to the Budget Page*/}
               <button
                 className="bg-red-500 text-white p-2 rounded"
                 onClick={() => handleDelete(index, 'goal')}

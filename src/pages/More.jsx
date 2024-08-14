@@ -46,10 +46,10 @@ function More({ emailOrPhone }) {
             });
           }
         });
-        setIsLoading(false); 
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
 
@@ -139,7 +139,7 @@ function More({ emailOrPhone }) {
           </div>
           <div className="text-gray-400 mt-4 mb-2 text-left text-xs ">ACCOUNT</div>
           <div className="space-y-2">
-            <SwitchAccount  />
+            <SwitchAccount />
           </div>
 
           <div className="text-gray-400 mt-4 mb-2 text-left text-xs">PREFERENCES</div>
@@ -225,7 +225,7 @@ function More({ emailOrPhone }) {
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">ACCOUNT</div>
         <div className="space-y-2">
-          <SwitchAccount  />
+          <SwitchAccount />
         </div>
         <div className="text-gray-400 mt-4 mb-2 text-left text-xs">YOUR REFERRAL CODE</div>
         <div className="flex items-center h-13 text-lg bg-slate-700 text-center text-white py-1 px-4 rounded">
@@ -254,9 +254,12 @@ function More({ emailOrPhone }) {
           <DeleteAccount onDelete={handleDeleteAccount} />
         </div>
         <div className="mt-4 text-center">
-          <button className="w-full py-2 px-4 rounded bg-green-500 text-white font-bold hover:bg-green-600 transition duration-200">
-            Add funds via <span className="ml-2">M-Pesa</span>
-          </button>
+          <a href="/budget" >
+            <button href="/budget" className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200">
+              Save funds via <span className="ml-2">M-Pesa</span>
+            </button>
+          </a>
+
         </div>
       </div>
       <Navbar />
