@@ -16,7 +16,7 @@ function StatusBar() {
     };
 
     return (
-        <div className="flex justify-between items-center p-2 bg-black text-white font-sans text-sm font-bold">
+        <div className="flex justify-between items-center p-2 w-screen bg-black text-white font-sans text-sm font-bold">
             <div id="time">{formatTime(time)}</div>
             <div className="flex space-x-2 items-center">
                 {/* Cell Service Icon */}
