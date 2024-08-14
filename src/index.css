@@ -1,6 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@property --num {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes counter {
+  from {
+    --num: var(--num-start);
+  }
+  to {
+    --num: var(--num-end);
+  }
+}
+
+.animate-counter {
+  animation: counter 3s ease-out forwards;
+  counter-set: _num var(--num);
+}
+
+.animate-counter::before {
+  content: counter(_num);
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

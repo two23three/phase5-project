@@ -101,13 +101,13 @@ const ChangePasswordPopup = ({ onClose }) => {
   return (
     <>
       {showFirstPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-black">Change Password</h2>
+        <div className=" fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
+          <div className=" relative bg-white shadow dark:bg-gray-800 sm:p-5 rounded-lg p-6 ">
+            <h2 className=" font-customFont border-gray-300 text-xl font-bold mb-4 ">Change Password</h2>
             {error && <p className="text-red-500 mb-2">{error}</p>}
             <form onSubmit={handleFirstPopupSubmit}>
               <div className="mb-4">
-                <label className="block mb-1 text-black text-left" htmlFor="currentPassword">
+                <label className="block mb-1 font-customFont border-gray-300 text-left" htmlFor="currentPassword">
                   Current Password
                 </label>
                 <div className="relative">
@@ -117,7 +117,7 @@ const ChangePasswordPopup = ({ onClose }) => {
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     required
-                    className="border border-gray-300 bg-white text-black rounded w-full p-2"
+                    className="border border-gray-300 bg-white font-customFont 00 text-black rounded w-full p-2"
                   />
                   <span
                     onClick={toggleCurrentPasswordVisibility}
@@ -149,12 +149,12 @@ const ChangePasswordPopup = ({ onClose }) => {
 
       {showSecondPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-black">Update Password</h2>
+          <div className="relative bg-white shadow dark:bg-gray-800 sm:p-5 rounded-lg  p-6">
+            <h2 className="font-customFont text-xl font-bold mb-4 text-gray-200">Update Password</h2>
             {error && <p className="text-red-500 mb-2">{error}</p>}
             <form onSubmit={handleSecondPopupSubmit}>
               <div className="mb-4">
-                <label className="block mb-1 text-black text-left" htmlFor="newPassword">
+                <label className="font-customFont block mb-1 text-gray-200 text-left" htmlFor="newPassword">
                   New Password
                 </label>
                 <div className="relative">
@@ -164,7 +164,7 @@ const ChangePasswordPopup = ({ onClose }) => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     required
-                    className="border border-gray-300 bg-white text-black rounded w-full p-2"
+                    className="font-customFont border border-gray-300 bg-white text-black rounded w-full p-2"
                   />
                   <span
                     onClick={toggleNewPasswordVisibility}
@@ -175,7 +175,7 @@ const ChangePasswordPopup = ({ onClose }) => {
                 </div>
               </div>
               <div className="mb-4">
-                <label className="block mb-1 text-black text-left" htmlFor="retypeNewPassword">
+                <label className="font-customFont border-gray-300 block mb-1  text-gray-200 text-left" htmlFor="retypeNewPassword">
                   Retype New Password
                 </label>
                 <div className="relative">
@@ -185,7 +185,7 @@ const ChangePasswordPopup = ({ onClose }) => {
                     value={retypeNewPassword}
                     onChange={(e) => setRetypeNewPassword(e.target.value)}
                     required
-                    className="border border-gray-300 bg-white text-black rounded w-full p-2"
+                    className="font-customFont border border-gray-300 bg-white text-black rounded w-full p-2"
                   />
                   <span
                     onClick={toggleRetypeNewPasswordVisibility}

@@ -19,6 +19,14 @@ function Home() {
     const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
+    const formatCurrency = (value, currencySymbol) => {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currencySymbol,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(value);
+    };
 
     const currencySymbols = {
         USD: "$",
@@ -165,7 +173,7 @@ function Home() {
         );
     }
     return (
-        <div className="flex flex-col bg-[url()] h-screen w-screen "
+        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
         style={{ backgroundImage: `url(${homeBackground})` }}
         >
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
@@ -173,8 +181,13 @@ function Home() {
                 <PieChart totalIncome={income} totalExpense={expense} />
             </div>
             <div className="text-center">
-                <h1 className="text-3xl md:text-5xl font-bold text-black">
-                    {currencySymbol} {formatNumber(balance)}
+                <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
+                {currencySymbol}‎ ‎ {/* Invisible charachters for spacing */}
+                    <span
+                        className="animate-counter"
+                        style={{ '--num-start': 0, '--num-end': balance }}
+                    >
+                    </span>    
                 </h1>
                 <p className="text-black font-bold">left to spend</p>
             </div>
