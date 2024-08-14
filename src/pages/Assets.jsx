@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
 import { useAuth } from "../components/AuthProvider";
+import assetsBackground from "../assets/assetsbackground.png";
 
 function Assets() {
     const [assets, setAssets] = useState([]);
@@ -183,7 +184,9 @@ function Assets() {
         }
         
     return (
-        <div className='width-full height-full rounded-b-xl bg-white text-white flex flex-col p-4'>
+        <div className='w-screen h-screen rounded-b-xl bg-cover  text-white flex flex-col p-4'
+        style={{ backgroundImage: `url(${assetsBackground})` }}
+        >
             <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
             <div className="bg-[#242424] p-4 text-white font-bold mb-4 rounded-b-xl">
             <h1>Total Assets</h1>
