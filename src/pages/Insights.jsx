@@ -5,6 +5,7 @@ import './insights.css';
 import Navbar from "../components/Navbar";
 import { useAuth } from "../components/AuthProvider";
 import {FaLightbulb} from "react-icons/fa"
+import insightsBackground from "../assets/insightsbackground.png";
 
 ChartJS.register(
     LineElement,
@@ -165,10 +166,12 @@ const Insights = () => {
       
       
     return (
-        <div className="Insights" style={{ backgroundColor: 'black' }}>
+        <div className="Insights w-screen l-screen bg-cover" style={{ backgroundImage: `url(${insightsBackground})` }}>
             <button onClick={() => setChange(prev => prev + 1)}>Press</button>
             <Header />
-            <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
+            <div>
+                <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
+            </div>
             <TotalExpense amount={totalAmount} />
             <div style={{ background: 'white', padding:'4px' }}>
                 <InsightsChart expenses={expenses} incomes={incomes} labels={labels} />
