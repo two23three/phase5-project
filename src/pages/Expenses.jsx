@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
+import { useAuth } from "../components/AuthProvider";
 import './insights.css';
 
 ChartJS.register(
@@ -16,6 +17,11 @@ ChartJS.register(
 )
 
 const Expenses = () => {
+
+    const {getUserId} = useAuth();
+    const userID = getUserId();
+    const API_URL = "https://barnes.onrender.com/";
+
     const [transactions, setTransactions] = useState([]);
     const [tranzactions, setTranzactions] = useState({ list: [], labels: [] });
     const [table, setTable] = useState([]);
@@ -28,7 +34,7 @@ const Expenses = () => {
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                let expenses = data.expenses.filter(expense => expense.user_id === 6);
+                let expenses = data.expenses.filter(expense => expense.user_id === userID);
                 const combinedData = combineAmountByDate(expenses);
                 setTranzactions(combinedData);
                 setTransactions(expenses);

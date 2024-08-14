@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
+import { useAuth } from "../components/AuthProvider";
 import './insights.css';
 
 ChartJS.register(
@@ -40,12 +41,12 @@ const DateFilter = ({ from, to, setFrom, setTo }) => {
     );
 };
 
-const IncomeChart = ({ list, labels }) => {
+const IncomeChart = ({ list, labels, role }) => {
     const data = {
         labels: labels,
         datasets: [
             {
-                label: 'Income Over Time',
+                label: role === 1? 'Income Over Time': 'Revenue over time',
                 data: list,
                 fill: true,
                 backgroundColor: 'rgba(0, 128, 0, 0.2)',
@@ -78,10 +79,10 @@ const IncomeChart = ({ list, labels }) => {
     );
 };
 
-const TotalIncome = ({ amount }) => {
+const TotalIncome = ({ amount, role }) => {
     return (
         <div className="total-expense">
-            <h2 className="text-2xl font-semibold">Total Income</h2>
+            {role === 1? <h2 className="text-2xl font-semibold">Total Income</h2>:<h2>Total Revenue</h2>}
             <p>Ksh {amount}</p>
         </div>
     );
@@ -129,9 +130,14 @@ const TransactionTable = ({ data }) => {
 
 const Income = () => {
 
+    const {getUserId} = useAuth();
+    const userID = getUserId();
+    const API_URL = "https://barnes.onrender.com/";
+
     const [transactions, setTransactions] = useState([]);
     const [tranzactions, setTranzactions] = useState({ list: [], labels: [] });
     const [table, setTable] = useState([]);
+    const [role, setRole]=useState('role');
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
 
@@ -141,13 +147,20 @@ const Income = () => {
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                console.log(data)
-                let expenses = data.incomes.filter(income =>  income.user_id === 6);
+                let expenses = data.incomes.filter(income =>  income.user_id === userID);
                 const combinedData = combineAmountByDate(expenses);
                 setTranzactions(combinedData);
                 setTransactions(expenses);
             })
             .catch(error => console.error('Error fetching data:', error));
+
+            fetch('https://barnes.onrender.com/users')
+            .then(response => response.json())
+            .then(data => {
+                let user = data.users.find(u => u.id === userID);
+                setRole(user.role_id)
+            })
+            .catch(error => console.log(error));
     }, []); // Empty dependency array to fetch only on mount
 
     const combineAmountByDate = (amounts) => {
@@ -195,8 +208,8 @@ const Income = () => {
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
-                <TotalIncome amount={tranzactions.list.reduce((a, b) => a + b, 0)} />
-                <IncomeChart list={tranzactions.list} labels={tranzactions.labels} />
+                <TotalIncome amount={tranzactions.list.reduce((a, b) => a + b, 0)} role={role}/>
+                <IncomeChart list={tranzactions.list} labels={tranzactions.labels} role={role} />
                 <TransactionTable data={table.length > 0 ? table : transactions} />
                 <Navbar />
             </div>

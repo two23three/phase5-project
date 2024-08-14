@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import './insights.css';
 import Navbar from "../components/Navbar";
 import { useAuth } from "../components/AuthProvider";
-import {FaLightbulb} from "react-icons/fa"
+import { FaLightbulb } from "react-icons/fa"
 
 ChartJS.register(
     LineElement,
@@ -18,74 +18,86 @@ ChartJS.register(
 );
 
 
-const Insights = () => {
 
-    const {getUserId} = useAuth();
+const Insights = () => {
+    const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
-    const [fullExpenses, setFullExpenses] = useState([]);
-    const [expenses, setExpenses] = useState([]);
-    const [incomes, setIncomes] = useState([]);
-    const [fullIncomes, setFullIncomes] = useState([]);
-    const [from, setFrom] = useState("from");
-    const [to, setTo] = useState("to");
-    const [change, setChange] = useState('');
+    const today = new Date();
+    const currentDate = today.toISOString().split('T')[0];
+    const lastMonthDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split('T')[0];
+
+    const [from, setFrom] = useState(lastMonthDate);
+    const [to, setTo] = useState(currentDate);
+    const [role, setRole] = useState("role");
     const [categories, setCategories] = useState([]);
     const [fetchedCategories, setFetchedCategories] = useState([]);
     const [labels, setLabels] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [fullExpenses, setFullExpenses] = useState([]);
+    const [expenses, setExpenses] = useState([]);
+    const [incomes, setIncomes] = useState([]);
+    const [fullIncomes, setFullIncomes] = useState([]);
 
     useEffect(() => {
-        fetch('https://barnes.onrender.com/expenses')
-            .then(response => response.json())
-            .then(data => {
-                let sortedExpenses = data.expenses.filter(expense => expense.user_id === 6);
-                setFullExpenses(sortedExpenses);
-                let list = combineAmountByDate(sortedExpenses);
-                setExpenses(list);
+        const fetchData = async () => {
+            try {
+                const expenseRes = await fetch(`${API_URL}expenses`);
+                const expenseData = await expenseRes.json();
+                const userExpenses = expenseData.expenses.filter(expense => expense.user_id === userID);
+                setFullExpenses(userExpenses);
+                setExpenses(combineAmountByDate(userExpenses, from, to));
 
-                let c = sortByCategories(sortedExpenses, fetchedCategories);
-                setCategories(c);
-            })
-            .catch(error => console.log(error));
-            console.log(categories);
+                const incomeRes = await fetch(`${API_URL}incomes`);
+                const incomeData = await incomeRes.json();
+                const userIncomes = incomeData.incomes.filter(income => income.user_id === userID);
+                setFullIncomes(userIncomes);
+                setIncomes(combineAmountByDate(userIncomes, from, to));
 
-            //http://localhost:3000/
-        fetch('https://barnes.onrender.com/incomes')
-            .then(response => response.json())
-            .then(data => {
-                let sortedIncomes = data.incomes.filter(income => income.user_id === 6);
-                setFullIncomes(sortedIncomes);
-                let list = combineAmountByDate(sortedIncomes);
-                setIncomes(list);
-            })
-            .catch(error => console.log(error));
-    }, [change]);
+                const categoryRes = await fetch(`${API_URL}categories`);
+                const categoryData = await categoryRes.json();
+                setFetchedCategories(categoryData.categories);
+                setCategories(sortByCategories(userExpenses, categoryData.categories));
+                console.log(categories);
+
+                const userRes = await fetch(`${API_URL}users`);
+                const userData = await userRes.json();
+                const currentUser = userData.users.find(u => u.id === userID);
+                setRole(currentUser.role_id);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [userID, API_URL]);
 
     useEffect(() => {
         filterByDate();
     }, [from, to]);
 
-    useEffect(()=>{
-        fetch('https://barnes.onrender.com/categories')
-        .then(response => response.json())
-        .then (d => {
-            setCategories(d.categories);
-            setFetchedCategories(d.categories);
-        })},[change]
-    );
-
-    const combineAmountByDate = (amounts) => {
+    const combineAmountByDate = (amounts, from, to) => {
+        console.log(amounts);
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
         
         const combined = [];
         let currentDate = null;
         let currentAmount = 0;
-
+    
         const dateLabels = [];
-
+    
+        // Convert 'from' and 'to' to Date objects for comparison
+        const fromDate = new Date(from);
+        const toDate = new Date(to);
+    
         for (const amount of amounts) {
+            const amountDate = new Date(amount.date);
+    
+            // Skip the current loop iteration if the date is outside the range
+            if (amountDate < fromDate || amountDate > toDate) {
+                continue;
+            }
+    
             if (amount.date === currentDate) {
                 currentAmount += parseInt(amount.amount);
             } else {
@@ -97,92 +109,84 @@ const Insights = () => {
                 currentAmount = parseInt(amount.amount);
             }
         }
+    
+        // Ensure the last date and amount are added to the arrays
         if (currentDate !== null) {
             combined.push(currentAmount);
             dateLabels.push(currentDate);
         }
-
+    
         setLabels(dateLabels);
         return combined;
     };
 
     const filterByDate = () => {
-        let filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
-        let filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
+        const filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
+        const filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
         
-        if (filteredIncomes && filteredExpenses) {
-            setExpenses(combineAmountByDate(filteredExpenses));
-            setIncomes(combineAmountByDate(filteredIncomes));
-        }
+        const combinedExpenses = combineAmountByDate(filteredExpenses, from, to);
+        const combinedIncomes = combineAmountByDate(filteredIncomes, from, to);
+        
+        setExpenses(combinedExpenses);
+        setIncomes(combinedIncomes);
+        setCategories(sortByCategories(filteredExpenses, fetchedCategories));
+        const totalFilteredAmount = combinedExpenses.reduce((sum, expense) => sum + expense, 0);
+        setTotalAmount(totalFilteredAmount);
     };
+    
 
     const sortByCategories = (data, categories) => {
-        let categoriesList = [];
-      
-       
-        let categoryTotals = {};
+        const categoryTotals = {};
         categories.forEach(category => {
-          categoryTotals[category.name.toLowerCase()] = 0;
+            categoryTotals[category.name.toLowerCase()] = 0;
         });
-      
-        
         for (let expense of data) {
-          
-          const matchingCategory = categories.find(category => category.id === expense.category_id);
-      
-          if (matchingCategory) {
-            
-            categoryTotals[matchingCategory.name.toLowerCase()] += parseInt(expense.amount);
-          }
-        }
-      
-        
-        const totalAmount = Object.values(categoryTotals).reduce((sum, amount) => sum + amount, 0);
-      
-        
-        categories.forEach(category => {
-          const amount = categoryTotals[category.name.toLowerCase()];
-          if (amount > 0) { 
-            const percentage = totalAmount ? Math.round((amount / totalAmount) * 100) : 0;
-            const categoryExists = categoriesList.some(cat => cat.category === category.name.toLowerCase());
-      
-            if (!categoryExists) {
-              categoriesList.push({
-                name: category.name,
-                id: category.id,
-                amount: amount,
-                percentage: percentage,
-                category: category.name.toLowerCase(),
-              });
+            const matchingCategory = categories.find(category => category.id === expense.category_id);
+            if (matchingCategory) {
+                categoryTotals[matchingCategory.name.toLowerCase()] += parseInt(expense.amount);
             }
-          }
-        });
-      
-        setTotalAmount(totalAmount); 
-      
+        }
+        const totalAmount = Object.values(categoryTotals).reduce((sum, amount) => sum + amount, 0);
+        const categoriesList = categories
+            .map(category => {
+                const amount = categoryTotals[category.name.toLowerCase()];
+                const percentage = totalAmount ? Math.round((amount / totalAmount) * 100) : 0;
+                if (amount > 0) {
+                    return {
+                        name: category.name,
+                        id: category.id,
+                        amount: amount,
+                        percentage: percentage,
+                        category: category.name.toLowerCase(),
+                    };
+                }
+                return null;
+            })
+            .filter(category => category !== null);
         return categoriesList;
-      };
-      
-      
+    };
+
     return (
         <div className="Insights" style={{ backgroundColor: 'black' }}>
-            <button onClick={() => setChange(prev => prev + 1)}>Press</button>
             <Header />
-            <DateFilter setTo={setTo} setFrom={setFrom} From={from} To={to} />
+            <DateFilter setTo={setTo} setFrom={setFrom} from={from} to={to} />
             <TotalExpense amount={totalAmount} />
-            <div style={{ background: 'white', padding:'4px' }}>
-                <InsightsChart expenses={expenses} incomes={incomes} labels={labels} />
-                <ExpenseCategoryList categories={categories} />
+            <div style={{ background: 'white', padding: '4px' }}>
+                {expenses.length > 0 || incomes.length > 0 ? (
+                    <>
+                        <InsightsChart expenses={expenses} incomes={incomes} labels={labels} role={role} />
+                        {categories.length > 0 && <ExpenseCategoryList categories={categories} userID={userID} expenses={fullExpenses} />}
+                    </>
+                ) : (
+                    <p style={{ color: 'black' }}>Add some expenses and expense categories...</p>
+                )}
             </div>
             <Navbar />
         </div>
     );
 };
 
-
-
-const ExpenseCategoryList = ({ categories }) => {
-    console.log(categories);
+const ExpenseCategoryList = ({ categories, userID, expenses }) => {
     const [visibleCategories, setVisibleCategories] = useState(categories);
 
     useEffect(() => {
@@ -191,9 +195,9 @@ const ExpenseCategoryList = ({ categories }) => {
 
     return (
         <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '0', margin: '0', borderRadius: '15px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <p style={{ color: '#423E3E', fontSize: '15px', marginRight: 'auto' }}>Expense categories</p>
-                <Dropdown categories={categories} setVisibleCategories={setVisibleCategories} />
+                <Dropdown categories={categories} setVisibleCategories={setVisibleCategories} userID={userID} expenses={expenses} />
             </div>
             <div className="expense-category-list">
                 {visibleCategories.map((category, index) => (
@@ -204,64 +208,105 @@ const ExpenseCategoryList = ({ categories }) => {
     );
 };
 
-const Dropdown = ({ categories, setVisibleCategories }) => {
-
-    const [value, setValue] = useState("All")
+const Dropdown = ({ categories, setVisibleCategories, userID, expenses }) => {
+    const [value, setValue] = useState("All");
 
     useEffect(() => {
-        fetch('https://barnes.onrender.com/expenses')
-        .then(res => res.json())
-        .then((data)=>{
-            
-            if(value === "All"){
-                setVisibleCategories(categories);
-            } else {
-                const filteredCategories = data.expenses.filter(transaction => (transaction.category_id === parseInt(value)) && (transaction.user_id === 6));
-                console.log(filteredCategories);
-                setVisibleCategories(filteredCategories);
-            }
+        if (value === "All") {
+            const groupedExpenses = expenses.reduce((acc, expense) => {
+                const categoryID = expense.category_id;
+                if (!acc[categoryID]) {
+                    acc[categoryID] = {
+                        category: categories.find(cat => cat.id === categoryID),
+                        totalAmount: 0
+                    };
+                }
+                acc[categoryID].totalAmount += parseInt(expense.amount);
+                return acc;
+            }, {});
 
-        })
-        .catch(err => console.error(err));
-    }, [value]
-    );
+            const overallTotalAmount = Object.values(groupedExpenses).reduce((sum, group) => sum + group.totalAmount, 0);
 
-    const filterCategories = (event) => {
-        const selectedCategory = event.target.value;
-        if (selectedCategory === "All") {
-            setValue("All"); 
+            const groupedCategories = Object.values(groupedExpenses).map(group => {
+                const percentage = overallTotalAmount ? Math.round((group.totalAmount / overallTotalAmount) * 100) : 0;
+                return {
+                    ...group.category,
+                    amount: group.totalAmount,
+                    percentage: percentage
+                };
+            });
+
+            setVisibleCategories(groupedCategories);
         } else {
-            setValue(event.target.value);
+            const filteredExpenses = expenses.filter(expense => expense.category_id === parseInt(value));
+            const totalAmount = filteredExpenses.reduce((sum, expense) => sum + parseInt(expense.amount), 0);
+            const filteredCategories = filteredExpenses.map(expense => {
+                const category = categories.find(cat => cat.id === expense.category_id);
+                const percentage = totalAmount ? Math.round((parseInt(expense.amount) / totalAmount) * 100) : 0;
+                return {
+                    ...category,
+                    amount: parseInt(expense.amount),
+                    percentage: percentage
+                };
+            });
+            setVisibleCategories(filteredCategories);
         }
-    };
-    console.log(value);
+    }, [value, categories, expenses, setVisibleCategories]);
 
     return (
-        <select className="dropdown" onChange={filterCategories} style={{ backgroundColor: '#D1D1D1', color: '#423E3E', fontSize: '15px' }}>
-            <option value="All">All</option>
-            {categories.map((category, index) => (
-                <option key={index} value={category.id}>{category.name}</option>
-            ))}
-        </select>
+        <div className="dropdown" style={{ backgroundColor: '#D1D1D1' }}>
+            <select className="dropdown-select" value={value} onChange={(e) => setValue(e.target.value)} style={{backgroundColor:'#D1D1D1'}}>
+                <option value="All">All</option>
+                {categories.map(category => (
+                    <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+            </select>
+        </div>
     );
 };
+
+const ExpenseCategoryItem = ({ category }) => {
+    const { name, amount, percentage } = category;
+    return (
+        <div className='expense-category-item' style={{display:'flex', justifyContent:'space-between'}}>
+            <p className='category-name'>{name}</p>
+            <p className='category-amount'>{amount}</p>
+            <p className='category-percentage'>{percentage}%</p>
+        </div>
+    );
+};
+
 
 const DateFilter = ({ setTo, setFrom, from, to }) => {
     return (
         <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
                 <label>From</label>
-                <input type="date" style={{ width: '120px' }} value={from} onChange={(event) => { setFrom(event.target.value), console.log(event.target.value) }} />
+                <input
+                    type="date"
+                    style={{ width: '120px' }}
+                    value={from}
+                    onChange={(event) => { setFrom(event.target.value) }}
+                    placeholder={from}
+                />
             </div>
             <div>
                 <label>To</label>
-                <input type="date" style={{ width: '120px' }} value={to} onChange={(event) => { setTo(event.target.value), console.log(event.target.value) }} />
+                <input
+                    type="date"
+                    style={{ width: '120px' }}
+                    value={to}
+                    onChange={(event) => { setTo(event.target.value) }}
+                    placeholder={to}
+                />
             </div>
         </div>
     );
 };
 
-const InsightsChart = ({ expenses, incomes, labels }) => {
+const InsightsChart = ({ expenses, incomes, labels, role }) => {
+    
+
     const data = {
         labels: labels,
         datasets: [
@@ -275,7 +320,7 @@ const InsightsChart = ({ expenses, incomes, labels }) => {
                 tension: 0.4,
             },
             {
-                label: 'Income Over Time',
+                label: role === 1 ? 'Income over Time' : 'Revenue over Time',
                 data: incomes,
                 fill: true,
                 backgroundColor: 'rgba(0, 128, 0, 0.2)',
@@ -300,8 +345,8 @@ const InsightsChart = ({ expenses, incomes, labels }) => {
     };
 
     return (
-        <div className={expenses.length>10? 'chart-container': null}>
-            <div className={expenses.length>10? 'chart-container': 'expense-chart'}>
+        <div className={expenses.length > 10 ? 'chart-container' : null}>
+            <div className={expenses.length > 10 ? 'chart-container' : 'expense-chart'}>
                 <Line data={data} options={options} />
             </div>
         </div>
@@ -334,25 +379,5 @@ const TotalExpense = ({ amount }) => {
 };
 
 
-
-
-
-
-const ExpenseCategoryItem = ({ category }) => {
-
-
-    return (
-        <div className="expense-category-item" style={{
-            display: 'flex', justifyContent: 'space-between', padding: '10px',
-            borderStyle: 'solid', borderRadius: '10px', borderWidth: '1px',
-            backgroundColor: '#242424', width: '100%', height: '300',
-        }}>
-            {/* <p style={{ margin: '0' }}>{category.icon ? category.icon : category.id}</p> */}
-            <p style={{ margin: '0' }}>{category.name? category.name : category.description}</p>
-            <p style={{ margin: '0' }}>{category.amount}</p>
-            <p style={{ margin: '0' }}>{category.percentage? `${category.percentage}%` : '0%'}</p>
-        </div>
-    );
-};
 
 export default Insights;

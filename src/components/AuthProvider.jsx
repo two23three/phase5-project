@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getUserId = () => user?.id;
+  // const getRoleId = () => user?.role_id;
 
   return (
     <AuthContext.Provider value={{ token, user, login, logout, getUserId, updateUserRole, setUser }}>
