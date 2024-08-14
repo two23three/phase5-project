@@ -7,7 +7,7 @@ function Navbar({ onAddTransactionClick }) {
     return (
         <nav id='navbar' className="rounded-b-xl flex space-x-4 bg-gray-800 position-fixed bottom left-0 right-0 p-2">
             <NavLink
-                to='/'
+                to='/home'
                 className={({ isActive }) =>
                     isActive ? "flex flex-col items-center text-black-400" : "flex flex-col items-center text-white"
                 }
