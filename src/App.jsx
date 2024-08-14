@@ -12,6 +12,7 @@ import Income from './pages/Income';
 import Insights from './pages/Insights';
 import Login from './pages/Login';
 import More from './pages/More';
+import StatusBar from './pages/StatusBar';
 import ErrorPage from './pages/ErrorPage';
 import PrivateRoute from './components/PrivateRoute';
 import TransactionTypePopup from './components/TransactionTypePopup';
@@ -52,7 +53,7 @@ function App() {
     <AuthProvider>
       <Router>
         <div>
-       
+       <StatusBar/>
           <Routes>
             <Route path="/home" element={<PrivateRoute element={Home} />} />
             <Route path="/register" element={<Register />} />
