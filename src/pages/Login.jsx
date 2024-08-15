@@ -63,7 +63,7 @@ function Login() {
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
     <div className="pl-4 pr-4 max-w-xs">
-      <div className="bg-[#242424] p-8 rounded-lg shadow-lg">
+      <div className="bg-[#242424] p-8 rounded-lg">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Login to Barnes!</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
