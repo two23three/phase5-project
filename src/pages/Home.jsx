@@ -18,7 +18,7 @@ function Home() {
     const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
-    const formatCurrency = (value, currencySymbol) => {
+    const fornmatNumber = (value, currencySymbol) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: currencySymbol,
@@ -128,6 +128,21 @@ function Home() {
         fetchData();
     }, []);
 
+    // Fetching user's role ID from the server
+    const [roleID, setRoleID] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`${API_URL}users/${userID}`);
+                const data = await response.json();
+                setRoleID(data.user.role_id);
+            } catch (error) {
+                console.log("Error fetching user role:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     const handleCurrencyChange = (newCurrency) => {
         setCurrency(newCurrency);
     };
@@ -171,45 +186,87 @@ function Home() {
             </div>
         );
     }
-    return (
-        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
-        style={{ backgroundImage: `url(${homeBackground})` }}
-        >
-            <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-            <div className="flex justify-center items-center ">
-                <PieChart totalIncome={income} totalExpense={expense} />
-            </div>
-            <div className="text-center">
-                <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
-                {currencySymbol}‎ ‎ {/* Invisible charachters for spacing */}
-                    <span
-                        className="animate-counter"
-                        style={{ '--num-start': 0, '--num-end': balance }}
-                    >
-                    </span>    
-                </h1>
-                <p className="text-black font-bold">left to spend</p>
-            </div>
-
-            <div className="bg-[#242424] pt-7 rounded-t-lg">
-                <div className="gap-4 mx-[5%] my-auto">
-                    <Link to="/income">
-                        <InfoCard title="Income" value={`${currencySymbol} ${formatNumber(income)}`} />
-                    </Link>
-                    <Link to="/expenses">
-                        <InfoCard title="Expense" value={`${currencySymbol} ${formatNumber(expense)}`} />
-                    </Link>
-                    <Link to="/budget">
-                        <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt + tempDebt)}`} />
-                    </Link>
-                    <Link to="/assets">
-                        <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
-                    </Link>
+    if (roleID === 1) {
+        return (
+            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
+                style={{ backgroundImage: `url(${homeBackground})` }}
+            >
+                <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+                <div className="flex justify-center items-center ">
+                    <PieChart totalIncome={income} totalExpense={expense} />
+                </div>
+                <div className="text-center">
+                    <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
+                        {currencySymbol}‎ ‎{/* Invisible characters for spacing */}
+                        <span
+                            className="animate-counter"
+                            style={{ '--num-start': 0, '--num-end': balance }}
+                        >
+                        </span>
+                    </h1>
+                    <p className="text-black font-bold">left to spend</p>
+                </div>
+    
+                <div className="bg-[#242424] pt-7 rounded-t-lg">
+                    <div className="gap-4 mx-[5%] my-auto">
+                        <Link to="/income">
+                            <InfoCard title="Income" value={`${currencySymbol} ${formatNumber(income)}`} />
+                        </Link>
+                        <Link to="/expenses">
+                            <InfoCard title="Expense" value={`${currencySymbol} ${formatNumber(expense)}`} />
+                        </Link>
+                        <Link to="/budget">
+                            <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt + tempDebt)}`} />
+                        </Link>
+                        <Link to="/assets">
+                            <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
+                        </Link>
+                    </div>
                 </div>
             </div>
-                
-        </div>
-    );
+        );
+    } else if (roleID === 2) {
+        return (
+            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
+                style={{ backgroundImage: `url(${homeBackground})` }}
+            >
+                <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+                <div className="flex justify-center items-center ">
+                    <PieChart totalIncome={income} totalExpense={expense} />
+                </div>
+                <div className="text-center">
+                    <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
+                        {currencySymbol}‎ ‎{/* Invisible characters for spacing */}
+                        <span
+                            className="animate-counter"
+                            style={{ '--num-start': 0, '--num-end': balance }}
+                        >
+                        </span>
+                    </h1>
+                    <p className="text-black font-bold">left to spend</p>
+                </div>
+    
+                <div className="bg-[#242424] pt-7 rounded-t-lg">
+                    <div className="gap-4 mx-[5%] my-auto">
+                        <Link to="/income">
+                            <InfoCard title="Revenue" value={`${currencySymbol} ${formatNumber(income)}`} />
+                        </Link>
+                        <Link to="/expenses">
+                            <InfoCard title="Expense" value={`${currencySymbol} ${formatNumber(expense)}`} />
+                        </Link>
+                        <Link to="/budget">
+                            <InfoCard title="Debt" value={`${currencySymbol} ${formatNumber(debt + tempDebt)}`} />
+                        </Link>
+                        <Link to="/assets">
+                            <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    
+    
 }
 
 export default Home;
