@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import AssetsInfoCard from "../components/AssetsInfoCard";
 import EditAssetModal from "../components/EditAssetModal";
 import Header from "../components/Header";
-import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
@@ -40,7 +39,6 @@ function Assets() {
             try {
                 const response = await fetch(`${API_URL}assets`);
                 const data = await response.json();
-                console.log("Fetched data:", data);
                 const assets = data.assets;
 
                 let totalAssetsValue = 0;
@@ -260,7 +258,6 @@ function Assets() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
-            <Navbar />
         </div>
     );
 }

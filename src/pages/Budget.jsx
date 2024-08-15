@@ -8,12 +8,16 @@ import { useAuth } from "../components/AuthProvider";
 import Navbar from "../components/Navbar";
 import DebtManagement from "../components/DebtManagement";
 import SavingsGoals from "../components/SavingsGoals";
+import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showLoanModal, setShowLoanModal] = useState(false);
   const [showLimitModal, setShowLimitModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [Dropdown, setDropdown] = useState(null);
   const [updateIndex, setUpdateIndex] = useState(null);
   const [updateType, setUpdateType] = useState(null);
   const [updateLabel, setUpdateLabel] = useState('');
@@ -37,13 +41,11 @@ function Budget() {
       .then(data => {
         let goalFilter = data.savings_goals.filter(goal => goal.user_id === userID);
         setGoals(goalFilter);
-        console.log(data);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
       });
   }, []);
-  console.log(goals);
 
   // Persist changes to savings goals
   useEffect(() => {
@@ -65,7 +67,6 @@ function Budget() {
             return response.json();
           })
           .then(data => {
-            console.log('Goal updated successfully:', data);
           })
           .catch(error => {
             console.error('Error updating goal:', error);
@@ -86,20 +87,17 @@ function Budget() {
       .then(data => {
         const loanFilter = data.debts.filter(loan => loan.user_id === userID);
         setLoans(loanFilter);
-        console.log(data);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
       });
   }, []);
 
-  console.log(loans);
 
-  // Persist changes to loans
+  // Persist changes to debts
   useEffect(() => {
     if (loans.length > 0) {
       const updatedLoan = loans[updateIndex];
-      console.log(updatedLoan);
       if (updatedLoan) {
         const { id, remaining_balance } = updatedLoan;
         fetch(`https://barnes.onrender.com/debts/${id}`, {
@@ -116,7 +114,6 @@ function Budget() {
             return response.json();
           })
           .then(data => {
-            console.log('Loan updated successfully:', data);
           })
           .catch(error => {
             console.error('Error updating loan:', error);
@@ -124,7 +121,24 @@ function Budget() {
       }
     }
   }, [loans]);
-  console.log(loans);
+
+  // fetch limits
+  //  useEffect(() => {
+  //   fetch("https://barnes.onrender.com/categories")
+  //      .then(response => {
+  //        if (!response.ok) {
+  //          throw new Error('Network response was not ok');
+  //        }
+  //        return response.json();
+  //     })
+  //      .then(data => {
+  //        const userLimits = data.categories.filter(category => category.user_id === userID).map(category => category.limit);
+  //        setLimits(userLimits);
+  //      })
+  //      .catch(error => {
+  //        console.error('There was a problem with the fetch operation:', error);
+  //      });
+  //  }, []);
 
   // Persist changes to limits
   useEffect(() => {
@@ -132,7 +146,7 @@ function Budget() {
       const updatedLimit = limits[updateIndex];
       if (updatedLimit) {
         const { id, current_amount } = updatedLimit;
-        fetch(`https://barnes.onrender.com/limits/${id}`, {
+        fetch(`https://barnes.onrender.com/categories/${limit}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -146,7 +160,6 @@ function Budget() {
             return response.json();
           })
           .then(data => {
-            console.log('Limit updated successfully:', data);
           })
           .catch(error => {
             console.error('Error updating limit:', error);
@@ -156,7 +169,6 @@ function Budget() {
   }, [limits]);
 
   const handleSaveGoal = async (newGoal) => {
-    console.log('Saving goal:', newGoal);
 
     try {
       const response = await fetch('https://barnes.onrender.com/savings', {
@@ -182,8 +194,6 @@ function Budget() {
   };
 
   const handleSaveLoan = async (newLoan) => {
-    console.log('Saving loan:', newLoan);
-    console.log(JSON.stringify(newLoan));
 
     try {
       const response = await fetch('https://barnes.onrender.com/debts', {
@@ -202,14 +212,15 @@ function Budget() {
       const data = await response.json();
       setLoans(prevLoans => [...prevLoans, { ...newLoan, principal_amount: 0 }]);
       setShowLoanModal(false);
+      window.location.reload();
 
     } catch (error) {
       console.error('Error saving new loan:', error);
     }
   };
 
+
   const handleSaveLimit = async (newLimit) => {
-    console.log('Saving limit:', newLimit);
 
     try {
       const response = await fetch('https://barnes.onrender.com/limits', {
@@ -273,7 +284,6 @@ function Budget() {
       endpoint = `https://barnes.onrender.com/savings/${itemToDelete.id}`;
     } else if (type === 'loan') {
       itemToDelete = loans[index];
-      console.log(itemToDelete)
       endpoint = `https://barnes.onrender.com/debts/${itemToDelete.id}`;
     } else if (type === 'limit') {
       itemToDelete = limits[index];
@@ -302,20 +312,31 @@ function Budget() {
         setLimits(limits.filter((_, i) => i !== index));
       }
 
-      console.log(`${type} deleted successfully`);
     } catch (error) {
       console.error(`Error deleting ${type}:`, error);
     }
   };
 
+
+
   return (
-    <div className="rounded-b-xl p-4 text-white w-screen l-screen" style={{ backgroundColor: '#242424' }}>
+    <div className=" p-4 text-white w-screen l-screen" style={{ backgroundColor: '#242424' }}>
       <div className="space-y-8">
 
-      < SavingsGoals goals={goals} handleUpdateAmount={handleUpdateAmount} handleDelete={handleDelete} setShowGoalModal={setShowGoalModal} />
-      < DebtManagement loans={loans} handleUpdateAmount={handleUpdateAmount} handleDelete={handleDelete} setShowLoanModal={setShowLoanModal} />
+      < SavingsGoals
+          goals={goals}
+          handleUpdateAmount={handleUpdateAmount}
+          handleDelete={handleDelete}
+          setShowGoalModal={setShowGoalModal}
+      />
+      < DebtManagement
+          loans={loans}
+          handleUpdateAmount={handleUpdateAmount}
+          handleDelete={handleDelete}
+          setShowLoanModal={setShowLoanModal}
+      />
         {/* Limits */}
-        <div className="p-4 rounded-lg bg-gray-500">
+        <div className="p-4 rounded-lg bg-zinc-800">
           <h2 className="text-xl font-bold mb-4 text-left">Limits</h2>
           <div className="space-y-4">
             {limits.map((l, index) => (
@@ -326,8 +347,13 @@ function Budget() {
                   current_amount={l.current_amount}
                   target_amount={l.limitAmount}
                   type="limit"
-                  onUpdate={() => handleUpdateAmount(index, 'limit', l.limit)}
                 />
+                <button
+                    className="bg-blue-500 text-white p-2 rounded-lg"
+                    onClick={() => handleUpdateAmount(index, 'limit', l.limit)}
+                  >
+                    Update Amount
+                </button>
                 <button
                   className="ml-4 bg-red-500 text-white p-2 rounded"
                   onClick={() => handleDelete(index, 'limit')}
@@ -336,12 +362,19 @@ function Budget() {
                 </button>
               </div>
             ))}
-            <button
-              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
-              onClick={() => setShowLimitModal(true)}
-            >
-              <span className="mr-2">+</span> Add Limit
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <div className="mt-4">
+                <button
+                  className="flex items-center p-1 rounded-lg w-auto justify-center text-gray-900 hover:text-black"
+                  onClick={() => setShowLimitModal(true)}
+                >
+                  <span className="bg-gray-300 mr-2 rounded-full p-1">
+                    <FontAwesomeIcon icon={faPlus} />
+                  </span>
+                  <span className="text-white">Add Limit</span>
+                </button>
+              </div>
+           </div>
           </div>
         </div>
       </div>
@@ -362,7 +395,6 @@ function Budget() {
           label={updateLabel}
         />
       )}
-      <Navbar />
     </div>
   );
 }

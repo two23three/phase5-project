@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthProvider';
 
-const EditDetailsPopup = ({ onClose }) => {
+const EditDetailsPopup = ({ onClose, isOpen }) => {
   const { user, token } = useAuth();
   const API_URL = "api/";
 
@@ -62,7 +62,7 @@ const EditDetailsPopup = ({ onClose }) => {
     }
   };
 
-
+  if (!isOpen) return null
   return (
     <>
       {showSuccessMessage && (

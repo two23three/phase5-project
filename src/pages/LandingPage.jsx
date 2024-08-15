@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import mockupImage from '../assets/mockup.png';
+import mockupImage from '../assets/mockup.png'; 
 
 function LandingPage() {
     const API_URL = "https://barnes.onrender.com/";
     const [totalUsers, setTotalUsers] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -13,32 +11,27 @@ function LandingPage() {
                 const response = await fetch(`${API_URL}users`);
                 const data = await response.json();
                 const users = data.users;
-                const roundedUsers = Math.round(users.length * 10);
+                const roundedUsers = Math.round(users.length ) ;
                 setTotalUsers(roundedUsers);
-                setIsLoading(false);
-
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
         fetchData();
     }, []);
+
     return (
-        <div className="bg-[#242424] w-screen h-screen flex flex-col items-center justify-center p-10">
+        <div className="bg-[#242424] min-h-screen flex flex-col items-center justify-center p-10">
             <h1 className="text-5xl font-bold mb-6 text-center text-white">Barnes</h1>
-            <h3 className="text-3xl mb-6 text-center text-white order-first font-semibold tracking-tight sm:text-5xl">
-                The Financial Manager to <span
-                    className="animate-counter"
-                    style={{ '--num-start': 0, '--num-end': totalUsers }}
-                >  K users worldwide
-                </span>
+            <h3 className="text-3xl mb-6 text-center text-white">
+                The Financial Manager to {totalUsers} users worldwide
             </h3>
             <div className="flex flex-col md:flex-row items-center justify-center gap-8">
                 <div className="text-center md:text-left max-w-lg">
                     <p className="text-lg mb-4 text-white">
-                        A smart wallet for your financial needs. Control your <span className="underline">budget</span>,
-                        track your <span className="underline">expenses</span> and <span className="underline">income</span>,
-                        track your <span className="underline">assets</span> and <span className="underline">loans</span>,
+                        A smart wallet for your financial needs. Control your <span className="underline">budget</span>, 
+                        track your <span className="underline">expenses</span> and <span className="underline">income</span>, 
+                        track your <span className="underline">assets</span> and <span className="underline">loans</span>, 
                         and set goals and limits within one application.
                     </p>
                 </div>
@@ -49,7 +42,7 @@ function LandingPage() {
                 <a href='/login' className="text-white"> or Login</a>
             </div>
 
-            <div className="bg-neutral-300 rounded-xl py-24 sm:py-32 mt-16">
+            <div className="bg-neutral-300 rounded-xl py-24  sm:py-32 mt-16">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                         <div className="mx-auto flex max-w-xs flex-col gap-y-4">
@@ -57,7 +50,7 @@ function LandingPage() {
                             <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                 <span
                                     className="animate-counter"
-                                    style={{ '--num-start': 0, '--num-end': 300 }}
+                                    style={{ '--num-start': 0, '--num-end': 5}}
                                 >  K +
                                 </span>
                             </dd>
@@ -65,9 +58,9 @@ function LandingPage() {
                         <div className="mx-auto flex max-w-xs flex-col gap-y-4">
                             <dt className="text-base leading-7 text-gray-600">Assets under holding</dt>
                             <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                                $ <span
+                                Ksh ‎ <span
                                     className="animate-counter"
-                                    style={{ '--num-start': 0, '--num-end': 119 }}
+                                    style={{ '--num-start': 0, '--num-end': 200 }}
                                 >
                                     <span className="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2"></span> Million
                                 </span>

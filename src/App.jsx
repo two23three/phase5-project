@@ -45,7 +45,7 @@ function App() {
 
   const handleCreateCategory = (newCategory) => {
     setShowCategoryPopup(false);
-    window.location.href = '/add_expense_transaction'; 
+    window.location.href = '/add_expense_transaction';
   };
 
 //
@@ -95,7 +95,7 @@ function App() {
               onCancel={() => setShowAddExpense(false)}
             />
           )}
-
+          <Navbar onAddTransactionClick={handleAddTransactionClick} />
         </div>
       </Router>
     </AuthProvider>
