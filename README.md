@@ -4,28 +4,18 @@
   <img src="client/public/golden-swing-1964101_1280.png" alt="Barnes" width="300" height="200">
 </p>
 
-## Table of Contents
-- [Introduction](#introduction)
+## Table of Contents)
 - [Problem Statement](#problem-statement)
 - [Key Features](#key-features)
 - [Launching](#launching)
-  - [Endpoints](#endpoints)
 - [Prerequisites](#prerequisites)
 - [Installations](#installations)
   - [Backend](#backend)
   - [Frontend](#frontend)
-- [Running CareConnect Locally](#running-careconnect-locally)
 - [Usage](#usage)
 - [Development Notes](#development-notes)
 - [Security Considerations](#security-considerations)
 - [MVPs](#mvps)
-  - [MVP 1: Service Management](#mvp-1-service-management)
-  - [MVP 2: Patient Management](#mvp-2-patient-management)
-  - [MVP 3: Appointment Management](#mvp-3-appointment-management)
-  - [MVP 4: Patient Login](#mvp-4-patient-login)
-  - [Stretch MVPs](#stretch-mvps)
-    - [MVP 5: Staff Management](#mvp-5-staff-management)
-    - [MVP 6: Billing Services](#mvp-6-billing-services)
 - [Technologies Used](#technologies-used)
 - [License](#license)
 - [Contributors](#contributors)
@@ -233,7 +223,7 @@ Purpose: Handles CRUD operations related to Assets.
 
 ## MVPs
 
-### MVP 1: Budget Tracking
+### MVP: Budget Tracking
 
 1. **Basic Income and Expense Tracking:** Simple categorization and visualization of income and expenses.
 2. **Separate Dashboards:** Initial implementation of separate dashboards for personal and business finances.
