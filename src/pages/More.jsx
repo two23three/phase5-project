@@ -94,7 +94,7 @@ function More({ emailOrPhone }) {
   if (userInfo.roleId === 2) {
 
     return (
-      <div className="ww-screen l-screen bg-white rounded-b-xl overflow-hidden shadow-lg">
+      <div className="ww-screen l-screen bg-white rounded-t-xl	 overflow-hidden shadow-lg">
         <div className="flex items-center p-4">
           <img
             className="w-16 h-16 rounded-full"
@@ -179,7 +179,7 @@ function More({ emailOrPhone }) {
     );
   }
   return (
-    <div className="w-screen l-screen bg-white rounded-b-xl overflow-hidden shadow-lg">
+    <div className="w-screen l-screen bg-white rounded-t-xl	 overflow-hidden shadow-lg">
       <div className="flex items-center p-4">
         <img
           className="w-16 h-16 rounded-full"

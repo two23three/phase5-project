@@ -309,7 +309,7 @@ function Budget() {
   };
 
   return (
-    <div className="rounded-b-xl p-4 text-white w-screen l-screen" style={{ backgroundColor: '#242424' }}>
+    <div className=" p-4 text-white w-screen l-screen" style={{ backgroundColor: '#242424' }}>
       <div className="space-y-8">
 
       < SavingsGoals goals={goals} handleUpdateAmount={handleUpdateAmount} handleDelete={handleDelete} setShowGoalModal={setShowGoalModal} />
