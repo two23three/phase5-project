@@ -29,7 +29,6 @@ const CategoryCreationPopup = ({ onClose, onCreateCategory }) => {
                 },
                 body: JSON.stringify(newCategory),
             });
-            console.log(newCategory)
 
             if (!response.ok) {
                 throw new Error('Failed to create category');

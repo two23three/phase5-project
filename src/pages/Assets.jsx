@@ -40,7 +40,6 @@ function Assets() {
             try {
                 const response = await fetch(`${API_URL}assets`);
                 const data = await response.json();
-                console.log("Fetched data:", data);
                 const assets = data.assets;
 
                 let totalAssetsValue = 0;

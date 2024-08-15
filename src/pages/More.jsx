@@ -35,7 +35,6 @@ function More({ emailOrPhone }) {
 
         users.forEach(user => {
           if (user.id === userID) {
-            console.log('Logged in user:', user)
             setUserInfo({
               name: user.name,
               email: user.email,
@@ -56,8 +55,6 @@ function More({ emailOrPhone }) {
   }, [emailOrPhone]);
 
   const handleChangePasswordSubmit = (currentPassword, newPassword) => {
-    console.log("Current Password:", currentPassword);
-    console.log("New Password:", newPassword);
   };
 
   const handleCopy = () => {

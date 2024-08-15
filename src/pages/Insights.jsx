@@ -58,14 +58,12 @@ const Insights = () => {
                 const categoryData = await categoryRes.json();
                 setFetchedCategories(categoryData.categories);
                 setCategories(sortByCategories(userExpenses, categoryData.categories));
-                console.log(categories);
 
                 const userRes = await fetch(`${API_URL}users`);
                 const userData = await userRes.json();
                 const currentUser = userData.users.find(u => u.id === userID);
                 setRole(currentUser.role_id);
             } catch (error) {
-                console.log(error);
             }
         };
         fetchData();
@@ -76,7 +74,6 @@ const Insights = () => {
     }, [from, to]);
 
     const combineAmountByDate = (amounts, from, to) => {
-        console.log(amounts);
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
         
         const combined = [];

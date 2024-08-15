@@ -185,7 +185,6 @@ const Income = () => {
             combined.labels.push(currentDate);
         }
 
-        console.log(combined);
         return combined;
     };
 

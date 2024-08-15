@@ -37,13 +37,11 @@ function Budget() {
       .then(data => {
         let goalFilter = data.savings_goals.filter(goal => goal.user_id === userID);
         setGoals(goalFilter);
-        console.log(data);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
       });
   }, []);
-  console.log(goals);
 
   // Persist changes to savings goals
   useEffect(() => {
@@ -65,7 +63,6 @@ function Budget() {
             return response.json();
           })
           .then(data => {
-            console.log('Goal updated successfully:', data);
           })
           .catch(error => {
             console.error('Error updating goal:', error);
@@ -86,20 +83,17 @@ function Budget() {
       .then(data => {
         const loanFilter = data.debts.filter(loan => loan.user_id === userID);
         setLoans(loanFilter);
-        console.log(data);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
       });
   }, []);
 
-  console.log(loans);
 
   // Persist changes to loans
   useEffect(() => {
     if (loans.length > 0) {
       const updatedLoan = loans[updateIndex];
-      console.log(updatedLoan);
       if (updatedLoan) {
         const { id, remaining_balance } = updatedLoan;
         fetch(`https://barnes.onrender.com/debts/${id}`, {
@@ -116,7 +110,6 @@ function Budget() {
             return response.json();
           })
           .then(data => {
-            console.log('Loan updated successfully:', data);
           })
           .catch(error => {
             console.error('Error updating loan:', error);
@@ -124,7 +117,6 @@ function Budget() {
       }
     }
   }, [loans]);
-  console.log(loans);
 
   // Persist changes to limits
   useEffect(() => {
@@ -146,7 +138,6 @@ function Budget() {
             return response.json();
           })
           .then(data => {
-            console.log('Limit updated successfully:', data);
           })
           .catch(error => {
             console.error('Error updating limit:', error);
@@ -156,7 +147,6 @@ function Budget() {
   }, [limits]);
 
   const handleSaveGoal = async (newGoal) => {
-    console.log('Saving goal:', newGoal);
 
     try {
       const response = await fetch('https://barnes.onrender.com/savings', {
@@ -182,8 +172,6 @@ function Budget() {
   };
 
   const handleSaveLoan = async (newLoan) => {
-    console.log('Saving loan:', newLoan);
-    console.log(JSON.stringify(newLoan));
 
     try {
       const response = await fetch('https://barnes.onrender.com/debts', {
@@ -209,7 +197,6 @@ function Budget() {
   };
 
   const handleSaveLimit = async (newLimit) => {
-    console.log('Saving limit:', newLimit);
 
     try {
       const response = await fetch('https://barnes.onrender.com/limits', {
@@ -273,7 +260,6 @@ function Budget() {
       endpoint = `https://barnes.onrender.com/savings/${itemToDelete.id}`;
     } else if (type === 'loan') {
       itemToDelete = loans[index];
-      console.log(itemToDelete)
       endpoint = `https://barnes.onrender.com/debts/${itemToDelete.id}`;
     } else if (type === 'limit') {
       itemToDelete = limits[index];
@@ -302,7 +288,6 @@ function Budget() {
         setLimits(limits.filter((_, i) => i !== index));
       }
 
-      console.log(`${type} deleted successfully`);
     } catch (error) {
       console.error(`Error deleting ${type}:`, error);
     }

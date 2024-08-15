@@ -11,7 +11,6 @@ const ContactPopup = ({ isOpen, onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Form submitted:', { name, email, queryType, description });
     const serviceId = "service_lmj91i1";
     const templateId = "template_wnap2mj";
     const publicKey = "cOusq-JJGtgAA2dgt";

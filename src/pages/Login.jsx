@@ -41,7 +41,6 @@ function Login() {
 
         if (user) {
           login(loginData.access_token, user);  
-          console.log('Logged in user:', user); 
           navigate('/home'); 
         } else {
           console.log('User not found');
