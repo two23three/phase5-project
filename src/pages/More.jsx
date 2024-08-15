@@ -7,6 +7,7 @@ import DeleteAccount from "../components/DeleteAccount";
 import AboutUsPopup from "../components/AboutUsPopup";
 import SwitchAccount from "../components/SwitchAccount";
 import { useAuth } from '../components/AuthProvider';
+import TipsPopup from "../components/TipsPopup";
 
 function More({ emailOrPhone }) {
   const [userInfo, setUserInfo] = useState({
@@ -22,6 +23,7 @@ function More({ emailOrPhone }) {
   const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isAboutUsPopupOpen, setIsAboutUsPopupOpen] = useState(false);
+  const [isTipsPopupOpen, setIsTipsPopupOpen] = useState(false);
   const { getUserId } = useAuth();
   const userID = getUserId();
   const API_URL = "https://barnes.onrender.com/";
@@ -35,7 +37,6 @@ function More({ emailOrPhone }) {
 
         users.forEach(user => {
           if (user.id === userID) {
-            console.log('Logged in user:', user)
             setUserInfo({
               name: user.name,
               email: user.email,
@@ -56,8 +57,6 @@ function More({ emailOrPhone }) {
   }, [emailOrPhone]);
 
   const handleChangePasswordSubmit = (currentPassword, newPassword) => {
-    console.log("Current Password:", currentPassword);
-    console.log("New Password:", newPassword);
   };
 
   const handleCopy = () => {
@@ -124,7 +123,7 @@ function More({ emailOrPhone }) {
               <svg className="h-8 w-6 text-slate-400 text-left	" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="ml-2">What is Barnes?</span>
+              <span className="ml-3">What is Barnes?</span>
             </button>
             <button className=" w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
               onClick={() => setIsContactPopupOpen(true)}
@@ -132,17 +131,17 @@ function More({ emailOrPhone }) {
               <svg className="mr-2 h-8 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              Contact Us
-            </button>
+              <span className="">Contuct Us</span>
+              </button>
             <button className=" w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
-              onClick={() => setIsAboutUsPopupOpen(true)}
+              onClick={() => setIsTipsPopupOpen(true)}
             >
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg>
               <span className="ml-2">Tips on Managing Finances</span>
             </button>
           </div>
           
-          <div className="text-gray-400 mt-4 mb-2 text-left text-xs ">ACCOUNT</div>
+          <div className="text-gray-400 mt-4 mb-2  text-left text-xs ">ACCOUNT</div>
           <div className="space-y-2">
             <SwitchAccount />
           </div>
@@ -171,6 +170,10 @@ function More({ emailOrPhone }) {
           isOpen={isAboutUsPopupOpen}
           onClose={() => setIsAboutUsPopupOpen(false)}
         />
+        <TipsPopup
+        isOpen={isTipsPopupOpen}
+        onClose={() => setIsTipsPopupOpen(false)}
+      />
         <ContactPopup isOpen={isContactPopupOpen} onClose={() => setIsContactPopupOpen(false)} />
         {isChangePasswordPopupOpen && (
           <ChangePasswordPopup
@@ -224,10 +227,10 @@ function More({ emailOrPhone }) {
             <svg className="h-8 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            Contact Us
+            <p className='ml-2'>Contact Us</p>
           </button>
           <button className=" w-full flex items-center text-left text-white py-2 px-4 rounded bg-gray-800 hover:bg-gray-700"
-              onClick={() => setIsAboutUsPopupOpen(true)}
+              onClick={() => setIsTipsPopupOpen(true)}
             >
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-200v-80h320v80H320Zm10-120q-69-41-109.5-110T180-580q0-125 87.5-212.5T480-880q125 0 212.5 87.5T780-580q0 81-40.5 150T630-320H330Zm24-80h252q45-32 69.5-79T700-580q0-92-64-156t-156-64q-92 0-156 64t-64 156q0 54 24.5 101t69.5 79Zm126 0Z"/></svg>
               <span className="ml-2">Tips on Managing Finaces</span>
@@ -258,7 +261,7 @@ function More({ emailOrPhone }) {
             <svg className="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
-            Change Password
+            <p className='ml-2'> Change Password</p>
           </button>
           <Logout onLogout={() => console.log("Logging out...")} />
           <DeleteAccount onDelete={handleDeleteAccount} />
@@ -289,6 +292,10 @@ function More({ emailOrPhone }) {
       <AboutUsPopup
         isOpen={isAboutUsPopupOpen}
         onClose={() => setIsAboutUsPopupOpen(false)}
+      />
+      <TipsPopup
+        isOpen={isTipsPopupOpen}
+        onClose={() => setIsTipsPopupOpen(false)}
       />
     </div>
   );
