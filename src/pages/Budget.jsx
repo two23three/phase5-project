@@ -8,6 +8,8 @@ import { useAuth } from "../components/AuthProvider";
 import Navbar from "../components/Navbar";
 import DebtManagement from "../components/DebtManagement";
 import SavingsGoals from "../components/SavingsGoals";
+import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 function Budget() {
@@ -92,7 +94,7 @@ function Budget() {
   }, []);
 
 
-  // Persist changes to loans
+  // Persist changes to debts
   useEffect(() => {
     if (loans.length > 0) {
       const updatedLoan = loans[updateIndex];
@@ -120,13 +122,31 @@ function Budget() {
     }
   }, [loans]);
 
+  // fetch limits
+  //  useEffect(() => {
+  //   fetch("https://barnes.onrender.com/categories")
+  //      .then(response => {
+  //        if (!response.ok) {
+  //          throw new Error('Network response was not ok');
+  //        }
+  //        return response.json();
+  //     })
+  //      .then(data => {
+  //        const userLimits = data.categories.filter(category => category.user_id === userID).map(category => category.limit);
+  //        setLimits(userLimits);
+  //      })
+  //      .catch(error => {
+  //        console.error('There was a problem with the fetch operation:', error);
+  //      });
+  //  }, []);
+
   // Persist changes to limits
   useEffect(() => {
     if (limits.length > 0) {
       const updatedLimit = limits[updateIndex];
       if (updatedLimit) {
         const { id, current_amount } = updatedLimit;
-        fetch(`https://barnes.onrender.com/limits/${id}`, {
+        fetch(`https://barnes.onrender.com/categories/${limit}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -197,7 +217,7 @@ function Budget() {
       console.error('Error saving new loan:', error);
     }
   };
-  
+
 
   const handleSaveLimit = async (newLimit) => {
 
@@ -315,7 +335,7 @@ function Budget() {
           setShowLoanModal={setShowLoanModal}
       />
         {/* Limits */}
-        <div className="p-4 rounded-lg bg-gray-500">
+        <div className="p-4 rounded-lg bg-zinc-800">
           <h2 className="text-xl font-bold mb-4 text-left">Limits</h2>
           <div className="space-y-4">
             {limits.map((l, index) => (
@@ -341,12 +361,19 @@ function Budget() {
                 </button>
               </div>
             ))}
-            <button
-              className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
-              onClick={() => setShowLimitModal(true)}
-            >
-              <span className="mr-2">+</span> Add Limit
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <div className="mt-4">
+                <button
+                  className="flex items-center p-1 rounded-lg w-auto justify-center text-gray-900 hover:text-black"
+                  onClick={() => setShowLimitModal(true)}
+                >
+                  <span className="bg-gray-300 mr-2 rounded-full p-1">
+                    <FontAwesomeIcon icon={faPlus} />
+                  </span>
+                  <span className="text-white">Add Limit</span>
+                </button>
+              </div>
+           </div>
           </div>
         </div>
       </div>

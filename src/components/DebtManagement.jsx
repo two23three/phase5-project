@@ -8,7 +8,7 @@ const DebtManagement = ({ loans, handleUpdateAmount, handleDelete, setShowLoanMo
 
   const toggleDropdown = (index) => {
     setDropdownOpen(dropdownOpen === index ? -1 : index);
-  };
+  }; 
 
   return (
     <div className="p-4 rounded-lg bg-zinc-800">
