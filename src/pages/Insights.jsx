@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
-import Navbar from "../components/Navbar";
 import { useAuth } from "../components/AuthProvider";
 import { FaLightbulb } from "react-icons/fa"
 
@@ -181,7 +180,6 @@ const Insights = () => {
                     <p style={{ color: 'black' }}>Add some expenses and expense categories...</p>
                 )}
             </div>
-            <Navbar />
         </div>
     );
 };

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import PieChart from "../components/PieChart";
 import InfoCard from "../components/InfoCard";
 import Header from "../components/Header";
-import Navbar from "../components/Navbar";
 import { formatNumber } from "chart.js/helpers";
 import { useAuth } from "../components/AuthProvider";
 import homeBackground from "../assets/homebackground.png";
@@ -207,7 +206,6 @@ function Home() {
                         <InfoCard title="Assets" value={`${currencySymbol} ${formatNumber(assets)}`} />
                     </Link>
                 </div>
-                <Navbar />
             </div>
                 
         </div>

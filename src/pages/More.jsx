@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import ContactPopup from "../components/ContactPopup";
 import EditDetailsPopup from "../components/EditDetailsPopup";
 import ChangePasswordPopup from "../components/ChangePasswordPopup";
@@ -166,7 +165,6 @@ function More({ emailOrPhone }) {
           isOpen={isAboutUsPopupOpen}
           onClose={() => setIsAboutUsPopupOpen(false)}
         />
-        <Navbar />
         <ContactPopup isOpen={isContactPopupOpen} onClose={() => setIsContactPopupOpen(false)} />
         {isChangePasswordPopupOpen && (
           <ChangePasswordPopup
@@ -262,7 +260,6 @@ function More({ emailOrPhone }) {
 
         </div>
       </div>
-      <Navbar />
       <ContactPopup isOpen={isContactPopupOpen} onClose={() => setIsContactPopupOpen(false)} />
       {isEditPopupOpen && (
         <EditDetailsPopup

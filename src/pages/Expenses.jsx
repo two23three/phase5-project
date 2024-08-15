@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { useAuth } from "../components/AuthProvider";
 import './insights.css';
@@ -89,7 +88,6 @@ const Expenses = () => {
                 <TotalExpense amount={tranzactions.list.reduce((a, b) => a + b, 0)} />
                 <ExpensesChart list={tranzactions.list} labels={tranzactions.labels} />
                 <TransactionTable data={table.length > 0 ? table : transactions} />
-                <Navbar />
             </div>
         </div>
     );

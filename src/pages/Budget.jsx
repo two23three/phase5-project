@@ -362,7 +362,6 @@ function Budget() {
           label={updateLabel}
         />
       )}
-      <Navbar />
     </div>
   );
 }

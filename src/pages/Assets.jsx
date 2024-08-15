@@ -260,7 +260,6 @@ function Assets() {
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSave}
             />
-            <Navbar />
         </div>
     );
 }
