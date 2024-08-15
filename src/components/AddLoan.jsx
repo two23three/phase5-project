@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddLoan = ({ onClose, onSave, userID }) => {
+const AddLoan = ({ onClose, onSave, userID  }) => {
   const [loan, setLoan] = useState('');
   const [loanAmount, setLoanAmount] = useState('');
 

@@ -11,15 +11,12 @@ const DebtManagement = ({ loans, handleUpdateAmount, handleDelete, setShowLoanMo
   };
 
   return (
-    <div className="p-4 rounded-lg bg-gray-500">
-      <h2 className="text-xl font-bold mb-4 text-left">Debt Management</h2>
+    <div className="p-4 rounded-lg bg-zinc-800">
+      <h1 className="text-xl font-bold mb-4 text-left">Debt Management</h1>
       <div className="space-y-4">
         {loans.map((l, index) => (
           <div key={index} className="flex justify-between items-center relative">
-            <div>
-              <h3 className="font-bold text-lg">{l.name}</h3>
-              <p>User ID: {l.user_id}</p>
-              <p>Start Date: {l.due_date}</p>
+            <div className="w-full">
               <ProgressBar
                 key={index}
                 label={l.name}
@@ -31,42 +28,50 @@ const DebtManagement = ({ loans, handleUpdateAmount, handleDelete, setShowLoanMo
             <div className="flex space-x-2">
               <button
                 onClick={() => toggleDropdown(index)}
-                className="bg-blue-500 text-white p-2 rounded-lg"
+                className="bg-gray-300 text-black p-2 rounded-lg self-end"
               >
                 <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
               </button>
               {dropdownOpen === index && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded z-10">
+                <div className="flex flex-col space-y-2 mt-2">
                   <button
                     onClick={() => handleUpdateAmount(index, 'loan', l.name)}
-                    className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-100"
+                    className="bg-blue-900 block w-full text-left px-4 py-2 rounded-3xl text-sm text-gray-100 hover:bg-blue-700"
                   >
                     Update Amount
                   </button>
                   <button
                     onClick={() => handleDelete(index, 'loan')}
-                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100"
+                    className="bg-red-900 block w-full text-left px-4 py-2 rounded-3xl text-sm text-gray-100 hover:bg-red-700"
                   >
                     Delete
                   </button>
-                  {/* Assuming you have a way to handle M-Pesa for loans similarly */}
+                  {/* Assuming you have a way to handle M-Pesa for loans similarly
                   <button
                     onClick={() => console.log('Add funds via M-Pesa for loan', l.name)}
-                    className="block w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-100"
+                    className="bg-lime-700  block w-full text-left px-4 py-2 rounded-3x1 text-sm text-gray-100 hover:bg-lime-600"
                   >
                     Add funds via M-Pesa
                   </button>
+                  */}
                 </div>
               )}
             </div>
           </div>
         ))}
-        <button
-          className="flex items-center bg-gray-300 p-2 rounded-lg w-full justify-center text-gray-900 hover:text-black"
-          onClick={() => setShowLoanModal(true)}
-        >
-          <span className="mr-2">+</span> Add Loan
-        </button>
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <div className="mt-4">
+            <button
+              className="flex items-center p-1 rounded-lg w-auto justify-center text-gray-900 hover:text-black"
+              onClick={() => setShowLoanModal(true)}
+            >
+              <span className="bg-gray-300 mr-2 rounded-full p-1">
+                <FontAwesomeIcon icon={faPlus} />
+              </span>
+              <span className="text-white">Add Loan</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -197,6 +197,7 @@ function Budget() {
       console.error('Error saving new loan:', error);
     }
   };
+  
 
   const handleSaveLimit = async (newLimit) => {
 
