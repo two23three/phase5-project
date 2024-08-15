@@ -54,7 +54,6 @@ function App() {
       <Router>
         <div>
        <StatusBar/>
-       <Navbar onAddTransactionClick={handleAddTransactionClick} />
           <Routes>
             <Route path="/home" element={<PrivateRoute element={Home} />} />
             <Route path="/register" element={<Register />} />
@@ -96,7 +95,7 @@ function App() {
               onCancel={() => setShowAddExpense(false)}
             />
           )}
-
+          <Navbar onAddTransactionClick={handleAddTransactionClick} />
         </div>
       </Router>
     </AuthProvider>
