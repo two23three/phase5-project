@@ -35,6 +35,7 @@ function More({ emailOrPhone }) {
 
         users.forEach(user => {
           if (user.id === userID) {
+            console.log('Logged in user:', user)
             setUserInfo({
               name: user.name,
               email: user.email,
@@ -55,6 +56,8 @@ function More({ emailOrPhone }) {
   }, [emailOrPhone]);
 
   const handleChangePasswordSubmit = (currentPassword, newPassword) => {
+    console.log("Current Password:", currentPassword);
+    console.log("New Password:", newPassword);
   };
 
   const handleCopy = () => {
@@ -251,7 +254,7 @@ function More({ emailOrPhone }) {
         <div className="mt-4 text-center">
           <a href="/budget" >
             <button href="/budget" className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200">
-              Save funds via <span className="ml-2">M-Pesa</span>
+              Save funds via <span className="ml-2">M Pesa</span>
             </button>
           </a>
 
