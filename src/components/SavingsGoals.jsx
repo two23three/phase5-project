@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import ProgressBar from "../components/ProgressBar";
+import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MpesaPopup from "../components/MpesaPopUp";
 
 const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModal }) => {
   const [showMpesaModal, setShowMpesaModal] = useState(false);
   const [selectedGoalName, setSelectedGoalName] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(-1);
 
   const openMpesaModal = (goalName) => {
     setSelectedGoalName(goalName);
     setShowMpesaModal(true);
+  };
+
+  const toggleDropdown = (index) => {
+    setDropdownOpen(dropdownOpen === index ? -1 : index);
   };
 
   return (
@@ -16,7 +23,7 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
       <h2 className="text-xl font-bold mb-4 text-left">Savings Goals</h2>
       <div className="space-y-4">
         {goals.map((g, index) => (
-          <div key={index} className="flex justify-between items-center">
+          <div key={index} className="flex justify-between items-center relative">
             <div>
               <h3 className="font-bold text-lg">{g.name}</h3>
               <p>Start Date: {g.start_date}</p>
@@ -25,22 +32,37 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
                 current_amount={parseInt(g.current_amount)}
                 target_amount={parseInt(g.target_amount)}
                 type="goal"
-                onUpdate={() => handleUpdateAmount(index, 'goal', g.name)}
               />
             </div>
             <div className="flex space-x-2">
               <button
-              className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200"
-                onClick={() => openMpesaModal(g.name)}
+                onClick={() => toggleDropdown(index)}
+                className="bg-blue-500 text-white p-2 rounded-lg"
               >
-                Add funds via M-Pesa
-              </button>{/* Leave this here, it re-directs the user to the Budget Page*/}
-              <button
-                className="bg-red-500 text-white p-2 rounded"
-                onClick={() => handleDelete(index, 'goal')}
-              >
-                Delete
+                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
               </button>
+              {dropdownOpen === index && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded z-10">
+                  <button
+                    onClick={() => handleUpdateAmount(index, 'goal', g.name)}
+                    className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-100"
+                  >
+                    Update Amount
+                  </button>
+                  <button
+                    onClick={() => handleDelete(index, 'goal')}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => openMpesaModal(g.name)}
+                    className="block w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-100"
+                  >
+                    Add funds via M-Pesa
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -53,9 +75,9 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
       </div>
 
       {showMpesaModal && (
-        <MpesaPopup 
-          goalName={selectedGoalName} 
-          onClose={() => setShowMpesaModal(false)} 
+        <MpesaPopup
+          goalName={selectedGoalName}
+          onClose={() => setShowMpesaModal(false)}
         />
       )}
     </div>

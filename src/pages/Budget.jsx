@@ -9,11 +9,13 @@ import Navbar from "../components/Navbar";
 import DebtManagement from "../components/DebtManagement";
 import SavingsGoals from "../components/SavingsGoals";
 
+
 function Budget() {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showLoanModal, setShowLoanModal] = useState(false);
   const [showLimitModal, setShowLimitModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [Dropdown, setDropdown] = useState(null);
   const [updateIndex, setUpdateIndex] = useState(null);
   const [updateType, setUpdateType] = useState(null);
   const [updateLabel, setUpdateLabel] = useState('');
@@ -293,12 +295,24 @@ function Budget() {
     }
   };
 
+
+
   return (
     <div className=" p-4 text-white w-screen l-screen" style={{ backgroundColor: '#242424' }}>
       <div className="space-y-8">
 
-      < SavingsGoals goals={goals} handleUpdateAmount={handleUpdateAmount} handleDelete={handleDelete} setShowGoalModal={setShowGoalModal} />
-      < DebtManagement loans={loans} handleUpdateAmount={handleUpdateAmount} handleDelete={handleDelete} setShowLoanModal={setShowLoanModal} />
+      < SavingsGoals
+          goals={goals}
+          handleUpdateAmount={handleUpdateAmount}
+          handleDelete={handleDelete}
+          setShowGoalModal={setShowGoalModal}
+      />
+      < DebtManagement
+          loans={loans}
+          handleUpdateAmount={handleUpdateAmount}
+          handleDelete={handleDelete}
+          setShowLoanModal={setShowLoanModal}
+      />
         {/* Limits */}
         <div className="p-4 rounded-lg bg-gray-500">
           <h2 className="text-xl font-bold mb-4 text-left">Limits</h2>
@@ -311,8 +325,13 @@ function Budget() {
                   current_amount={l.current_amount}
                   target_amount={l.limitAmount}
                   type="limit"
-                  onUpdate={() => handleUpdateAmount(index, 'limit', l.limit)}
                 />
+                <button
+                    className="bg-blue-500 text-white p-2 rounded-lg"
+                    onClick={() => handleUpdateAmount(index, 'limit', l.limit)}
+                  >
+                    Update Amount
+                </button>
                 <button
                   className="ml-4 bg-red-500 text-white p-2 rounded"
                   onClick={() => handleDelete(index, 'limit')}

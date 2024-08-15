@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProgressBar = ({ label, current_amount, target_amount, onUpdate, type }) => {
+const ProgressBar = ({ label, current_amount, target_amount, type }) => {
   const percentage = (current_amount / target_amount) * 100;
 
   let barColor;
@@ -32,12 +32,6 @@ const ProgressBar = ({ label, current_amount, target_amount, onUpdate, type }) =
       <div className="text-gray-400 text-right mb-2">
         Ksh {current_amount.toLocaleString()} / Ksh {target_amount.toLocaleString()}
       </div>
-      <button
-        className="bg-blue-500 text-white p-2 rounded-lg w-full"
-        onClick={onUpdate}
-      >
-        Update Amount
-      </button>
     </div>
   );
 };
