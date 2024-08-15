@@ -82,7 +82,7 @@ const Expenses = () => {
     }, [from, to]);
 
     return (
-        <div className="p-4" style={{ backgroundColor: 'black', padding:'0px' }}>
+        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen " style={{ backgroundColor: 'black', padding:'0px' }}>
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
