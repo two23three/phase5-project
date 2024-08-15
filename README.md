@@ -1,7 +1,7 @@
 # Barnes
 
 <p align="center">
-  <img src="client/public/golden-swing-1964101_1280.png" alt="CARECONNECT-LOGO" width="300" height="200">
+  <img src="client/public/golden-swing-1964101_1280.png" alt="Barnes" width="300" height="200">
 </p>
 
 ## Table of Contents
