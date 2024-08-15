@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import AssetsInfoCard from "../components/AssetsInfoCard";
 import EditAssetModal from "../components/EditAssetModal";
 import Header from "../components/Header";
-import Navbar from "../components/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { formatNumber } from "chart.js/helpers";
