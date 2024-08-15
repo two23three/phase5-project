@@ -156,8 +156,8 @@ function More({ emailOrPhone }) {
             <DeleteAccount onDelete={handleDeleteAccount} />
           </div>
           <div className="mt-4 text-center">
-            <button className="w-full py-2 px-4 rounded bg-green-500 text-white font-bold hover:bg-green-600 transition duration-200">
-              Add funds via <span className="ml-2">M-Pesa</span>
+            <button className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200">
+              Save funds via <span className="ml-2">M-Pesa</span>
             </button>
           </div>
         </div>
