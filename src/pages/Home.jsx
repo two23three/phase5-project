@@ -243,7 +243,7 @@ function Home() {
                         >
                         </span>
                     </h1>
-                    <p className="text-black font-bold">left to spend</p>
+                    <p className="text-black font-bold">in profits</p>
                 </div>
     
                 <div className="bg-[#242424] pt-7 rounded-t-lg">

@@ -212,6 +212,7 @@ function Budget() {
       const data = await response.json();
       setLoans(prevLoans => [...prevLoans, { ...newLoan, principal_amount: 0 }]);
       setShowLoanModal(false);
+      window.location.reload();
 
     } catch (error) {
       console.error('Error saving new loan:', error);
