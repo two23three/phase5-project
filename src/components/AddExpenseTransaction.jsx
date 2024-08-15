@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "../components/AuthProvider";
+import { useNavigate } from 'react-router-dom';
 
 const AddExpenseTransaction = ({ onCancel }) => {
     const [amount, setAmount] = useState('');
@@ -11,6 +12,8 @@ const AddExpenseTransaction = ({ onCancel }) => {
 
     const { getUserId } = useAuth();
     const userID = getUserId();
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -67,6 +70,9 @@ const AddExpenseTransaction = ({ onCancel }) => {
             setSuccess('');
         }
     };
+    const handleCancel = () => {
+        navigate('/home'); // Navigate to the home page
+    };
 
     return (
         <div className="max-w-md mx-auto p-8 rounded-lg" style={{ backgroundColor: '#242424' }}>
@@ -115,7 +121,11 @@ const AddExpenseTransaction = ({ onCancel }) => {
                 <button className="w-full bg-red-800 text-white py-2 rounded" type="submit">
                     Add Expense
                 </button>
-                <button className="w-full bg-gray-500 text-white py-2 rounded mt-2" onClick={onCancel} type="button">
+                <button
+                    className="w-full bg-gray-500 text-white py-2 rounded mt-2"
+                    onClick={handleCancel}
+                    type="button"
+                >
                     Cancel
                 </button>
             </form>

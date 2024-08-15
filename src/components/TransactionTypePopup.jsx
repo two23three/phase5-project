@@ -8,7 +8,7 @@ const TransactionTypePopup = ({ onClose, onChoose }) => {
                 <button className="bg-green-500 text-white px-4 py-2 rounded mr-4" onClick={() => onChoose('income')}>
                     Income
                 </button>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={() => onChoose('expense')}>
+                <button className="bg-red-800 text-white px-4 py-2 rounded" onClick={() => onChoose('expense')}>
                     Expense
                 </button>
                 <button className="mt-4 text-gray-500" onClick={onClose}>Cancel</button>

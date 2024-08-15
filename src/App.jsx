@@ -45,7 +45,7 @@ function App() {
 
   const handleCreateCategory = (newCategory) => {
     setShowCategoryPopup(false);
-    window.location.href = '/add_expense_transaction'; 
+    window.location.href = '/add_expense_transaction';
   };
 
 //
@@ -54,6 +54,7 @@ function App() {
       <Router>
         <div>
        <StatusBar/>
+       <Navbar onAddTransactionClick={handleAddTransactionClick} />
           <Routes>
             <Route path="/home" element={<PrivateRoute element={Home} />} />
             <Route path="/register" element={<Register />} />
