@@ -93,104 +93,109 @@ function Register() {
   };
 
   return (
-    <div className="w-full max-w-xs mx-auto">
+    <div className="flex justify-end ">
+      <div className="w-full max-w-xl mx-auto mt-5 mb-5 ">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Sign Up for Barnes!</h2>
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-gray-400">Name<span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-400">Email<span className="text-red-500">*</span></label>
-            <input
-              type="email"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-400">Phone Number<span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              placeholder="Enter Phone ( 07xxxxxx)"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-gray-400">Role<span className="text-red-500">*</span></label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
-            >
-              <option value="Personal">Personal</option>
-              <option value="Business">Business</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-gray-400">Password<span className="text-red-500">*</span></label>
-            <div className="relative">
+        <form className="space-y-9" onSubmit={handleSubmit}>
+          <div className="flex flex-wrap -mx-2">
+            <div className="w-1/2 px-1">
+              <label className="block text-gray-400">Name<span className="text-red-500">*</span></label>
               <input
-                type={passwordVisible ? 'text' : 'password'}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mb-4 w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                required
+              />
+            </div>
+            <div className="w-1/2 px-2">
+              <label className="block text-gray-400">Email<span className="text-red-500">*</span></label>
+              <input
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
                 required
               />
-              <span
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400"
-              >
-                {passwordVisible ? 'Hide' : 'Show'}
-              </span>
             </div>
-          </div>
-          <div>
-            <label className="block text-gray-400">Confirm Password<span className="text-red-500">*</span></label>
-            <div className="relative">
+            <div className="w-1/2 px-2">
+              <label className="block text-gray-400">Phone Number<span className="text-red-500">*</span></label>
               <input
-                type={passwordVisible ? 'text' : 'password'}
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                type="text"
+                placeholder="Enter Phone ( 07xxxxxx)"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
                 required
               />
-              <span
-                onClick={togglePasswordVisibility}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400"
+            </div>
+            <div className="w-1/2 px-2">
+              <label className="block text-gray-400">Role<span className="text-red-500">*</span></label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="mb-5 w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                required
               >
-                {passwordVisible ? 'Hide' : 'Show'}
-              </span>
+                <option value="Personal">Personal</option>
+                <option value="Business">Business</option>
+              </select>
+            </div>
+            <div className="w-1/2 px-2">
+              <label className="block text-gray-400">Password<span className="text-red-500">*</span></label>
+              <div className="relative">
+                <input
+                  type={passwordVisible ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+                <span
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400"
+                >
+                  {passwordVisible ? 'Hide' : 'Show'}
+                </span>
+              </div>
+            </div>
+            <div className="w-1/2 px-2">
+              <label className="block text-gray-400">Confirm Password<span className="text-red-500">*</span></label>
+              <div className="relative">
+                <input
+                  type={passwordVisible ? 'text' : 'password'}
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+                <span
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400"
+                >
+                  {passwordVisible ? 'Hide' : 'Show'}
+                </span>
+              </div>
             </div>
           </div>
-          <div>
-            <label className="block text-gray-400">Referral Code:</label>
-            <input
-              type="text"
-              placeholder="Referral code (Optional)"
-              value={referralCode}
-              onChange={(e) => setReferralCode(e.target.value)}
-              className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
+          <div className="flex justify-center mt-4">
+            <div className="w-full max-w-md">
+              <label className="block text-gray-400">Referral Code:</label>
+              <input
+                type="text"
+                placeholder="Referral code (Optional)"
+                value={referralCode}
+                onChange={(e) => setReferralCode(e.target.value)}
+                className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              />
+            </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex justify-center items-center mt-4">
             <input
               type="checkbox"
               id="terms"
@@ -215,21 +220,18 @@ function Register() {
               </button>
             </span>
           </div>
-          
           <button
             type="submit"
-            className="w-full py-3 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition duration-200"
+            className="w-full p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
           >
             Register
           </button>
         </form>
-        <div className="text-center text-gray-500 mt-4">
-          Already have an account? <a href="/login" className="text-red-500 hover:underline">Log in</a>
-        </div>
       </div>
-      {showTerms && <TermsPopup onClose={closeTermsPopup} />}
-      {showPrivacy && <PrivacyPolicyPopup onClose={closePrivacyPopup} />}
+      {showTerms && <TermsPopup show={setShowTerms} onClose={closeTermsPopup} />}
+      {showPrivacy && <PrivacyPolicyPopup show={setShowPrivacy} onClose={closePrivacyPopup} />}
     </div>
+  </div>
   );
 }
 
