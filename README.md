@@ -1,4 +1,4 @@
-# CARECONNECT APP
+# Barnes
 
 <p align="center">
   <img src="client/public/golden-swing-1964101_1280.png" alt="CARECONNECT-LOGO" width="300" height="200">
@@ -33,60 +33,74 @@
 
 ## Features
 - ## User Roles
-The app's homepage requests a person to define themselves either as a patient or an admin(Healthcare provider).
-  - ## As a Patient:
-Can view available services and their prices, register and login, book appointments and view medical records.
-  - ## As an Admin: 
-Can manage services, appointments, and update patients records.
+The app allows a user to choose between having a personal account or business account.
+  - ## Personal Account:
+Can manage their debts, savings, assets, incomes and expenses as well as gain referral points.
+  - ## Business Account: 
+Can manage revenues, assets and expenses.
 
-CareConnect App is a comprehensive healthcare facility application dedicated to providing high-quality medical services to patients. Our mission is to modernize healthcare operations, improve patient care through innovative solutions, and promote a good image and integrity for all healthcare facilities.
+Barnes App is a user-friendly budget tracker application that provides separate dashboards for personal and business finances, allowing users to monitor and manage income, expenses, assets, savings goals, and debts.
 
 ## Problem Statement
 
-Many healthcare facilities struggle with efficient management of patient information, appointments, and medical records. Patients are also wary of hidden fees in hospitals and desire a way to see all services received and their current bill. This project provides a way for patients to track their bills. Manual processes are often time-consuming, error-prone, and can lead to miscommunication between departments. This results in longer wait times for patients, increased administrative burden on staff, and potential risks to patient care quality.
+Many individuals and small business owners struggle to manage their finances effectively due to the complexity of tracking income, expenses, assets, savings goals, and debts. The challenge is often compounded when personal and business finances are intertwined, leading to a lack of clarity and control over financial health.
+There is a need for an intuitive and comprehensive budget tracking solution that can provide clear visibility into both personal and business financial activities, helping users make informed decisions, achieve savings goals, and manage debts efficiently.
 
 ## Key Features
 
-- ## User Roles
-The app's homepage requests a person to define themselves either as a patient or an admin(Healthcare provider).
-  - ## As a Patient:
-Can view available services and their prices, register and login, book appointments and view medical records.
-  - ## As an Admin: 
-Can manage services, appointments, and update patients records.
+1. **Income Tracking:**
+   - Personal and business income categorization.
+   - Recurring and one-time income sources.
+   - Income trend analysis.
 
-- ## Service Management:
-  - Add, view and delete services.
-  - View service details.
+2. **Expense Management:**
+   - Categorization of expenses (e.g., utilities, rent, supplies).
+   - Budget setting and tracking for different categories.
+   - Alerts for overspending in specific categories.Sharon Byegon
 
-- ## Appointment management:
-  - Schedule, view and cancel appointments.
+3. **Asset Management:**
+   - Tracking of personal and business assets (e.g., properties, equipment).
+   - Valuation updates and depreciation tracking.
 
-- ## Patient Management:
-  - Register, view, update details and delete patients.
-  - View patient details.
+4. **Savings Goals:**
+   - Goal setting for savings (e.g., emergency fund, business expansion).
+   - Progress tracking and milestone achievements.
+   - Automated suggestions for reaching savings goals faster.
 
-- ## Medical records(Patient Profile):
-  - View, store and update patients medical records.
-  - Accessible to authorized healthcare providers and patients.
+5. **Debt Management:**
+   - Tracking of personal and business debts (e.g., loans, credit cards).
+   - Payment schedules and reminders.
+   - Debt payoff strategies and projections.
 
-- ## Admin panel:
-  - Admin dashboard for managing patient accounts, appointments and services.
+6. **Separate Dashboards:**
+   - Clear distinction between personal and business finances.
+   - Customizable dashboards for quick insights and detailed views.
+   - Integration of financial data from different sources.
+
+7. **Reporting and Analytics:**
+   - Monthly, quarterly, and annual financial summaries.
+   - Detailed reports on spending, income, and asset performance.
+   - Predictive analytics for future financial planning.
+
+8. **Security and Privacy:**
+   - Data encryption and secure authentication.
+   - Compliance with financial data protection regulations.
 
 ## Launching
 ## ENDPOINTS:
 1. ## User Authentication and Authorization Endpoints
 Purpose: Handles user registration, login and logout.
- - POST /api.add_resource(PatientResource, '/patients', '/patient'): /patient 
+ - POST /api.add_resource(UserResource, '/users', '/users/<int:id>'): /patient 
 
-  - Description: Registers a new patient in the system.
+  - Description: Registers a new user in the system.
   - Request Body: { username,first_name,last_name, date_of_birth, contact_number, email,password }
   - Response: { success: true, message: "User registered        successfully" }
 
 - POST /api.add_resource(Login, '/login'): /login
 
-  - Description: Logs in a user or an admin and generates a JWT token for   authentication.
-  - Request Body: { username, password }
-  - Response: { success: true, token: "your_jwt_token_here" }
+  - Description: Logs in a user.
+  - Request Body: { username, password, email }
+  - Response: { success: true, token: "Login successful" }
 
 - POST /api.add_resource(Logout, '/logout'): /logout
 
@@ -94,77 +108,54 @@ Purpose: Handles user registration, login and logout.
   - Authorization: Bearer token in headers.
   - Response: { success: true, message: "Logged out successfully" }
 
-2. ##  Appointment Management Endpoints
-Purpose: Handles CRUD operations related to appointments.
+2. ##  Insights Management Endpoints
+Purpose: Handles CRUD operations related to incomes and expenses.
 
-- POST /api.add_resource(AppointmentResource, '/appointments',): /appointments
+- POST /api.add_resource(IncomeResource, '/incomes',): /incomes
 
-  - Description: Creates a new appointment.
-  - Authorization: Bearer token in headers.
-  - Request Body: { patientId, doctorId, appointmentDate, reason}
-  - Response: { success: true, message: "Appointment created successfully" }
+  - Description: Creates an income transaction.
+  - Request Body: { amount, userId, description, date, category_id,}
+  - Response: { success: true, message: "Income transaction added" }
 
-- GET /api.add_resource(AppointmentResource, '/appointments',): /appointments
+- POST /api.add_resource(ExpenseResource, '/expenses',): /expenses
 
-  - Description: Retrieves all appontments with their details.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, appointment: { ... } }
+  - Description: Creates an expense transaction.
+  - Request Body: {amount, category_id, userID, date, description}
+  - Response: { success: true, message: "Expense transaction added" }
 
-- DELETE /api.add_resource(AppointmentByID, '/appointments/<int:appointment_id>', endpoint='appointment_by_id'): /appointments/${selectedAppointment.id}
+3. ##  Category Endpoints
+Purpose: Handles CRUD operations related to Categories.
 
-  - Description: Cancels an appointment.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, message: "Appointment canceled successfully" }
+- GET /api.add_resource(IncomeCategoryResource,'/income_categories', '/income_categories/<int:id>')
 
-3. ##  Service Management Endpoints
-Purpose: Handles CRUD operations related to Services.
+  - Description: Retrieves the categories for income transactions.
+  - Response: { success: true, message: "Categories retrieves" }
 
-- POST /api.add_resource(services_data,'/services_data', endpoint='services_data'): /services_data
+- POST /api.add_resource(ExpenseCategoryResource, '/categories', '/categories/<int:id>')
 
-  - Description: Creates a new service.
-  - Authorization: Bearer token in headers.
-  - Request Body: { name, description, price}
-  - Response: { success: true, message: "Service created successfully" }
+  - Description: Creates a new expense category
+  - Response: { success: true, message: "Category successfully created" }
 
-- GET /api.add_resource(services_data,'/services_data', endpoint='services_data')
+4. ##  Assets Endpoint
+Purpose: Handles CRUD operations related to Assets.
 
-  - Description: Retrieves all services with their details.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, servces: { ... } }
+- POST /api.add_resource(AssetResource, '/assets', '/assets/<int:id>')
 
-- DELETE /api.add_resource(ServiceByID, '/service_data/<int:service_id>'): /service_data/${id}
+  - Description: Creates a new asset in the system.
+  - Request Body: { name ,amount ,description}
+  - Response: { success: true, message: "Asset added successfully" }
 
-  - Description: Deletes a service.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, message: "Service deleted successfully" }
+5. ## Budget Endpoints
 
-4. ##  Patient Management Endpoints
-Purpose: Handles CRUD operations related to Services.
+- POST /api.add_resource(SavingsGoalResource, '/savings', '/savings/<int:id>')
 
-- POST /api.add_resource(PatientResource, '/patients', '/patient'): /patients
+  - Description: Creates new savings goals.
+  - Response: { success: true, message: "Savings goal created successfully" }
 
-  - Description: Creates a new patient in the system.
-  - Authorization: Bearer token in headers.
-  - Request Body: { username,first_name,last_name, date_of_birth, contact_number, email,password}
-  - Response: { success: true, message: "patient created successfully" }
+ POST /api.add_resource(DebtResource, '/debts', '/debts/<int:id>')
 
-- GET /api.add_resource(PatientResource, '/patients', '/patient'): /patients
-
-  - Description: Retrieves all patients with their details.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, patients: { ... } }
-
- PATCH /api.add_resource(PatientByID, '/patient/<int:patient_id>', endpoint='patient_by_id'): /patient/${id}
-
-  - Description: Updates patient details.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, message: "Patient updated successfully" }  
-
-- DELETE /api.add_resource(PatientByID, '/patient/<int:patient_id>', endpoint='patient_by_id'): /patient/${id}
-
-  - Description: Deletes a patient.
-  - Authorization: Bearer token in headers.
-  - Response: { success: true, message: "Patient deleted successfully" }
+  - Description: Creates debt to manage/pay off.
+  - Response: { success: true, message: "Debt added successfully" }  
 
   ## Additional Considerations
     - Error Handling: Implement robust error handling for each endpoint to provide meaningful error messages and status codes.
@@ -174,30 +165,32 @@ Purpose: Handles CRUD operations related to Services.
 
 ## Prerequisites:
 - React
-- Python 3.8.13
-- Flask sqlalchemy
+- Tailwind
+- Python
+- MySQL
 - An active database  and client side connection.
 
 ## Installations:
 - ## Backend:
   - Ensure atleast python 3.8.13 is installed in your system.
   - Install required packages using pip:
-        pip install flask-sqlalchemy, sqlalchemy_serializer, flask_bcrypt, flask_jwt_extended, faker and any other incase the app requires.
+        pip install MySQL, sqlalchemy_serializer, flask_bcrypt and any other incase the app requires.
 
 - ## Frontend:
   - Ensure Reactjs is installed in your system.
+  - Ensure Vite is installed
 
-## To run Careconnect locally, follow these steps:
+## To run Barnes locally, follow these steps:
 1. ## Clone the repository:
-      git clone https://github.com/Maurine6/careconnect.git
-      cd careconnect
+      git clone https://github.com/iankuria668/phase5-project.git
+      cd phase5-project
 2. ## Client side
   -  To download the dependencies for the frontend client, run:
            npm install --prefix client;
   - You can run your React app on localhost:3000 by running: 
             npm start --prefix client
 
-  - Check that your the React client displays a default page http://localhost:3000. You should see a web page with the heading "Welcome to CareConnect".   
+  - Check that your the React client displays a default page  http://localhost:5173/. You should see a web page with the heading "Barnes".   
 
 3. ## Open another terminal: Run Server side.
   - Install dependencies:
@@ -212,85 +205,42 @@ Purpose: Handles CRUD operations related to Services.
       python app.py
 
 5. ## Access the application:
-- Open your web browser and go to 'http://localhost: 3000' to use Careconnect.
+- Open your web browser and go to 'http://localhost:5173/' to use Barnes.
 ## Usage
-- ## Patient Workflow:
+- ## Personal Account:
   1. Register or login.
-  2. Schedule appointment with the doctor.
-  3. View personal  medical records(patient profile).
+  2. Plan your savings, debts and limits.
+  3. View personal/ business financial records.
+  4. Send out your referral code to get referral points
 
-- ## Admin Wokflow: 
-  1. Login.
-  2. Manage appointments by either keeping or cancelling schedules.
-  3. Manage services by either adding, viewing, or deleting a service.
-  4. Manage patients by viewing, updating patient details and deleting a patient.
+- ## Business Account: 
+  1. Register or login.
+  2. Plan your savings, debts and limits.
+  3. View personal/ business financial records.
 
 ## Development Notes:
 - ~ client~: Contains  the frontend code built with React.js.
-- ~ server~: Contains the backend code built with flask sqlalchemy(python)
-- ~ models~: Defines Flask app db schemas using sqlalchemy.
+- ~ server~: Contains the backend code built with MySQL(python)
+- ~ models~: Defines Flask app db schemas using MySQL.
 - ~ routes~: Defines API routes for authentication
-- ~config~: Configuration files including database connection setup and JWT configuration.
+- ~config~: Configuration files including database connection setup.
 
 ## Security Considerations:
 
-  - Use of JWT for secure authentication and authorization.
+  - Use of hashing for secure authentication and authorization.
   - Input validation and sanitization to prevent security vulnerabilities.
 
 
 ## MVPs
 
-### MVP 1: Service Management
+### MVP 1: Budget Tracking
 
-As a user (with credentials):
-- I should be able to get a list of all services offered by the hospital.
-- I should be able to delete a hospital service if it is no longer offered.
-- I should be able to add services offered by the hospital.
+1. **Basic Income and Expense Tracking:** Simple categorization and visualization of income and expenses.
+2. **Separate Dashboards:** Initial implementation of separate dashboards for personal and business finances.
+3. **Savings Goals Setup:** Basic goal setting and tracking feature.
+4. **Debt Tracking:** Simple debt recording and payment reminders.
+5. **Basic Reporting:** Monthly summaries of financial activities.
 
-#### Service List
-![Service List](server/Readme/servicesList.png)
-
-#### Add Services
-![Add Services](server/Readme/serviceList.png)
-
-### MVP 2: Patient Management
-
-Admin should be able to:
-- See all patients.
-- Update patient details.
-- Delete a patient.
-- Add a patient with all their details.
-
-#### Patient Management Section
-![Patient Management](server/Readme/patientData.png)
-
-### MVP 3: Appointment Management
-
-As a user (with credentials):
-- I should be able to create an appointment.
-- I should be able to delete an appointment.
-- I should be able to view appointments.
-
-#### Managing Appointments
-![Managing Appointments](server/Readme/Appointment.png)
-
-### MVP 4: Patient Login
-
-- Login page for patients using credentials provided in their hospital account.
-
-#### Logging In
-![Logging In](server/Readme/login.png)
-
-### Stretch MVPs
-
-#### MVP 5: Staff Management
-
-- Based on accrued appointments, hospital staff (e.g., doctors) will be able to know what patients to expect and plan accordingly.
-
-#### MVP 6: Billing Services
-
-As a user:
-- I should be able to view a list of all services I have received and my current bill.
 
 ## Technologies Used
 
@@ -310,14 +260,14 @@ As a user:
 - **Package Management**: npm
 - **Build Tools**: Create React App
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contributors
 
-- [Maurine6](https://github.com/Maurine6)
-- [SC-Kenduiwa](https://github.com/SC-Kenduiwa)
-- [macharra](https://github.com/macharra)
-- [0097eo](https://github.com/0097eo)
-- [Ephy](https://github.com/Ephymuiruri)
+- [Tulley](https://github.com/two23three)
+- [Kuria](https://github.com/iankuria668)
+- [Mwachi](https://github.com/MwachiOfficial)
+- [Bill](https://github.com/Bjoseph23)
+- [Andy](https://github.com/Muny1re1)
+- [George](https://github.com/migeroreloaded)
+- [Mariya](https://github.com/mariyaschrome)
+- [Sharon](https://github.com/B-Sharon)
