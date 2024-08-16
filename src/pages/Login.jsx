@@ -80,10 +80,10 @@ function Login() {
           <h2 className="text-2xl font-bold text-white mb-6 text-center">Login to Barnes!</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block text-gray-400">Email or Phone Number<span className="text-red-500">*</span></label>
+              <label className="block text-gray-400">Email Address<span className="text-red-500">*</span></label>
               <input
                 type="text"
-                placeholder="Email or Phone (254xxxxxx)"
+                placeholder="Email address"
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
                 className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"

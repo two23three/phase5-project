@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TermsPopup from "../components/TermsPopup";
 import PrivacyPolicyPopup from "../components/PrivacyPolicyPopup";
-import videoBg from '../assets/videoBg.mp4';
+import backgroundImage from '../assets/loginbackground.png'; 
 
 function Register() {
   const [name, setName] = useState('');
@@ -99,15 +99,9 @@ function Register() {
   };
 
   return (
-    <div className="relative h-screen">
-      <video
-        src={videoBg}
-        autoPlay
-        loop
-        muted
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        // style={{ filter: 'blur(3px)' }}
-      />
+    <div  className="bg-cover bg-center h-screen w-screen flex items-center justify-center"
+    style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
       <div className="flex-1 flex justify-center items-center relative z-10 p-5">
         <div className="w-full max-w-xl mx-auto mt-5 mb-3 ">
           <div className="bg-gray-800 p-8 rounded-lg shadow-lg">

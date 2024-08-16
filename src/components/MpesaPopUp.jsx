@@ -79,11 +79,10 @@ const MpesaPopup = ({ goalName, onClose }) => {
 
       <div className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ${showSuccessMessage ? 'hidden' : ''}`}>
         <div className="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-          <h2 className="text-xl font-bold mb-4 text-gray-200">M-Pesa Payment</h2>
+          <h2 className="text-xl font-bold mb-4 font-customFont ">M-Pesa Payment</h2>
           {error && <p className="text-red-500 mb-2">{error}</p>}
           <form onSubmit={handleMpesaSubmit}>
             <div className="mb-4">
-              <label className="font-customFont block text-sm font-medium text-gray-200">Amount</label>
               <input
                 type="text"
                 value={amount}
