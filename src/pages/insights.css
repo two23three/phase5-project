@@ -13,7 +13,7 @@
 
 .expense-chart canvas {
     
-    max-width: fit-content;
+    max-width: 600px;
 }
 
 .chart-container {

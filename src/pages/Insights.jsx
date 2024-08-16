@@ -55,7 +55,7 @@ const Insights = () => {
 
                 const categoryRes = await fetch(`${API_URL}categories`);
                 const categoryData = await categoryRes.json();
-                setFetchedCategories(categoryData.categories);
+                setFetchedCategories(categoryData.categories.filter(category => category.user_id === userID));
                 setCategories(sortByCategories(userExpenses, categoryData.categories, from, to));
 
                 const userRes = await fetch(`${API_URL}users`);
@@ -177,7 +177,7 @@ const Insights = () => {
             <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} from={from} to={to} />
             <TotalExpense amount={totalAmount} />
-            <div style={{ background: 'white', padding: '4px' }}>
+            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen" style={{ background: 'white', padding: '4px' }}>
                 {expenses.length > 0 || incomes.length > 0 ? (
                     <>
                         <InsightsChart expenses={expenses} incomes={incomes} labels={labels} role={role} />
@@ -187,7 +187,6 @@ const Insights = () => {
                     <p style={{ color: 'black' }}>Add some expenses and expense categories...</p>
                 )}
             </div>
-            <Navbar />
         </div>
     );
 };
