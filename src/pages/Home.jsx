@@ -199,7 +199,7 @@ function Home() {
                 <h1 className="text-3xl md:text-5xl font-bold text-black">
                 {currencySymbol} {formatNumber(balance)}
                     </h1>
-                    <p className="text-black font-bold">left to spend</p>
+                    <p className="text-black font-bold">Left To Spend</p>
                 </div>
     
                 <div className="bg-[#242424] pt-7 rounded-t-lg">

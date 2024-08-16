@@ -11,7 +11,7 @@ function LandingPage() {
                 const response = await fetch(`${API_URL}users`);
                 const data = await response.json();
                 const users = data.users;
-                const roundedUsers = Math.round(users.length * 68) ;
+                const roundedUsers = Math.round(users.length ) ;
                 setTotalUsers(roundedUsers);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -50,7 +50,7 @@ function LandingPage() {
                             <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                 <span
                                     className="animate-counter"
-                                    style={{ '--num-start': 0, '--num-end': 300}}
+                                    style={{ '--num-start': 0, '--num-end': 5}}
                                 >  K +
                                 </span>
                             </dd>
@@ -58,11 +58,11 @@ function LandingPage() {
                         <div className="mx-auto flex max-w-xs flex-col gap-y-4">
                             <dt className="text-base leading-7 text-gray-600">Assets under holding</dt>
                             <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                                $<span
+                                Ksh ‎ <span
                                     className="animate-counter"
-                                    style={{ '--num-start': 0, '--num-end': 119 }}
+                                    style={{ '--num-start': 0, '--num-end': 200 }}
                                 >
-                                    <span className="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2"></span> trillion
+                                    <span className="flex tabular-nums text-slate-900 text-5xl font-extrabold mb-2"></span> Million
                                 </span>
                             </dd>
                         </div>

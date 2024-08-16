@@ -6,12 +6,14 @@ import backgroundImage from '../assets/loginbackground.png';
 function Login() {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [isSwitching, setIsSwitching] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false); // State to manage success message visibility
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    setIsSwitching(true)
     e.preventDefault();
 
     const isEmail = emailOrPhone.includes('@');
@@ -41,7 +43,8 @@ function Login() {
         const user = usersData.users.find(u => u.email === emailOrPhone || u.phone_number === emailOrPhone);
 
         if (user) {
-          login(loginData.access_token, user);  
+          login(loginData.access_token, user); 
+          setIsSwitching(false); 
           setShowSuccess(true); // Show the success message
           setTimeout(() => {
             navigate('/home'); // Redirect after 3 seconds
@@ -102,8 +105,10 @@ function Login() {
             </div>
             <button
               type="submit"
-              className="w-full py-3 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition duration-200"
-            >
+              className={`w-full py-3 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition duration-200  ${isSwitching ? 'cursor-not-allowed opacity-50' : ''}`}
+              disabled={isSwitching}
+              >
+                {isSwitching ? 'Attempting to ' : ''}
               Login
             </button>
           </form>
