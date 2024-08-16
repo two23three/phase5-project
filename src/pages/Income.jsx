@@ -105,6 +105,7 @@ const TransactionTable = ({ data }) => {
     const headers = ['Date', 'Description', 'Frequecy', 'Amount'];
 
     return (
+        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen l-screen">
         <div className='transaction-table'>
         <table>
             <thead>
@@ -124,6 +125,7 @@ const TransactionTable = ({ data }) => {
             </tbody>
         </table>
         </ div>
+        </div>
     );
 };
 
@@ -204,14 +206,14 @@ const Income = () => {
     }, [from, to]);
 
     return (
-        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen " style={{ backgroundColor: 'black', padding: '0px' }}>
-            <div className="expenses-page" style={{ backgroundColor: 'black' }}>
+        <div  style={{ backgroundColor: 'black', padding: '0px' }}>
+            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen l-screen" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
                 <TotalIncome amount={tranzactions.list.reduce((a, b) => a + b, 0)} role={role}/>
                 <IncomeChart list={tranzactions.list} labels={tranzactions.labels} role={role} />
                 <TransactionTable data={table.length > 0 ? table : transactions} />
-                <Navbar />
+
             </div>
         </div>
     );
