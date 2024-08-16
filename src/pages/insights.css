@@ -11,7 +11,7 @@
 }
 
 .expense-chart canvas {
-    min-width: 500px; /* Ensures the chart has a minimum width */
+    min-width: 300px; /* Ensures the chart has a minimum width */
     max-width: 600px;
 }
 

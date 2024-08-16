@@ -100,7 +100,9 @@ function Assets() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             setAssets(assets.filter(asset => asset.id !== id));
-        } catch (error) {
+            window.location.reload();
+        } 
+        catch (error) {
             console.log("Error deleting asset:", error);
         }
     };

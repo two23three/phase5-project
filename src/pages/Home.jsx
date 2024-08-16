@@ -18,14 +18,15 @@ function Home() {
     const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
-    const fornmatNumber = (value, currencySymbol) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currencySymbol,
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(value);
-    };
+    
+    // const fornmatNumber = (value, currencySymbol) => {
+    //     return new Intl.NumberFormat('en-US', {
+    //         style: 'currency',
+    //         currency: currencySymbol,
+    //         minimumFractionDigits: 2,
+    //         maximumFractionDigits: 2,
+    //     }).format(value);
+    // };
 
     const currencySymbols = {
         USD: "$",

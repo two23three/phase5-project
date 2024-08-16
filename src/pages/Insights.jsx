@@ -163,7 +163,7 @@ const Insights = () => {
     };
 
     return (
-        <div className="Insights  " style={{ backgroundColor: 'black' }}>
+        <div className="Insights w-screen h-screen " style={{ backgroundColor: 'black' }}>
             <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} from={from} to={to} />
             <TotalExpense amount={totalAmount} />
