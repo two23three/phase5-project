@@ -47,7 +47,12 @@ function Home() {
 
                 incomes.forEach((income) => {
                     if (income.user_id === userID) {
-                        totalIncome += parseFloat(income.amount);
+                        // Filtering data for the current month
+                        const incomeDate = new Date(income.date);
+                        const currentMonth = new Date().getMonth();
+                        if (incomeDate.getMonth() === currentMonth) {
+                            totalIncome += parseFloat(income.amount);
+                        }
                     }
                 });
 
@@ -70,7 +75,12 @@ function Home() {
 
                 expenses.forEach((expense) => {
                     if (expense.user_id === userID) {
-                        totalExpenses += parseFloat(expense.amount);
+                        // Filtering data for the current month
+                        const expenseDate = new Date(expense.date);
+                        const currentMonth = new Date().getMonth();
+                        if (expenseDate.getMonth() === currentMonth) {
+                            totalExpenses += parseFloat(expense.amount);
+                        }
                     }
                 });
 
