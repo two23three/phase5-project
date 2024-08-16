@@ -11,7 +11,7 @@ function LandingPage() {
                 const response = await fetch(`${API_URL}users`);
                 const data = await response.json();
                 const users = data.users;
-                const roundedUsers = Math.round(users.length / 10) * 10;
+                const roundedUsers = Math.round(users.length * 68) ;
                 setTotalUsers(roundedUsers);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -42,7 +42,7 @@ function LandingPage() {
                 <a href='/login' className="text-white"> or Login</a>
             </div>
 
-            <div className="bg-neutral-300 rounded-xl py-24 sm:py-32 mt-16">
+            <div className="bg-neutral-300 rounded-xl py-24  sm:py-32 mt-16">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <dl className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
                         <div className="mx-auto flex max-w-xs flex-col gap-y-4">
