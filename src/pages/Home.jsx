@@ -201,21 +201,21 @@ function Home() {
     }
     if (roleID === 1) {
         return (
-            <div className="flex flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
+            <div className="flex pb-20 flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-                <h1 className="text-3xl md:text-5xl font-bold text-black">Hello, {userName}</h1>
+                <h1 className="text-3xl md:text-5xl font-sans  text-black">Hello, {userName}</h1>
                 <div className="flex justify-center items-center ">
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
                 <div className="text-center">
-                <h1 className="text-3xl md:text-5xl font-bold text-black">
+                <h1 className="text-3xl md:text-5xl font-serif font-bold text-black">
                 {currencySymbol} {formatNumber(balance)}
                     </h1>
                     <p className="text-black font-bold">Left To Spend</p>
                 </div>
-    
+
                 <div className="bg-[#242424] pt-7 rounded-t-lg ">
                     <div className="gap-4 mx-[5%] my-auto">
                         <Link to="/income">
@@ -236,21 +236,21 @@ function Home() {
         );
     } else if (roleID === 2) {
         return (
-            <div className="flex flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
+            <div className="flex pb-20 flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
-                <h1 className="text-3xl md:text-5xl font-bold text-black">{userName}'s Business </h1>
+                <h1 className="text-3xl md:text-5xl font-sans font-bold text-black">{userName}'s Business </h1>
                 <div className="flex justify-center items-center ">
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
                 <div className="text-center">
-                <h1 className="text-3xl md:text-5xl font-bold text-black">
+                <h1 className="text-3xl font-serif md:text-5xl font-bold text-black">
                 {currencySymbol} {formatNumber(balance)}
                     </h1>
                     <p className="text-black font-bold">In Profits</p>
                 </div>
-    
+
                 <div className="bg-[#242424] pt-7 rounded-t-lg">
                     <div className="gap-4 mx-[5%] my-auto">
                         <Link to="/income">
@@ -270,8 +270,8 @@ function Home() {
             </div>
         );
     }
-    
-    
+
+
 }
 
 export default Home;

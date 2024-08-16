@@ -206,8 +206,8 @@ const Income = () => {
     }, [from, to]);
 
     return (
-        <div  style={{ backgroundColor: 'black', padding: '0px' }}>
-            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen l-screen" style={{ backgroundColor: 'black' }}>
+        <div  style={{ backgroundColor: '#D1D1D1', padding: '0px' }}>
+            <div className="flex  pb-20 flex-col bg-cover bg-[url()] h-screen w-screen l-screen" style={{ backgroundColor: '#D1D1D1' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
                 <TotalIncome amount={tranzactions.list.reduce((a, b) => a + b, 0)} role={role}/>

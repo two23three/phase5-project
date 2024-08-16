@@ -117,11 +117,11 @@ const CategoryCreationPopup = ({ onClose, onCreateCategory }) => {
                                 required
                             />
                         </div>
-                        <button className="w-full text-2xl font-customFont bg-red-600 text-white py-2 mb-2 rounded" type="submit">
+                        <button className="w-full text-2xl font-customFont bg-red-800 text-white py-2 mb-2 rounded-lg" type="submit">
                             Create Category
                         </button>
                         <button
-                        className="w-full text-2xl font-customFont bg-red-800 text-white py-2 rounded"
+                        className="w-full text-2xl font-customFont bg-blue-900 text-white py-2 rounded-lg"
                         onClick={handleUseExistingCategory} // Use the new handler for this button
                         type="button" // Specify type as button to prevent form submission
                     >
