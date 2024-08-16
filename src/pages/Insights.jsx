@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import './insights.css';
+import Navbar from "../components/Navbar";
 import { useAuth } from "../components/AuthProvider";
-import { FaLightbulb } from "react-icons/fa"
+import Header from "../components/Header";
 
 ChartJS.register(
     LineElement,
@@ -15,8 +16,6 @@ ChartJS.register(
     Legend,
     Filler,
 );
-
-
 
 const Insights = () => {
     const { getUserId } = useAuth();
@@ -57,21 +56,18 @@ const Insights = () => {
                 const categoryRes = await fetch(`${API_URL}categories`);
                 const categoryData = await categoryRes.json();
                 setFetchedCategories(categoryData.categories);
-                setCategories(sortByCategories(userExpenses, categoryData.categories));
+                setCategories(sortByCategories(userExpenses, categoryData.categories, from, to));
 
                 const userRes = await fetch(`${API_URL}users`);
                 const userData = await userRes.json();
                 const currentUser = userData.users.find(u => u.id === userID);
                 setRole(currentUser.role_id);
             } catch (error) {
+                console.log(error);
             }
         };
         fetchData();
-    }, [userID, API_URL]);
-
-    useEffect(() => {
-        filterByDate();
-    }, [from, to]);
+    }, [userID, API_URL, from, to]);
 
     const combineAmountByDate = (amounts, from, to) => {
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -79,17 +75,14 @@ const Insights = () => {
         const combined = [];
         let currentDate = null;
         let currentAmount = 0;
-    
         const dateLabels = [];
     
-        // Convert 'from' and 'to' to Date objects for comparison
         const fromDate = new Date(from);
         const toDate = new Date(to);
     
         for (const amount of amounts) {
             const amountDate = new Date(amount.date);
     
-            // Skip the current loop iteration if the date is outside the range
             if (amountDate < fromDate || amountDate > toDate) {
                 continue;
             }
@@ -106,46 +99,44 @@ const Insights = () => {
             }
         }
     
-        // Ensure the last date and amount are added to the arrays
         if (currentDate !== null) {
             combined.push(currentAmount);
             dateLabels.push(currentDate);
         }
     
         setLabels(dateLabels);
+        console.log(dateLabels);
         return combined;
     };
 
-    const filterByDate = () => {
-        const filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
-        const filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
-        
-        const combinedExpenses = combineAmountByDate(filteredExpenses, from, to);
-        const combinedIncomes = combineAmountByDate(filteredIncomes, from, to);
-        
-        setExpenses(combinedExpenses);
-        setIncomes(combinedIncomes);
-        setCategories(sortByCategories(filteredExpenses, fetchedCategories));
-        const totalFilteredAmount = combinedExpenses.reduce((sum, expense) => sum + expense, 0);
-        setTotalAmount(totalFilteredAmount);
-    };
-    
-
-    const sortByCategories = (data, categories) => {
+    const sortByCategories = (data, categories, from, to) => {
         const categoryTotals = {};
+        // Initialize category totals
         categories.forEach(category => {
             categoryTotals[category.name.toLowerCase()] = 0;
         });
-        for (let expense of data) {
+    
+        // Filter data by date range
+        const filteredData = data.filter(expense => {
+            const expenseDate = new Date(expense.date);
+            return expenseDate >= new Date(from) && expenseDate <= new Date(to);
+        });
+    
+        
+        for (let expense of filteredData) {
             const matchingCategory = categories.find(category => category.id === expense.category_id);
             if (matchingCategory) {
                 categoryTotals[matchingCategory.name.toLowerCase()] += parseInt(expense.amount);
             }
         }
+    
+        // Calculate total amount for percentage calculations
         const totalAmount = Object.values(categoryTotals).reduce((sum, amount) => sum + amount, 0);
-        const categoriesList = categories
+    
+        // Build the updated category list
+        const updatedCategoriesList = categories
             .map(category => {
-                const amount = categoryTotals[category.name.toLowerCase()];
+                const amount = categoryTotals[category.name.toLowerCase()] || 0;
                 const percentage = totalAmount ? Math.round((amount / totalAmount) * 100) : 0;
                 if (amount > 0) {
                     return {
@@ -159,15 +150,34 @@ const Insights = () => {
                 return null;
             })
             .filter(category => category !== null);
-        return categoriesList;
+    
+        return updatedCategoriesList;
     };
 
+    const filterByDate = () => {
+        const filteredExpenses = fullExpenses.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
+        const filteredIncomes = fullIncomes.filter(income => new Date(income.date) >= new Date(from) && new Date(income.date) <= new Date(to));
+        
+        const combinedExpenses = combineAmountByDate(filteredExpenses, from, to);
+        const combinedIncomes = combineAmountByDate(filteredIncomes, from, to);
+        
+        setExpenses(combinedExpenses);
+        setIncomes(combinedIncomes);
+        setCategories(sortByCategories(filteredExpenses, fetchedCategories, from, to));
+        const totalFilteredAmount = combinedExpenses.reduce((sum, expense) => sum + expense, 0);
+        setTotalAmount(totalFilteredAmount);
+    };
+
+    useEffect(() => {
+        filterByDate();
+    }, [from, to, fullExpenses, fullIncomes, fetchedCategories]);
+
     return (
-        <div className="Insights w-screen h-screen " style={{ backgroundColor: 'black' }}>
+        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen " style={{ backgroundColor: 'black' }}>
             <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} from={from} to={to} />
             <TotalExpense amount={totalAmount} />
-            <div style={{ background: 'white', padding: '40px' }}>
+            <div style={{ background: 'white', padding: '4px' }}>
                 {expenses.length > 0 || incomes.length > 0 ? (
                     <>
                         <InsightsChart expenses={expenses} incomes={incomes} labels={labels} role={role} />
@@ -177,6 +187,7 @@ const Insights = () => {
                     <p style={{ color: 'black' }}>Add some expenses and expense categories...</p>
                 )}
             </div>
+            <Navbar />
         </div>
     );
 };
@@ -189,12 +200,12 @@ const ExpenseCategoryList = ({ categories, userID, expenses }) => {
     }, [categories]);
 
     return (
-        <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '20px', margin: '0', borderRadius: '15px' }}>
+        <div style={{ backgroundColor: '#D1D1D1', padding: '0', margin: '0', borderRadius: '15px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <p style={{ color: '#423E3E', fontSize: '15px', marginRight: 'auto' }}>Expense categories</p>
                 <Dropdown categories={categories} setVisibleCategories={setVisibleCategories} userID={userID} expenses={expenses} />
             </div>
-            <div className="expense-category-list">
+            <div >
                 {visibleCategories.map((category, index) => (
                     <ExpenseCategoryItem key={index} category={category} />
                 ))}
@@ -219,41 +230,34 @@ const Dropdown = ({ categories, setVisibleCategories, userID, expenses }) => {
                 acc[categoryID].totalAmount += parseInt(expense.amount);
                 return acc;
             }, {});
-
-            const overallTotalAmount = Object.values(groupedExpenses).reduce((sum, group) => sum + group.totalAmount, 0);
-
-            const groupedCategories = Object.values(groupedExpenses).map(group => {
-                const percentage = overallTotalAmount ? Math.round((group.totalAmount / overallTotalAmount) * 100) : 0;
-                return {
-                    ...group.category,
-                    amount: group.totalAmount,
-                    percentage: percentage
-                };
-            });
-
-            setVisibleCategories(groupedCategories);
+            const updatedCategories = Object.keys(groupedExpenses)
+                .map(categoryID => {
+                    const { category, totalAmount } = groupedExpenses[categoryID];
+                    return {
+                        ...category,
+                        amount: totalAmount
+                    };
+                })
+                .filter(category => category.amount > 0);
+            setVisibleCategories(updatedCategories);
         } else {
-            const filteredExpenses = expenses.filter(expense => expense.category_id === parseInt(value));
-            const totalAmount = filteredExpenses.reduce((sum, expense) => sum + parseInt(expense.amount), 0);
-            const filteredCategories = filteredExpenses.map(expense => {
-                const category = categories.find(cat => cat.id === expense.category_id);
-                const percentage = totalAmount ? Math.round((parseInt(expense.amount) / totalAmount) * 100) : 0;
-                return {
-                    ...category,
-                    amount: parseInt(expense.amount),
-                    percentage: percentage
-                };
-            });
+            const filteredCategories = categories.filter(category => category.name === value);
             setVisibleCategories(filteredCategories);
         }
-    }, [value, categories, expenses, setVisibleCategories]);
+    }, [value, categories, setVisibleCategories]);
 
     return (
-        <div className="dropdown" style={{ backgroundColor: '#D1D1D1' }}>
-            <select className="dropdown-select" value={value} onChange={(e) => setValue(e.target.value)} style={{backgroundColor:'#D1D1D1'}}>
+        <div style={{ backgroundColor: '#D1D1D1' }}>
+            <select
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                style={{ backgroundColor: '#D1D1D1', color:'black' }}
+            >
                 <option value="All">All</option>
-                {categories.map(category => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
+                {categories.map((category, index) => (
+                    <option key={index} value={category.name}>
+                        {category.name}
+                    </option>
                 ))}
             </select>
         </div>
@@ -261,18 +265,16 @@ const Dropdown = ({ categories, setVisibleCategories, userID, expenses }) => {
 };
 
 const ExpenseCategoryItem = ({ category }) => {
-    const { name, amount, percentage } = category;
     return (
-        <div className='expense-category-item' style={{display:'flex', justifyContent:'space-between'}}>
-            <p className='category-name'>{name}</p>
-            <p className='category-amount'>{amount}</p>
-            <p className='category-percentage'>{percentage}%</p>
+        <div className="expense-category-item" style={{ display:'flex', justifyContent:'space-between' }}>
+            <p>{category.name}</p>
+            <p>{category.amount}</p>
+            <p>{category.percentage}%</p>
         </div>
     );
 };
 
-
-const DateFilter = ({ setTo, setFrom, from, to }) => {
+const DateFilter = ({ setFrom, setTo, from, to }) => {
     return (
         <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
@@ -299,70 +301,6 @@ const DateFilter = ({ setTo, setFrom, from, to }) => {
     );
 };
 
-const InsightsChart = ({ expenses, incomes, labels, role }) => {
-    
-
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Expenses',
-                data: expenses,
-                fill: true,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
-                tension: 0.4,
-            },
-            {
-                label: role === 1 ? 'Income over Time' : 'Revenue over Time',
-                data: incomes,
-                fill: true,
-                backgroundColor: 'rgba(0, 128, 0, 0.2)',
-                borderColor: 'rgba(0, 128, 0, 1)',
-                borderWidth: 1,
-                tension: 0.4,
-            }
-        ]
-    };
-
-    const options = {
-        scales: {
-            x: {
-                type: 'category',
-                display: true,
-            },
-            y: {
-                beginAtZero: true
-            }
-        },
-        maintainAspectRatio: false,
-    };
-
-    return (
-        <div className={expenses.length > 10 ? 'chart-container' : null}>
-            <div className={expenses.length > 10 ? 'chart-container' : 'expense-chart'}>
-                <Line data={data} options={options} />
-            </div>
-        </div>
-    );
-};
-
-
-const Header = () => {
-    return (
-        <nav style={{ display: 'flex', justifycontent: 'space-between', margin: '10px', backgroundColor: 'black' }} className="navbar">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifycontent='space-between'>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                <path d="M480-40q-112 0-206-51T120-227v107H40v-240h240v80h-99q48 72 126.5 116T480-120q75 0 140.5-28.5t114-77q48.5-48.5 77-114T840-480h80q0 91-34.5 171T791-169q-60 60-140 94.5T480-40Zm-36-160v-52q-47-11-76.5-40.5T324-370l66-26q12 41 37.5 61.5T486-314q33 0 56.5-15.5T566-378q0-29-24.5-47T454-466q-59-21-86.5-50T340-592q0-41 28.5-74.5T446-710v-50h70v50q36 3 65.5 29t40.5 61l-64 26q-8-23-26-38.5T482-648q-35 0-53.5 15T410-592q0 26 23 41t83 35q72 26 96 61t24 77q0 29-10 51t-26.5 37.5Q583-274 561-264.5T514-250v50h-70ZM40-480q0-91 34.5-171T169-791q60-60 140-94.5T480-920q112 0 206 51t154 136v-107h80v240H680v-80h99q-48-72-126.5-116T480-840q-75 0-140.5 28.5t-114 77q-48.5 48.5-77 114T120-480H40Z" />
-            </svg>
-        </nav>
-    );
-};
-
-
 
 const TotalExpense = ({ amount }) => {
     return (
@@ -373,6 +311,60 @@ const TotalExpense = ({ amount }) => {
     );
 };
 
+const InsightsChart = ({ expenses, incomes, labels, role }) => {
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Expenses',
+                data: expenses,
+                borderColor: 'red',
+                tension: 0.5,
+                fill: true,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                tension: 0.4,
+            },
+            {
+                label: 'Incomes',
+                data: incomes,
+                borderColor: 'green',
+                tension: 0.5,
+                fill: true,
+                backgroundColor: 'rgba(0, 128, 0, 0.2)',
+                borderColor: 'rgba(0, 128, 0, 1)',
+                borderWidth: 1,
+                tension: 0.4,
+            }
+        ]
+    };
 
+    const options = {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: role === 1 ? 'Personal Income and Expenses' : 'Business revenue and Expenses'
+            }
+        }
+    };
+
+    return (
+        <div className={expenses.length > 10 ? 'chart-container' : null}>
+            <div className={expenses.length > 10 ? 'chart-container' : 'expense-chart'}>
+                <Line data={data} options={options} />
+            </div>
+        </div>
+    );
+};
 
 export default Insights;
