@@ -202,7 +202,7 @@ const Income = () => {
     }, [from, to]);
 
     return (
-        <div className="p-4" style={{ backgroundColor: 'black', padding: '0px' }}>
+        <div className="ww-screen l-screen bg-white rounded-t-xl	 overflow-hidden shadow-lg" style={{ backgroundColor: 'black', padding: '0px' }}>
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />

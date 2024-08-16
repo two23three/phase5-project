@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './components/AuthProvider';
 import Register from './pages/Register';
 import AddIncomeTransaction from './components/AddIncomeTransaction';
@@ -31,8 +31,7 @@ function App() {
   const handleAddTransactionClick = () => {
     console.log('Add Transaction button clicked');
     setShowTransactionTypePopup(true);
-};
-
+  };
 
   const handleChooseTransactionType = (type) => {
     setShowTransactionTypePopup(false);
@@ -48,57 +47,86 @@ function App() {
     window.location.href = '/add_expense_transaction';
   };
 
-//
   return (
     <AuthProvider>
       <Router>
-        <div>
-       <StatusBar/>
-          <Routes>
-            <Route path="/home" element={<PrivateRoute element={Home} />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/add_income_transaction" element={<PrivateRoute element={AddIncomeTransaction} />} />
-            <Route path="/add_expense_transaction" element ={<PrivateRoute element={AddExpenseTransaction} />} />
-            <Route path="/assets" element={<PrivateRoute element={Assets} />} />
-            <Route path="/budget" element={<PrivateRoute element={Budget} />} />
-            <Route path="/expenses" element={<PrivateRoute element={Expenses} />} />
-            <Route path="/income" element={<PrivateRoute element={Income} />} />
-            <Route path="/insights" element={<PrivateRoute element={Insights} />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/more" element={<PrivateRoute element={More} />} />
-            <Route path="*" element={<ErrorPage />} />
-            <Route path='/' element={<LandingPage/>} />
-          </Routes>
-
-          {showTransactionTypePopup && (
-            <TransactionTypePopup
-              onClose={() => setShowTransactionTypePopup(false)}
-              onChoose={handleChooseTransactionType}
-            />
-          )}
-
-          {showAddIncome && (
-            <AddIncomeTransaction
-              onCancel={() => setShowAddIncome(false)}
-            />
-          )}
-
-          {showCategoryPopup && (
-            <CategoryCreationPopup
-              onClose={() => setShowCategoryPopup(false)}
-              onCreateCategory={handleCreateCategory}
-            />
-          )}
-
-          {showAddExpense && (
-            <AddExpenseTransaction
-              onCancel={() => setShowAddExpense(false)}
-            />
-          )}
-          <Navbar onAddTransactionClick={handleAddTransactionClick} />
-        </div>
+        <AppContent
+          showTransactionTypePopup={showTransactionTypePopup}
+          setShowTransactionTypePopup={setShowTransactionTypePopup}
+          handleChooseTransactionType={handleChooseTransactionType}
+          showAddIncome={showAddIncome}
+          setShowAddIncome={setShowAddIncome}
+          showAddExpense={showAddExpense}
+          setShowAddExpense={setShowAddExpense}
+          showCategoryPopup={showCategoryPopup}
+          setShowCategoryPopup={setShowCategoryPopup}
+          handleCreateCategory={handleCreateCategory}
+          handleAddTransactionClick={handleAddTransactionClick}
+        />
       </Router>
     </AuthProvider>
+  );
+}
+
+function AppContent({
+  showTransactionTypePopup,
+  setShowTransactionTypePopup,
+  handleChooseTransactionType,
+  showAddIncome,
+  setShowAddIncome,
+  showAddExpense,
+  setShowAddExpense,
+  showCategoryPopup,
+  setShowCategoryPopup,
+  handleCreateCategory,
+  handleAddTransactionClick,
+}) {
+  const location = useLocation();
+  const isNavbarVisible = !['/login', '/', '/register'].includes(location.pathname);
+
+  return (
+    <div>
+      <StatusBar />
+      <Routes>
+        <Route path="/home" element={<PrivateRoute element={Home} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/add_income_transaction" element={<PrivateRoute element={AddIncomeTransaction} />} />
+        <Route path="/add_expense_transaction" element={<PrivateRoute element={AddExpenseTransaction} />} />
+        <Route path="/assets" element={<PrivateRoute element={Assets} />} />
+        <Route path="/budget" element={<PrivateRoute element={Budget} />} />
+        <Route path="/expenses" element={<PrivateRoute element={Expenses} />} />
+        <Route path="/income" element={<PrivateRoute element={Income} />} />
+        <Route path="/insights" element={<PrivateRoute element={Insights} />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/more" element={<PrivateRoute element={More} />} />
+        <Route path="*" element={<ErrorPage />} />
+        <Route path="/" element={<LandingPage />} />
+      </Routes>
+
+      {showTransactionTypePopup && (
+        <TransactionTypePopup
+          onClose={() => setShowTransactionTypePopup(false)}
+          onChoose={handleChooseTransactionType}
+        />
+      )}
+
+      {showAddIncome && (
+        <AddIncomeTransaction onCancel={() => setShowAddIncome(false)} />
+      )}
+
+      {showCategoryPopup && (
+        <CategoryCreationPopup
+          onClose={() => setShowCategoryPopup(false)}
+          onCreateCategory={handleCreateCategory}
+        />
+      )}
+
+      {showAddExpense && (
+        <AddExpenseTransaction onCancel={() => setShowAddExpense(false)} />
+      )}
+
+      {isNavbarVisible && <Navbar onAddTransactionClick={handleAddTransactionClick} />}
+    </div>
   );
 }
 
