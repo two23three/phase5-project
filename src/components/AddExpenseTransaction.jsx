@@ -16,6 +16,10 @@ const AddExpenseTransaction = ({ onCancel }) => {
 
     const navigate = useNavigate();
 
+    const handleCancelExpense = () => {
+        navigate('/home');
+    };
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -78,7 +82,7 @@ const AddExpenseTransaction = ({ onCancel }) => {
     };
 
     return (
-        <div className="flex justify-between items-center p-2 w-screen  bg-gray-900">
+        <div className="flex justify-between items-center p-2 w-screen  bg-gray-300">
             <div className="max-w-md mx-auto p-8 rounded-lg" style={{ backgroundColor: '#242424' }}>
                 {showSuccessMessage && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
@@ -148,7 +152,7 @@ const AddExpenseTransaction = ({ onCancel }) => {
                     </button>
                     <button
                         className="w-full bg-gray-500 text-2xl text-white py-2 rounded mt-2"
-                        onClick={onCancel}
+                        onClick={handleCancelExpense}
                         type="button"
                     >
                         Cancel

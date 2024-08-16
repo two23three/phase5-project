@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from "../components/AuthProvider";
+import { useNavigate } from 'react-router-dom';
 
 const CategoryCreationPopup = ({ onClose, onCreateCategory }) => {
+
+    const navigate = useNavigate()
+
     const [categoryName, setCategoryName] = useState('');
     const [limit, setLimit] = useState('');
     const [description, setDescription] = useState('');
@@ -10,6 +14,11 @@ const CategoryCreationPopup = ({ onClose, onCreateCategory }) => {
 
     const { getUserId } = useAuth();
     const userID = getUserId();
+
+    const handleUseExistingCategory = () => {
+        onClose();
+        navigate('/add_expense_transaction');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -108,8 +117,15 @@ const CategoryCreationPopup = ({ onClose, onCreateCategory }) => {
                                 required
                             />
                         </div>
-                        <button className="w-full text-2xl font-customFont bg-red-800 text-white py-2 rounded" type="submit">
+                        <button className="w-full text-2xl font-customFont bg-red-600 text-white py-2 mb-2 rounded" type="submit">
                             Create Category
+                        </button>
+                        <button
+                        className="w-full text-2xl font-customFont bg-red-800 text-white py-2 rounded"
+                        onClick={handleUseExistingCategory} // Use the new handler for this button
+                        type="button" // Specify type as button to prevent form submission
+                    >
+                        Use Existing Category
                         </button>
                         <button className="mt-4 text-2xl font-customFont underline text-gray-900" onClick={onClose} type="button">
                             Cancel
