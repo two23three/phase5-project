@@ -30,12 +30,6 @@
     }
   ],
   "env": {
-    "REACT_APP_API_URL": "https://barnes.onrender.com" 
-  },
-  "functions": {
-    "api/**/*.js": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
+    "REACT_APP_API_URL": "https://barnes.onrender.com"
   }
 }
