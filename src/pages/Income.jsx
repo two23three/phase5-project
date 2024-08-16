@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { useAuth } from "../components/AuthProvider";
 import './insights.css';
@@ -17,7 +18,7 @@ ChartJS.register(
 
 const DateFilter = ({ from, to, setFrom, setTo }) => {
     return (
-        <div className="expense-filter">
+        <div className="income-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
                 <label>From</label>
                 <input
@@ -45,7 +46,7 @@ const IncomeChart = ({ list, labels, role }) => {
         labels: labels,
         datasets: [
             {
-                label: role === 1 ? 'Income Over Time' : 'Revenue over time',
+                label: role === 1? 'Income Over Time': 'Revenue over time',
                 data: list,
                 fill: true,
                 backgroundColor: 'rgba(0, 128, 0, 0.2)',
@@ -70,8 +71,10 @@ const IncomeChart = ({ list, labels, role }) => {
     };
 
     return (
-        <div className={list.length > 10 ? 'chart-container' : 'expense-chart'}>
-            <Line data={data} options={options} />
+        <div className={list.length > 10 ? 'chart-container' : null}>
+                       <div className={list.length>10? 'chart-container': 'expense-chart'} style={{borderBottomRightRadius:'0px', borderBottomLeftRadius:'0px', borderTopLeftRadius:'10px', borderTopRightRadius:'10px', marginBottom:'0px'}}>
+                <Line data={data} options={options} />
+            </div>
         </div>
     );
 };
@@ -79,7 +82,7 @@ const IncomeChart = ({ list, labels, role }) => {
 const TotalIncome = ({ amount, role }) => {
     return (
         <div className="total-expense">
-            {role === 1 ? <h2 className="text-2xl font-semibold">Total Income</h2> : <h2>Total Revenue</h2>}
+            {role === 1? <h2 className="text-2xl font-semibold">Total Income</h2>:<h2>Total Revenue</h2>}
             <p>Ksh {amount}</p>
         </div>
     );
@@ -87,8 +90,8 @@ const TotalIncome = ({ amount, role }) => {
 
 const Header = () => {
     return (
-        <nav className="navbar">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6" width='20px'>
+        <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', backgroundColor: 'black' }} className="navbar">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifyContent='space-between'>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
             </svg>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
@@ -99,64 +102,68 @@ const Header = () => {
 };
 
 const TransactionTable = ({ data }) => {
-    const headers = ['Date', 'Description', 'Frequency', 'Amount'];
+    const headers = ['Date', 'Description', 'Frequecy', 'Amount'];
 
     return (
-        <div className="transaction-table">
-            <table>
-                <thead>
-                    <tr>
-                        {headers.map((header, index) => <th key={index}>{header}</th>)}
+        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen l-screen">
+        <div className='transaction-table'>
+        <table>
+            <thead>
+                <tr>
+                    {headers.map((header, index) => <th key={index}>{header}</th>)}
+                </tr>
+            </thead>
+            <tbody>
+                {data.map((transaction, index) => (
+                    <tr key={index}>
+                        <td>{transaction.date}</td>
+                        <td>{transaction.description}</td>
+                        <td>{transaction.is_recurring === true? 'recurring':'not recurring'}</td>
+                        <td>{transaction.amount}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {data.map((transaction, index) => (
-                        <tr key={index}>
-                            <td>{transaction.date}</td>
-                            <td>{transaction.description}</td>
-                            <td>{transaction.is_recurring ? 'Recurring' : 'Not Recurring'}</td>
-                            <td>{transaction.amount}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                ))}
+            </tbody>
+        </table>
+        </ div>
         </div>
     );
 };
 
+
 const Income = () => {
-    const { getUserId } = useAuth();
+
+    const {getUserId} = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
 
     const [transactions, setTransactions] = useState([]);
     const [tranzactions, setTranzactions] = useState({ list: [], labels: [] });
     const [table, setTable] = useState([]);
-    const [role, setRole] = useState('role');
+    const [role, setRole]=useState('role');
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
 
     useEffect(() => {
         // Fetch transactions from the API
-        fetch(`${API_URL}/incomes`)
+        fetch('https://barnes.onrender.com/incomes')
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
-                let expenses = data.incomes.filter(income => income.user_id === userID);
+                let expenses = data.incomes.filter(income =>  income.user_id === userID);
                 const combinedData = combineAmountByDate(expenses);
                 setTranzactions(combinedData);
                 setTransactions(expenses);
             })
             .catch(error => console.error('Error fetching data:', error));
 
-        fetch(`${API_URL}/users`)
+            fetch('https://barnes.onrender.com/users')
             .then(response => response.json())
             .then(data => {
                 let user = data.users.find(u => u.id === userID);
-                setRole(user.role_id);
+                setRole(user.role_id)
             })
             .catch(error => console.log(error));
-    }, [userID]); // Dependency on userID
+    }, []); // Empty dependency array to fetch only on mount
 
     const combineAmountByDate = (amounts) => {
         amounts.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -176,25 +183,38 @@ const Income = () => {
                 currentAmount = parseInt(amount.amount);
             }
         }
-        combined.list.push(currentAmount);
-        combined.labels.push(currentDate);
+        if (currentDate !== null) {
+            combined.list.push(currentAmount);
+            combined.labels.push(currentDate);
+        }
+
+        console.log(combined);
         return combined;
     };
 
-    const filteredData = transactions.filter(transaction => {
-        const date = new Date(transaction.date);
-        const fromDate = new Date(from);
-        const toDate = new Date(to);
-        return (!from || date >= fromDate) && (!to || date <= toDate);
-    });
+    const filterByDate = () => {
+        if (from && to) {
+            const filteredExpenses = transactions.filter(expense => new Date(expense.date) >= new Date(from) && new Date(expense.date) <= new Date(to));
+            const combinedData = combineAmountByDate(filteredExpenses);
+            setTranzactions(combinedData);
+            setTable(filteredExpenses);
+        }
+    };
+
+    useEffect(() => {
+        filterByDate();
+    }, [from, to]);
 
     return (
-        <div className="insights-container">
-            <Header />
-            <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
-            <IncomeChart list={tranzactions.list} labels={tranzactions.labels} role={role} />
-            <TotalIncome amount={filteredData.reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0)} role={role} />
-            <TransactionTable data={filteredData} />
+        <div  style={{ backgroundColor: 'black', padding: '0px' }}>
+            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen l-screen" style={{ backgroundColor: 'black' }}>
+                <Header />
+                <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
+                <TotalIncome amount={tranzactions.list.reduce((a, b) => a + b, 0)} role={role}/>
+                <IncomeChart list={tranzactions.list} labels={tranzactions.labels} role={role} />
+                <TransactionTable data={table.length > 0 ? table : transactions} />
+
+            </div>
         </div>
     );
 };
