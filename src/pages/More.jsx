@@ -140,7 +140,7 @@ function More({ emailOrPhone }) {
               <span className="ml-2">Tips on Managing Finances</span>
             </button>
           </div>
-          
+
           <div className="text-gray-400 mt-4 mb-2  text-left text-xs ">ACCOUNT</div>
           <div className="space-y-2">
             <SwitchAccount />
@@ -160,11 +160,11 @@ function More({ emailOrPhone }) {
             <Logout onLogout={() => console.log("Logging out...")} />
             <DeleteAccount onDelete={handleDeleteAccount} />
           </div>
-          <div className="mt-4 text-center">
-            <button className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200">
-              Save funds via <span className="ml-2">M-Pesa</span>
+          <a href="/budget" >
+            <button href="/budget" className="w-full py-2 px-4 rounded-full bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200">
+              Save funds via <span className="ml-2">M Pesa</span>
             </button>
-          </div>
+          </a>
         </div>
         <AboutUsPopup
           isOpen={isAboutUsPopupOpen}
