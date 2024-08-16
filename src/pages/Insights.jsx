@@ -122,7 +122,7 @@ const Insights = () => {
             return expenseDate >= new Date(from) && expenseDate <= new Date(to);
         });
     
-        // Update category totals based on filtered data
+        
         for (let expense of filteredData) {
             const matchingCategory = categories.find(category => category.id === expense.category_id);
             if (matchingCategory) {

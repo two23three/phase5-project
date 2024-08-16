@@ -5,21 +5,21 @@ const AboutUsPopup = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg text-black w-11/12 max-w-lg">
-        <h2 className="text-2xl font-bold mb-4">About Us</h2>
+      <div className="bg-white p-6 rounded shadow-lg text-black w-11/12 max-w-lg h-5/6 overflow-y-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">About Us</h2>
         
-        <h3 className="text-xl font-semibold mt-4">Who we are</h3>
+        <h3 className="text-2xl font-semibold mt-4">Who we are</h3>
         <p className="mb-4">
           We are a dedicated team focused on providing innovative financial solutions to individuals and small business owners. Our aim is to simplify the complexity of managing finances and offer tools that empower our users to achieve their financial goals.
         </p>
 
-        <h3 className="text-xl font-semibold mt-4">Why trust us</h3>
+        <h3 className="text-2xl font-semibold mt-4">Why trust us</h3>
         <p className="mb-4">
           Our platform is built on a foundation of security and transparency. We prioritize the protection of your financial data with top-notch encryption and follow strict compliance regulations. Our user-friendly interface and robust features have been designed with your needs in mind, ensuring that you can trust us with your financial management.
         </p>
 
-        <h3 className="text-xl font-semibold mt-4">Our mission</h3>
-        <p>
+        <h3 className="text-2xl font-semibold mt-4">Our mission</h3>
+        <p className="text-lg">
           Our mission is to create a comprehensive budgeting solution that brings clarity and control over personal and business finances. We strive to offer a seamless experience that helps users track income, manage expenses, set savings goals, and navigate debt, all while providing valuable insights into their financial health.
         </p>
 

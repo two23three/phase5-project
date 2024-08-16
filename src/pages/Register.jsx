@@ -16,6 +16,7 @@ function Register() {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [role, setRole] = useState('Personal'); // Default role
   const [referralCode, setReferralCode] = useState('');
+  const [isSwitching, setIsSwitching] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false); // State to manage success message visibility
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ function Register() {
   };
 
   const handleSubmit = async (e) => {
+    setIsSwitching(true)
     e.preventDefault();
 
     // Check if passwords match
@@ -78,6 +80,7 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
+        setIsSwitching(false)
         setShowSuccess(true); // Show the success message
         setTimeout(() => {
           navigate('/login'); // Redirect after 3 seconds
@@ -103,7 +106,7 @@ function Register() {
         loop
         muted
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ filter: 'blur(3px)' }}
+        // style={{ filter: 'blur(3px)' }}
       />
       <div className="flex-1 flex justify-center items-center relative z-10 p-5">
         <div className="w-full max-w-xl mx-auto mt-5 mb-3 ">
@@ -228,8 +231,11 @@ function Register() {
               </div>
               <button
                 type="submit"
-                className="w-full p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 mt-6"
+                className={`w-full p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 mt-6  ${isSwitching ? 'cursor-not-allowed opacity-50' : ''}`}
+                disabled={isSwitching}
+
               >
+                {isSwitching ? 'Attempting to ' : ''}
                 Register
               </button>
             </form>
@@ -263,8 +269,8 @@ function Register() {
         </div>
       </div>
 
-      {showTerms && <TermsPopup onClose={closeTermsPopup} />}
-      {showPrivacy && <PrivacyPolicyPopup onClose={closePrivacyPopup} />}
+      {showTerms && <TermsPopup show={setShowTerms} onClose={closeTermsPopup} />}
+      {showPrivacy && <PrivacyPolicyPopup show={setShowPrivacy}onClose={closePrivacyPopup} />}
     </div>
   );
 }

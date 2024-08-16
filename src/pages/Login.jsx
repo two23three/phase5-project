@@ -9,18 +9,20 @@ function Login() {
   const [isSwitching, setIsSwitching] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false); // State to manage success message visibility
+  const [errorMessage, setErrorMessage] = useState(''); // State to manage error messages
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    setIsSwitching(true)
+    setIsSwitching(true);
     e.preventDefault();
 
     const isEmail = emailOrPhone.includes('@');
     const isPhoneNumber = /^(2547\d{8}|07\d{8})$/.test(emailOrPhone);
 
     if (!isEmail && !isPhoneNumber) {
-      alert('Please enter a valid email or phone number');
+      setErrorMessage('Please enter a valid email or phone number');
+      setIsSwitching(false);
       return;
     }
 
@@ -50,13 +52,17 @@ function Login() {
             navigate('/home'); // Redirect after 3 seconds
           }, 3000);
         } else {
-          console.log('User not found');
+          setErrorMessage('User not found');
+          setIsSwitching(false);
         }
       } else {
-        alert(loginData.msg);
+        setErrorMessage(loginData.msg || 'Invalid credentials');
+        setIsSwitching(false);
       }
     } catch (error) {
       console.error('Login error:', error);
+      setErrorMessage('An error occurred. Please try again.');
+      setIsSwitching(false);
     }
   };
 
@@ -105,12 +111,13 @@ function Login() {
             </div>
             <button
               type="submit"
-              className={`w-full py-3 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition duration-200  ${isSwitching ? 'cursor-not-allowed opacity-50' : ''}`}
+              className={`w-full py-3 rounded font-bold transition duration-200 ${isSwitching ? 'cursor-not-allowed opacity-50' : ''} ${errorMessage ? 'bg-red-600 text-white' : 'bg-red-600 text-white hover:bg-red-700'}`}
               disabled={isSwitching}
-              >
-                {isSwitching ? 'Attempting to ' : ''}
-              Login
+            >
+              {isSwitching ? 'Attempting to ' : ''}
+              {errorMessage ? 'Login' : 'Login'}
             </button>
+            {errorMessage && <div className="text-red-500 text-center mt-2">{errorMessage}</div>}
           </form>
           <div className="text-center mt-4">
             <a href="/register" className="text-white font-bold hover:underline">Sign Up</a>
@@ -135,7 +142,7 @@ function Login() {
             </div>
             <h3 className="text-2xl text-gray-500 font-semibold mb-2">Successful Login!</h3>
             <p className="text-sm text-gray-500">
-            Redirecting you now...
+              Redirecting you now...
             </p>
           </div>
         </div>

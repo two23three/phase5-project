@@ -14,18 +14,20 @@ function Home() {
     const [assets, setAssets] = useState(0);
     const [currency, setCurrency] = useState("Ksh");
     const [isLoading, setIsLoading] = useState(true);
+    const [userName, setUserName] = useState("");
 
     const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
-    const fornmatNumber = (value, currencySymbol) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currencySymbol,
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(value);
-    };
+
+    // const fornmatNumber = (value, currencySymbol) => {
+    //     return new Intl.NumberFormat('en-US', {
+    //         style: 'currency',
+    //         currency: currencySymbol,
+    //         minimumFractionDigits: 2,
+    //         maximumFractionDigits: 2,
+    //     }).format(value);
+    // };
 
     const currencySymbols = {
         USD: "$",
@@ -45,7 +47,12 @@ function Home() {
 
                 incomes.forEach((income) => {
                     if (income.user_id === userID) {
-                        totalIncome += parseFloat(income.amount);
+                        // Filtering data for the current month
+                        const incomeDate = new Date(income.date);
+                        const currentMonth = new Date().getMonth();
+                        if (incomeDate.getMonth() === currentMonth) {
+                            totalIncome += parseFloat(income.amount);
+                        }
                     }
                 });
 
@@ -68,7 +75,12 @@ function Home() {
 
                 expenses.forEach((expense) => {
                     if (expense.user_id === userID) {
-                        totalExpenses += parseFloat(expense.amount);
+                        // Filtering data for the current month
+                        const expenseDate = new Date(expense.date);
+                        const currentMonth = new Date().getMonth();
+                        if (expenseDate.getMonth() === currentMonth) {
+                            totalExpenses += parseFloat(expense.amount);
+                        }
                     }
                 });
 
@@ -136,6 +148,7 @@ function Home() {
                 const response = await fetch(`${API_URL}users/${userID}`);
                 const data = await response.json();
                 setRoleID(data.user.role_id);
+                setUserName(data.user.name);
             } catch (error) {
                 console.log("Error fetching user role:", error);
             }
@@ -188,10 +201,11 @@ function Home() {
     }
     if (roleID === 1) {
         return (
-            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
+            <div className="flex flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+                <h1 className="text-3xl md:text-5xl font-bold text-black">Hello, {userName}</h1>
                 <div className="flex justify-center items-center ">
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
@@ -202,7 +216,7 @@ function Home() {
                     <p className="text-black font-bold">Left To Spend</p>
                 </div>
     
-                <div className="bg-[#242424] pt-7 rounded-t-lg">
+                <div className="bg-[#242424] pt-7 rounded-t-lg ">
                     <div className="gap-4 mx-[5%] my-auto">
                         <Link to="/income">
                             <InfoCard title="Income" value={`${currencySymbol} ${formatNumber(income)}`} />
@@ -222,21 +236,17 @@ function Home() {
         );
     } else if (roleID === 2) {
         return (
-            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
+            <div className="flex flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+                <h1 className="text-3xl md:text-5xl font-bold text-black">{userName}'s Business </h1>
                 <div className="flex justify-center items-center ">
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
                 <div className="text-center">
-                    <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
-                        {currencySymbol}‎ ‎{/* Invisible characters for spacing */}
-                        <span
-                            className="animate-counter"
-                            style={{ '--num-start': 0, '--num-end': balance }}
-                        >
-                        </span>
+                <h1 className="text-3xl md:text-5xl font-bold text-black">
+                {currencySymbol} {formatNumber(balance)}
                     </h1>
                     <p className="text-black font-bold">In Profits</p>
                 </div>

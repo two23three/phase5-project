@@ -12,13 +12,13 @@
 }
 
 .expense-chart canvas {
-    /* Ensures the chart has a minimum width */
+    
     max-width: fit-content;
 }
 
 .chart-container {
-    width: 100%; /* Set the width of the container */
-    overflow-x: auto; /* Enable horizontal scrolling */
+    width: 100%; 
+    overflow-x: auto; 
     padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
@@ -26,8 +26,8 @@
 }
 
 .chart-inner {
-    width: auto; /* Adjust based on the chart's width */
-    min-width: 600px; /* Set a minimum width for the chart */
+    width: auto; 
+    min-width: 600px; 
 }
 
 .income-chart {

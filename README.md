@@ -1,10 +1,8 @@
-# Barnes
+# Barnes Budgeting Application
+![alt text](Barnes.jpeg)
 
-<p align="center">
-  <img src="client/public/golden-swing-1964101_1280.png" alt="Barnes" width="300" height="200">
-</p>
 
-## Table of Contents)
+## Table of Contents
 - [Problem Statement](#problem-statement)
 - [Key Features](#key-features)
 - [Launching](#launching)
@@ -30,6 +28,8 @@ Can manage their debts, savings, assets, incomes and expenses as well as gain re
 Can manage revenues, assets and expenses.
 
 Barnes App is a user-friendly budget tracker application that provides separate dashboards for personal and business finances, allowing users to monitor and manage income, expenses, assets, savings goals, and debts.
+
+![alt text](image-2.png) ‎ ‎ ‎ ‎ ‎ ‎ ‎ ![alt text](image-1.png)
 
 ## Problem Statement
 

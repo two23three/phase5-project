@@ -23,45 +23,47 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
       <h1 className="text-xl font-bold mb-4 text-left">Savings Goals</h1>
       <div className="space-y-4">
         {goals.map((g, index) => (
-          <div key={index} className="flex justify-between items-center relative">
-            <div className="w-full">
-              <ProgressBar
-                label={g.name}
-                current_amount={parseInt(g.current_amount)}
-                target_amount={parseInt(g.target_amount)}
-                type="goal"
-              />
+          <div key={index} className="relative">
+            <div className="flex justify-between items-center">
+              <div className="w-full">
+                <ProgressBar
+                  label={g.name}
+                  current_amount={parseInt(g.current_amount)}
+                  target_amount={parseInt(g.target_amount)}
+                  type="goal"
+                />
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => toggleDropdown(index)}
+                  className="bg-gray-300 text-black p-2 rounded-lg self-end"
+                >
+                  <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
+                </button>
+              </div>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => toggleDropdown(index)}
-                className="bg-gray-300 text-black p-2 rounded-lg self-end"
-              >
-                <FontAwesomeIcon icon={faChevronDown} className="ml-2" />
-              </button>
-              {dropdownOpen === index && (
-                <div className="flex flex-col space-y-2 mt-2">
-                  <button
-                    onClick={() => handleUpdateAmount(index, 'goal', g.name)}
-                    className="bg-blue-900 block w-full text-left px-4 py-2 rounded-3xl text-sm text-gray-100 hover:bg-blue-700"
-                  >
-                    Update Amount
-                  </button>
-                  <button
-                    onClick={() => handleDelete(index, 'goal')}
-                    className="bg-red-900 block w-full text-left px-4 py-2 rounded-3xl text-sm text-gray-100 hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => openMpesaModal(g.name)}
-                    className="bg-lime-700 block w-full text-left px-4 py-2 rounded-3xl text-sm text-gray-100 hover:bg-lime-600"
-                  >
-                    Add funds via M-Pesa
-                  </button>
-                </div>
-              )}
-            </div>
+            {dropdownOpen === index && (
+              <div className="flex space-y-2 mt-2">
+                <button
+                  onClick={() => handleUpdateAmount(index, 'goal', g.name)}
+                  className="bg-blue-900 mr-4 text-semibold block w-full px-3 py-1 rounded-3xl text-xl font-semibold text-center text-gray-100 hover:bg-blue-700"
+                >
+                  Update Amount
+                </button>
+                <button
+                  onClick={() => handleDelete(index, 'goal')}
+                  className="bg-red-900 mr-4 text-semibold block w-full text-xl font-semibold text-center px-4 py-2 rounded-3xl  text-gray-100 hover:bg-red-700"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => openMpesaModal(g.name)}
+                  className="bg-white text-green-700 font-bold hover:bg-neutral-400 transition duration-200 block w-full text-xl text-centerpx-4 py-3 px-2 rounded-3xl "
+                >
+                  Save with ‎ ‎ ‎ M-Pesa
+                </button>
+              </div>
+            )}
           </div>
         ))}
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
@@ -71,14 +73,14 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
               onClick={() => setShowGoalModal(true)}
             >
               <span className="bg-gray-300 mr-2 rounded-full p-1">
-              <FontAwesomeIcon icon={faPlus} />
-                </span>
-                <span className="text-white">Set New Goal</span>
+                <FontAwesomeIcon icon={faPlus} />
+              </span>
+              <span className="text-white">Set New Goal</span>
             </button>
           </div>
         </div>
       </div>
-
+  
       {showMpesaModal && (
         <MpesaPopup
           goalName={selectedGoalName}
@@ -87,6 +89,7 @@ const SavingsGoals = ({ goals, handleUpdateAmount, handleDelete, setShowGoalModa
       )}
     </div>
   );
+  
 };
 
 export default SavingsGoals;
