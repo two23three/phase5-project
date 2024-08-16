@@ -52,7 +52,6 @@ const IncomeChart = ({ list, labels, role }) => {
                 backgroundColor: 'rgba(0, 128, 0, 0.2)',
                 borderColor: 'rgba(0, 128, 0, 1)',
                 borderWidth: 1,
-                tension: 0.4,
             },
         ]
     };
