@@ -196,13 +196,8 @@ function Home() {
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
                 <div className="text-center">
-                    <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
-                        {currencySymbol}‎ ‎{/* Invisible characters for spacing */}
-                        <span
-                            className="animate-counter"
-                            style={{ '--num-start': 0, '--num-end': balance }}
-                        >
-                        </span>
+                <h1 className="text-3xl md:text-5xl font-bold text-black">
+                {currencySymbol} {formatNumber(balance)}
                     </h1>
                     <p className="text-black font-bold">left to spend</p>
                 </div>

@@ -103,7 +103,7 @@ function Register() {
         loop
         muted
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ filter: 'blur(2px)' }}
+        style={{ filter: 'blur(6px)' }}
       />
       <div className="flex-1 flex justify-center items-center relative z-10 p-5">
         <div className="w-full max-w-xl mx-auto mt-5 mb-3 ">
@@ -233,7 +233,10 @@ function Register() {
                 Register
               </button>
             </form>
-            {showSuccess && (
+            <div className="text-center text-gray-500 mt-4">
+          Already have an account? <a href="/login" className="text-red-500 hover:underline">Log in</a>
+        </div>
+        {showSuccess && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
           <div className="bg-white p-6 rounded shadow-lg text-center">
             <div className="w-20 h-20 rounded-full bg-green-100 p- mx-auto mb-3.5">
@@ -249,7 +252,7 @@ function Register() {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl text-gray-500 font-semibold mb-2">Successful Signup!</h3>
+            <h3 className="text-2xl text-gray-500 font-semibold mb-2">Successful Registration!</h3>
             <p className="text-sm text-gray-500">
             Redirecting you now...
             </p>
