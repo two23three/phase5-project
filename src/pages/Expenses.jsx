@@ -81,7 +81,7 @@ const Expenses = () => {
     }, [from, to]);
 
     return (
-        <div className="justify-between items-center p-2 w-screen" style={{ backgroundColor: 'black', padding:'10px' }}>
+        <div className="justify-between items-center p-2 h-screen w-screen" style={{ backgroundColor: 'black', padding:'10px' }}>
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />

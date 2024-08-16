@@ -14,11 +14,12 @@ function Home() {
     const [assets, setAssets] = useState(0);
     const [currency, setCurrency] = useState("Ksh");
     const [isLoading, setIsLoading] = useState(true);
+    const [userName, setUserName] = useState("");
 
     const { getUserId } = useAuth();
     const userID = getUserId();
     const API_URL = "https://barnes.onrender.com/";
-    
+
     // const fornmatNumber = (value, currencySymbol) => {
     //     return new Intl.NumberFormat('en-US', {
     //         style: 'currency',
@@ -137,6 +138,7 @@ function Home() {
                 const response = await fetch(`${API_URL}users/${userID}`);
                 const data = await response.json();
                 setRoleID(data.user.role_id);
+                setUserName(data.user.name);
             } catch (error) {
                 console.log("Error fetching user role:", error);
             }
@@ -193,6 +195,7 @@ function Home() {
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+                <h1 className="text-3xl md:text-5xl font-bold text-black">Hello, {userName}</h1>
                 <div className="flex justify-center items-center ">
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
@@ -227,6 +230,7 @@ function Home() {
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
+                <h1 className="text-3xl md:text-5xl font-bold text-black">{userName}'s Business </h1>
                 <div className="flex justify-center items-center ">
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
