@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import Navbar from "../components/Navbar";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { useAuth } from "../components/AuthProvider";
 import './insights.css';
@@ -20,7 +19,7 @@ const Expenses = () => {
 
     const {getUserId} = useAuth();
     const userID = getUserId();
-    const API_URL = "https://barnes.onrender.com/";
+    const API_URL = "api/";
 
     const [transactions, setTransactions] = useState([]);
     const [tranzactions, setTranzactions] = useState({ list: [], labels: [] });
@@ -30,7 +29,7 @@ const Expenses = () => {
 
     useEffect(() => {
         // Fetch transactions from the API
-        fetch('https://barnes.onrender.com/expenses')
+        fetch('api/expenses')
             .then(response => response.json())
             .then(data => {
                 // Filter expenses for a specific user and type
@@ -82,14 +81,13 @@ const Expenses = () => {
     }, [from, to]);
 
     return (
-        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen " style={{ backgroundColor: 'black', padding:'0px' }}>
+        <div className="justify-between items-center p-2 w-screen" style={{ backgroundColor: 'black', padding:'10px' }}>
             <div className="expenses-page" style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
                 <TotalExpense amount={tranzactions.list.reduce((a, b) => a + b, 0)} />
                 <ExpensesChart list={tranzactions.list} labels={tranzactions.labels} />
                 <TransactionTable data={table.length > 0 ? table : transactions} />
-                <Navbar />
             </div>
         </div>
     );
@@ -100,21 +98,21 @@ const TransactionTable = (data) => {
     const headers = ['Date', 'Description', 'Category', 'Amount'];
 
     return (
-        <div className='transaction-table'>
-        <table>
+        <div className='justify-between items-center p-2 w-screen transaction-table' style={{ width: '100%', overflowX: 'auto', marginTop: '20px' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
                 <tr>
-                    {headers.map((header, index) => <th key={index}>{header}</th>)}
+                    {headers.map((header, index) => <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }} key={index}>{header}</th>)}
                 </tr>
             </thead>
             <tbody>
                 {data.data.map((transaction, index) => (
                     <tr key={index}>
-                        <td>{transaction.date}</td>
-                        <td>{transaction.description}</td>
-                        <td>{transaction.is_recurring === true? 'recurring':'not recurring'}</td>
-                        <td>{transaction.amount}</td>
-                    </tr>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{transaction.date}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{transaction.description}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{transaction.is_recurring ? 'recurring' : 'not recurring'}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px' }}>{transaction.amount}</td>
+                </tr>
                 ))}
             </tbody>
         </table>
@@ -125,7 +123,7 @@ const TransactionTable = (data) => {
 
 const DateFilter = ({ from, to, setFrom, setTo }) => {
     return (
-        <div className="expense-filter" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className="expense-filter justify-between items-center p-2 w-screen" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginRight: 'auto' }}>
                 <label>From</label>
                 <input
@@ -198,7 +196,7 @@ const TotalExpense = ({ amount }) => {
 
 const Header = () => {
     return (
-        <nav style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', backgroundColor: 'black' }} className="navbar">
+        <nav  style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', backgroundColor: 'black' }} className="navbar justify-between items-center p-2 w-screen">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6" width='20px' display='flex' justifyContent='space-between'>
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
             </svg>
