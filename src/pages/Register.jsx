@@ -103,7 +103,7 @@ function Register() {
         loop
         muted
         className="absolute top-0 left-0 w-full h-full object-cover"
-        style={{ filter: 'blur(6px)' }}
+        style={{ filter: 'blur(3px)' }}
       />
       <div className="flex-1 flex justify-center items-center relative z-10 p-5">
         <div className="w-full max-w-xl mx-auto mt-5 mb-3 ">
