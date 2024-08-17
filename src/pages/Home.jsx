@@ -188,7 +188,7 @@ function Home() {
     }
     if (roleID === 1) {
         return (
-            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
+            <div className="flex flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
@@ -202,7 +202,7 @@ function Home() {
                     <p className="text-black font-bold">Left To Spend</p>
                 </div>
     
-                <div className="bg-[#242424] pt-7 rounded-t-lg">
+                <div className="bg-[#242424] pt-7 rounded-t-lg ">
                     <div className="gap-4 mx-[5%] my-auto">
                         <Link to="/income">
                             <InfoCard title="Income" value={`${currencySymbol} ${formatNumber(income)}`} />
@@ -222,7 +222,7 @@ function Home() {
         );
     } else if (roleID === 2) {
         return (
-            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen "
+            <div className="flex flex-col justify-between bg-cover bg-[url()] h-screen w-screen "
                 style={{ backgroundImage: `url(${homeBackground})` }}
             >
                 <Header onCurrencyChange={handleCurrencyChange} onLogout={() => console.log("Logged out")} />
@@ -230,13 +230,8 @@ function Home() {
                     <PieChart totalIncome={income} totalExpense={expense} />
                 </div>
                 <div className="text-center">
-                    <h1 className="text-3xl md:text-5xl font-bold text-black order-first tracking-tight sm:text-5xl">
-                        {currencySymbol}‎ ‎{/* Invisible characters for spacing */}
-                        <span
-                            className="animate-counter"
-                            style={{ '--num-start': 0, '--num-end': balance }}
-                        >
-                        </span>
+                <h1 className="text-3xl md:text-5xl font-bold text-black">
+                {currencySymbol} {formatNumber(balance)}
                     </h1>
                     <p className="text-black font-bold">In Profits</p>
                 </div>
