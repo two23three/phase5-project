@@ -72,7 +72,7 @@ function LandingPage() {
                                 <span
                                     className="animate-counter"
                                     style={{ '--num-start': 0, '--num-end': totalUsers }}
-                                > K+
+                                > 
                                 </span>
                             </dd>
                         </div>
