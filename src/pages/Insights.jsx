@@ -163,11 +163,11 @@ const Insights = () => {
     };
 
     return (
-        <div className="Insights" style={{ backgroundColor: 'black' }}>
+        <div className="Insights  " style={{ backgroundColor: 'black' }}>
             <Header />
             <DateFilter setTo={setTo} setFrom={setFrom} from={from} to={to} />
             <TotalExpense amount={totalAmount} />
-            <div style={{ background: 'white', padding: '4px' }}>
+            <div style={{ background: 'white', padding: '40px' }}>
                 {expenses.length > 0 || incomes.length > 0 ? (
                     <>
                         <InsightsChart expenses={expenses} incomes={incomes} labels={labels} role={role} />
@@ -189,7 +189,7 @@ const ExpenseCategoryList = ({ categories, userID, expenses }) => {
     }, [categories]);
 
     return (
-        <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '0', margin: '0', borderRadius: '15px' }}>
+        <div className='expense-category-container' style={{ backgroundColor: '#D1D1D1', padding: '20px', margin: '0', borderRadius: '15px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <p style={{ color: '#423E3E', fontSize: '15px', marginRight: 'auto' }}>Expense categories</p>
                 <Dropdown categories={categories} setVisibleCategories={setVisibleCategories} userID={userID} expenses={expenses} />

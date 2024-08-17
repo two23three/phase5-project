@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .expense-chart {
     background: white;
     overflow-x: auto;
@@ -43,7 +42,6 @@
     max-width: 500px;
 }
 
-
 .Insights {
     background-color: black;
     color: white;
@@ -57,8 +55,6 @@
     justify-content: space-between;
     align-items: center;
 }
-
-
 
 .expense-filter {
     display: flex;
@@ -84,7 +80,6 @@
     text-align: center;
     padding: 20px;
     border-radius: 10px;
-    padding: 0px 4px;
     margin: 10px 0;
 }
 
@@ -123,9 +118,9 @@
 }
 
 .expense-category-item:hover {
-    color:#646cff;
+    color: #646cff;
     cursor: pointer;
-};
+}
 
 .expense-category-item p {
     margin: 0;
@@ -140,34 +135,15 @@
     margin-left: 10px;
 }
 
-.expense-chart {
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    margin: 10px 0;
-}
-
-/* for income and expense pages */
-
-.expenses-page {
-    display: flex;
-    flex-direction: column;
-    height: fit-content; 
-    width: fit-content;
-    padding: 0px;
-    font-family: Arial, sans-serif;
-    background-color: #000000; 
-}
-
 .transaction-table {
-    width: 100%;
-    max-width: 800px; 
-    padding: 0;
-    margin: 0 auto;
+    width: 100%; /* Full width of the screen */
+    padding: 0 2rem; /* Padding on the left and right */
+    margin: 0 auto; /* Center the table */
 }
 
 table {
-    width: 100%;
+    width: 100%; /* Full width of the container */
+    max-width: 100%; /* Prevents table from exceeding container width */
     border-collapse: collapse;
     background-color: #D1D1D1;
     color: #000000;

@@ -83,10 +83,11 @@ function AppContent({
 }) {
   const location = useLocation();
   const isNavbarVisible = !['/login', '/', '/register'].includes(location.pathname);
+  const isStatusBarVisible = location.pathname !== '/add_expense_transaction';
 
   return (
     <div>
-      <StatusBar />
+      {isStatusBarVisible && <StatusBar />}
       <Routes>
         <Route path="/home" element={<PrivateRoute element={Home} />} />
         <Route path="/register" element={<Register />} />
