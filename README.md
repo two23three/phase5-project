@@ -1,8 +1,6 @@
 # Barnes Budgeting Application
+![alt text](Barnes.jpeg)
 
-<!-- <p align="center">
-  <img src="client/public/golden-swing-1964101_1280.png" alt="Barnes" width="300" height="200">
-</p> -->
 
 ## Table of Contents
 - [Problem Statement](#problem-statement)
