@@ -99,7 +99,7 @@ function DeleteAccount({ userId, onDeleteSuccess }) {
                                 />
                             </svg>
                             <p className="mb-4 text-gray-500 dark:text-gray-300">
-                                Are you sure you want to delete this item? (Warning! This action cannot be undone)
+                                Are you sure you want to delete your Account? (Warning! This action cannot be undone.)
                             </p>
                             <div className="flex justify-center items-center space-x-4">
                                 <button

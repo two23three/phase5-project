@@ -82,14 +82,13 @@ const Expenses = () => {
     }, [from, to]);
 
     return (
-        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen " style={{ backgroundColor: 'black', padding:'0px' }}>
-            <div className="expenses-page" style={{ backgroundColor: 'black' }}>
+        <div style={{ backgroundColor: 'black', padding:'0px' }}>
+            <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen " style={{ backgroundColor: 'black' }}>
                 <Header />
                 <DateFilter from={from} to={to} setFrom={setFrom} setTo={setTo} />
                 <TotalExpense amount={tranzactions.list.reduce((a, b) => a + b, 0)} />
                 <ExpensesChart list={tranzactions.list} labels={tranzactions.labels} />
                 <TransactionTable data={table.length > 0 ? table : transactions} />
-                <Navbar />
             </div>
         </div>
     );
@@ -100,7 +99,8 @@ const TransactionTable = (data) => {
     const headers = ['Date', 'Description', 'Category', 'Amount'];
 
     return (
-        <div className='transaction-table'>
+        <div className="flex flex-col bg-cover bg-[url()] h-screen w-screen ">
+            <div className='transaction-table'>
         <table>
             <thead>
                 <tr>
@@ -118,6 +118,7 @@ const TransactionTable = (data) => {
                 ))}
             </tbody>
         </table>
+        </div>
         </div>
     );
 };

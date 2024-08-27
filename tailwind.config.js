@@ -8,9 +8,15 @@ export default {
     extend: {
       fontFamily: {
         customFont: ['"Custom Font"', "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "sans-serif"],
-      },
-      animation: {
-        'checkmark-fade': 'checkmark-fade 0.5s ease-out',
+        sans: ['Poppins', 'ui-sans-serif', 'system-ui'],
+        serif: [
+          'Georgia',         // A widely used serif font
+          'Times New Roman', // Classic serif font available on most systems
+          ,],
+        mono: ['Fira Code', 'monospace'],
+        animation: {
+          'checkmark-fade': 'checkmark-fade 0.5s ease-out',
+        },
       },
       keyframes: {
         'checkmark-fade': {

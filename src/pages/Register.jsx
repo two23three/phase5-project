@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TermsPopup from "../components/TermsPopup";
 import PrivacyPolicyPopup from "../components/PrivacyPolicyPopup";
-import videoBg from '../assets/videoBg.mp4';
+import backgroundImage from '../assets/loginbackground.png';
 
 function Register() {
   const [name, setName] = useState('');
@@ -39,18 +39,20 @@ function Register() {
   };
 
   const handleSubmit = async (e) => {
-    setIsSwitching(true)
     e.preventDefault();
+    setIsSwitching(true);
 
     // Check if passwords match
     if (password !== confirmPassword) {
       alert('Passwords do not match');
+      setIsSwitching(false);
       return;
     }
 
     // Check if terms are accepted
     if (!termsAccepted) {
       alert('You must accept the Terms and Conditions to register.');
+      setIsSwitching(false);
       return;
     }
 
@@ -80,17 +82,19 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
-        setIsSwitching(false)
+        setIsSwitching(false);
         setShowSuccess(true); // Show the success message
         setTimeout(() => {
           navigate('/login'); // Redirect after 3 seconds
         }, 3000);
       } else {
         alert(data.msg || 'An error occurred'); // Show error message from backend
+        setIsSwitching(false);
       }
     } catch (error) {
       console.error('Registration error:', error);
       alert('An error occurred while registering. Please try again.');
+      setIsSwitching(false);
     }
   };
 
@@ -99,17 +103,11 @@ function Register() {
   };
 
   return (
-    <div className="relative h-screen">
-      <video
-        src={videoBg}
-        autoPlay
-        loop
-        muted
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        // style={{ filter: 'blur(3px)' }}
-      />
+    <div className="bg-cover bg-center h-screen w-screen flex items-center justify-center"
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+    >
       <div className="flex-1 flex justify-center items-center relative z-10 p-5">
-        <div className="w-full max-w-xl mx-auto mt-5 mb-3 ">
+        <div className="w-full max-w-xl mx-auto mt-5 mb-3">
           <div className="bg-gray-800 p-8 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">Sign Up for Barnes!</h2>
             <form className="space-y-9" onSubmit={handleSubmit}>
@@ -140,7 +138,7 @@ function Register() {
                   <label className="block text-gray-400">Phone Number<span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    placeholder="Enter Phone ( 07xxxxxx)"
+                    placeholder="Enter Phone (07xxxxxx)"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     className="w-full p-3 rounded bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -233,44 +231,43 @@ function Register() {
                 type="submit"
                 className={`w-full p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 mt-6  ${isSwitching ? 'cursor-not-allowed opacity-50' : ''}`}
                 disabled={isSwitching}
-
               >
                 {isSwitching ? 'Attempting to ' : ''}
                 Register
               </button>
             </form>
             <div className="text-center text-gray-500 mt-4">
-          Already have an account? <a href="/login" className="text-red-500 hover:underline">Log in</a>
-        </div>
-        {showSuccess && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
-          <div className="bg-white p-6 rounded shadow-lg text-center">
-            <div className="w-20 h-20 rounded-full bg-green-100 p- mx-auto mb-3.5">
-              <svg
-                className="w-20 h-20 text-green-500 animate-checkmark-fade"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              Already have an account? <a href="/login" className="text-red-500 hover:underline">Log in</a>
             </div>
-            <h3 className="text-2xl text-gray-500 font-semibold mb-2">Successful Registration!</h3>
-            <p className="text-sm text-gray-500">
-            Redirecting you now...
-            </p>
-          </div>
-        </div>
-      )}
+            {showSuccess && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
+                <div className="bg-white p-6 rounded shadow-lg text-center">
+                  <div className="w-20 h-20 rounded-full bg-green-100 p- mx-auto mb-3.5">
+                    <svg
+                      className="w-20 h-20 text-green-500 animate-checkmark-fade"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl text-gray-500 font-semibold mb-2">Successful Registration!</h3>
+                  <p className="text-sm text-gray-500">
+                    Redirecting you now...
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {showTerms && <TermsPopup show={setShowTerms} onClose={closeTermsPopup} />}
-      {showPrivacy && <PrivacyPolicyPopup show={setShowPrivacy}onClose={closePrivacyPopup} />}
+      {showTerms && <TermsPopup show={showTerms} onClose={closeTermsPopup} />}
+      {showPrivacy && <PrivacyPolicyPopup show={showPrivacy} onClose={closePrivacyPopup} />}
     </div>
   );
 }

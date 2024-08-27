@@ -11,10 +11,7 @@
     border: 1px solid #ddd;
 }
 
-.expense-chart canvas {
-    
-    max-width: 600px;
-}
+
 
 .chart-container {
     width: 100%; 
@@ -38,10 +35,6 @@
     border: 1px solid #ddd;
 }
 
-.income-chart canvas {
-    min-width: 400px; /* Ensures the chart has a minimum width */
-    max-width: 500px;
-}
 
 
 .Insights {
@@ -152,8 +145,6 @@
 .expenses-page {
     display: flex;
     flex-direction: column;
-    height: fit-content; 
-    width: fit-content;
     padding: 0px;
     font-family: Arial, sans-serif;
     background-color: #000000; 
@@ -161,9 +152,7 @@
 
 .transaction-table {
     width: 100%;
-    max-width: 800px; 
     padding: 0;
-    margin: 0 auto;
 }
 
 table {
